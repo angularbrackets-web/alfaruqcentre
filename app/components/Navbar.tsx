@@ -1,7 +1,9 @@
 "use client";
 import React, { useState } from 'react';
-import Image from 'next/image';
 import logoImage from '../../public/AlFaruqLogo.png';
+import Link from "next/link";
+import Image from "next/image";
+
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -10,15 +12,16 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full bg-blue-600 text-white backdrop-blur-sm z-10">
     <div className="container mx-auto px-6 py-4 flex justify-between items-center">
       {/* Desktop Logo */}
-      <a href="/">
-  <div className="h-16 w-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
-    <img
-      src={logoImage.src}
+      <Link href="/">
+  <div className="relative h-16 w-16 bg-white rounded-full overflow-hidden flex items-center justify-center">
+    <Image
+      src={logoImage}
       alt="Al-Faruq Islamic Centre Logo"
-      className="object-cover h-full w-full"
+      fill
+      className="object-cover"
     />
   </div>
-</a>
+</Link>
       <div className="hidden md:flex space-x-6 text-xl">
         <a className="px-4 py-2 hover:text-gray-900" href="#">Home</a>
         <a className="px-4 py-2 hover:text-gray-900" href="#">About</a>
@@ -50,9 +53,9 @@ const Navbar = () => {
       </div>
       {/* Mobile Logo - Centered */}
       <div className="mb-12">
-        <a className="text-2xl font-bold text-gray-800" href="/">
-          <img src={logoImage.src} alt="Al-Faruq Islamic Centre Logo" className="h-16" />
-        </a>
+        <Link className="text-2xl font-bold text-gray-800" href="/">
+          <Image src={logoImage.src} alt="Al-Faruq Islamic Centre Logo" className="h-16" />
+        </Link>
       </div>
       {/* Mobile Menu Links - Vertically Centered */}
       <div className="space-y-4 text-center">

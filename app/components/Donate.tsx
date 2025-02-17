@@ -5,7 +5,6 @@ interface DonateProps {
   paymentLink?: string;
   buttonText?: string;
   title?: string;
-  missionStatement?: string;
   thankYouMessage?: string;
   backgroundImageUrl?: string; // Optional background image
   impactMessage?: string; // Optional message highlighting impact
@@ -15,7 +14,6 @@ const Donate: React.FC<DonateProps> = ({
   paymentLink="https://www.canadahelps.org/en/dn/103035",
   buttonText = "Donate Now",
   title = "Donate generously to support Al-Faruq Islamic Center and Islamic School",
-  missionStatement = "Support our mission to make a positive impact.",
   thankYouMessage = "Thank you for your generous donation!",
   backgroundImageUrl = "/credit-card.jpg",
   impactMessage,
