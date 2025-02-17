@@ -1,0 +1,26 @@
+/* HeroSectionTable.module.css */
+
+.heroSection {
+  min-height: 70vh;
+  width: 100%;
+  padding: 48px 16px;
+  margin-top: 64px;
+  background: linear-gradient(45deg, #03528b, #ffffff); /* Diagonal gradient */
+  position: relative; /* Needed for clip-path positioning if using percentages */
+  overflow: hidden; /* To clip any content that goes outside the shape */
+  clip-path: polygon( /* Define an asymmetric polygon shape */
+    0% 0%,      /* Top left corner */
+    100% 0%,    /* Top right corner */
+    85% 100%,   /* Bottom right corner (moved inwards to create asymmetry) */
+    15% 100%    /* Bottom left corner (moved inwards to create asymmetry) */
+  );
+}
+
+
+/* Ensure content is above the gradient background */
+.heroSectionContent {
+  position: relative; /* Create stacking context */
+  z-index: 1;
+  color: black; /* Ensure text is visible on gradient */
+  padding: 20px; /* Add some padding to content */
+}
