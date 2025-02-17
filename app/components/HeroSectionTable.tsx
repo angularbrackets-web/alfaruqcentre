@@ -210,11 +210,10 @@ const HeroSectionTable = () => {
                   nextSlide={nextSlide} // Pass nextSlide to ContentBlock
                 />
               </div>
-                 {/* Conditionally render cta only for video blocks, OUTSIDE ContentBlock */}
+                 
                  {contentBlocks[currentIndex].type === 'video' && contentBlocks[currentIndex].cta && (
-                    <div className="mt-4"> {/* Added a div to wrap cta and provide margin */}
-                        {contentBlocks[currentIndex].cta as ReactNode} {/* Type assertion here */}
-                        {console.log("CTA Rendered - Index:", currentIndex)} {/* Debugging log */}
+                    <div className="mt-4"> 
+                        {contentBlocks[currentIndex].cta as ReactNode}
                     </div>
                  )}
 
