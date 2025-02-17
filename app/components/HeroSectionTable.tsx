@@ -251,7 +251,7 @@ const HeroSectionTable = () => {
 
           {/* Right Column - Table */}
           <div className="md:col-span-1">
-          <iframe src="https://timing.athanplus.com/masjid/widgets/embed?theme=1&masjid_id=nL1Zq8Aa" type="text/html" width="100%" height="560" frameBorder="0" allowtransparency="true"></iframe>
+          <iframe src="https://timing.athanplus.com/masjid/widgets/embed?theme=1&masjid_id=nL1Zq8Aa" width="100%" height="560" frameBorder="0"></iframe>
           </div>
           
         </div>
