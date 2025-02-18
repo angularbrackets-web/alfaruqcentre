@@ -10,10 +10,19 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row items-center justify-between">
           <div className="mb-4 md:mb-0">
             <h2 className="text-2xl font-bold">Al Faruq Islamic Centre</h2>
-            <p className="text-sm">Uniting the community through faith and service.</p>
+            <ul>
+              <li>Address:</li>
+              <li>4410 127 Street SW, Edmonton, Alberta T6W 1A7</li>
+              <li></li>
+              <li>Email:</li>
+              <li><span>General : </span>info@sahabamosque.ca</li>
+              <li><span>Imam : </span>imam.alfaruq34@gmail.com</li>
+              <li>Phone:</li>
+              <li>(780) 243-8811</li>
+            </ul>
           </div>
           <div className="flex space-x-6">
-            <Link href="/about" className="hover:text-gray-400">
+            {/* <Link href="/about" className="hover:text-gray-400">
               About Us
             </Link>
             <Link href="/contact" className="hover:text-gray-400">
@@ -24,7 +33,7 @@ const Footer: React.FC = () => {
             </Link>
             <Link href="/donate" className="hover:text-gray-400">
               Donate
-            </Link>
+            </Link> */}
           </div>
         </div>
         {/* Bottom Section */}

@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, RefObject, ReactNode } from "react";
 import Image from "next/image";
 import {
-  PlayCircle,
+  // PlayCircle,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -110,14 +110,14 @@ const HeroSectionTable = () => {
     },
     {
       type: "video",
-      title: "Al Faruq Islamic School and Amana Academy",
+      title: "Al Faruq Islamic School",
       description: "<p>Empowering Minds and Enriching Souls</p>",
       videoUrl: "/Amana.mp4",
-      cta: (
-        <button className="flex items-center gap-2 rounded-lg bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
-          <PlayCircle size={24} /> Register
-        </button>
-      ),
+      // cta: (
+      //   <button className="flex items-center gap-2 rounded-lg bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      //     <PlayCircle size={24} /> Register
+      //   </button>
+      // ),
     },
   ], []); // Empty dependency array because contentBlocks is static
 

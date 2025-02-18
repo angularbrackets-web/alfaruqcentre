@@ -1,11 +1,16 @@
+import Donate from "./components/Donate";
+import HeroSectionTable from "./components/HeroSectionTable";
+import ImagePostGrid from "./components/ImagePostGrid";
 
 
 export default function Home() {
   return (
-    <main>
+    <div>
       
-      {/* Add other content for your homepage below the HeroSection */}
+      <HeroSectionTable />
+      <ImagePostGrid />
+      <Donate />
      
-    </main>
+    </div>
   );
 }

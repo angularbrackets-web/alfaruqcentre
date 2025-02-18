@@ -7,6 +7,12 @@
   --foreground: #171717;
 }
 
+@layer utilities {
+  .min-h-0 {
+    min-height: 0px;
+  }
+}
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
