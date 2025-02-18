@@ -35,10 +35,10 @@ const ContentBlock: React.FC<{ block: ContentBlockType, videoRef: RefObject<HTML
       const videoBlock = block as VideoBlock; // Type assertion for video block
       return (
         <>
-          <h2 className="text-6xl font-semibold mb-6">{videoBlock.title}</h2>
+          <h2 className="text-2xl md:text-6xl font-semibold mb-6">{videoBlock.title}</h2>
           {videoBlock.description && (
             <div
-              className="text-xl text-gray-600 max-w-2xl mb-8"
+              className="text-lg md:text-xl text-gray-600 max-w-2xl mb-8"
               dangerouslySetInnerHTML={{ __html: videoBlock.description }}
             />
           )}
@@ -70,10 +70,10 @@ const ContentBlock: React.FC<{ block: ContentBlockType, videoRef: RefObject<HTML
               {imageBlock.pretitle}
             </h6>
           )}
-          <h2 className="text-6xl font-semibold mb-6">{imageBlock.title}</h2>
+          <h2 className="text-2xl md:text-6xl font-semibold mb-6">{imageBlock.title}</h2>
           {imageBlock.description && (
             <div
-              className="text-xl text-gray-600 max-w-2xl mb-8"
+              className="text-lg md:text-xl text-gray-600 max-w-2xl mb-8"
               dangerouslySetInnerHTML={{ __html: imageBlock.description }}
             />
           )}

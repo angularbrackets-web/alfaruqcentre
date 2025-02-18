@@ -9,6 +9,11 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Al-Faruq Islamic Centre',
+  icons: {
+    icon: [
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ]
+  },
   description: 'Come visit us',
 };
 
