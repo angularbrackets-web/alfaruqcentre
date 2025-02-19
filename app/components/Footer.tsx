@@ -14,8 +14,7 @@ const Footer: React.FC = () => {
               <li>4410 127 Street SW, Edmonton, Alberta T6W 1A7</li>
               <li></li>
               <li>Email:</li>
-              <li><span>General : </span>info@sahabamosque.ca</li>
-              <li><span>Imam : </span>imam.alfaruq34@gmail.com</li>
+              <li>info@alfaruqcentre.com</li>
               <li>Phone:</li>
               <li>(780) 243-8811</li>
             </ul>
