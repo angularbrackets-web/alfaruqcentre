@@ -1,5 +1,8 @@
 "use client";
 import React from 'react';
+import Image from "next/image";
+import CanadaHelpImage from '../../public/CanadaHelp.png';
+import Link from 'next/link';
 
 interface DonateProps {
   paymentLink?: string;
@@ -34,11 +37,25 @@ const Donate: React.FC<DonateProps> = ({
       <div className="bg-white bg-opacity-90 p-8 md:p-16"> {/* Add background overlay for better text readability */}
         <div className="text-center">
           {title && (
-            <h3 className="text-5xl font-bold text-blue-800 mb-3">
+            <h3 className="text-5xl font-bold text-blue-800 mb-10">
               {title}
             </h3>
           )}
-          
+          <div className='flex flex-col md:flex-row justify-center items-center'>
+          <div className='flex flex-col items-center gap-4'>
+          <Image
+            src={CanadaHelpImage.src}
+            alt="CanadaHelps Logo"
+            className="object-cover"
+            width={400}
+            height={600}
+          />
+
+          <Link href="https://www.canadahelps.org/en/tax-time/" target='_blank' className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full text-sm lg:text-md transition-colors duration-300">Calculate your Tax Benefits</Link>  
+        </div>
+
+            <div className='p-5'>
+            <div>
             <p className="text-lg text-gray-800 mb-6">
                 Join us in supporting Al Faruq Islamic School (AFIS), ensuring a better learning environment for our students and fostering their educational journey.
 
@@ -75,7 +92,17 @@ const Donate: React.FC<DonateProps> = ({
             {thankYouMessage}
           </p>
         )}
+            </div>
+            
+        
+        
+
+            
+          </div>
+            
+        
       </div>
+    </div>
     </div>
   );
 };
