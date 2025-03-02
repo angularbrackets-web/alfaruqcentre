@@ -1,14 +1,15 @@
 import Donate from "./components/Donate";
 import HeroSectionTable from "./components/HeroSectionTable";
-import ImagePostGrid from "./components/ImagePostGrid";
+import IslamicRelief from "./components/IslamicRelief";
+import PosterGallery from "./components/PosterGallery";
 
 
 export default function Home() {
   return (
     <div>
-      
+      <IslamicRelief />
       <HeroSectionTable />
-      <ImagePostGrid />
+      <PosterGallery />      
       <Donate />
      
     </div>
