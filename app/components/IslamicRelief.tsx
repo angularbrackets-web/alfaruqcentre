@@ -28,7 +28,7 @@ export default function IslamicRelief() {
                 </div>
                 <div>
                     <h3 className="font-bold text-blue-500">CAMPAIGN PROGRESS</h3>
-                    <p className="text-3xl font-bold mt-4"><span className="bg-blue-800 text-white p-2 rounded">$ 50.00</span> raised <span className="text-blue-800">of $ 200,000.00</span></p>
+                    <p className="text-3xl font-bold mt-4 leading-loose md:leading-normal whitespace-normal py-2"><span className="bg-blue-800 text-white p-2 rounded break-keep whitespace-nowrap">$ 1783.00</span> raised <span className="text-blue-800 break-keep whitespace-nowrap">of $ 200,000.00</span></p>
                 </div>
             </div>
         </div>
