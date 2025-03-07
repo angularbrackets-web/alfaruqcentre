@@ -78,14 +78,15 @@ const ContentBlock: React.FC<{ block: ContentBlockType, videoRef: RefObject<HTML
             />
           )}
           <div className="relative w-full min-h-[500px] mb-6">
-            <Image
-              src={imageBlock.imageSrc || "/fallback-image.png"}
-              alt={imageBlock.title}
-              fill
-              className="object-cover rounded-lg shadow-lg"
-              priority
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            />
+          <Image
+  src={imageBlock.imageSrc || "/fallback-image.png"}
+  alt={imageBlock.title}
+  fill
+  className="object-contain rounded-lg shadow-lg"
+  priority
+  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+/>
+
           </div>
           {imageBlock.subtitle && (
             <p className="text-xl text-gray-600 max-w-2xl mb-8">{imageBlock.subtitle}</p>
@@ -102,9 +103,17 @@ const HeroSectionTable = () => {
   const contentBlocks = useMemo<ContentBlockType[]>(() => [
     {
       type: "image",
+      pretitle: "",
+      title: "",
+      description: "",
+      imageSrc: "/RamadanFundraiser2025.jpeg",
+      duration: 60000,
+    },
+    {
+      type: "image",
       pretitle: "Welcome to",
       title: "Al Faruq Islamic Centre",
-      description: "<p>4410 127 Street SW, Edmonton, Alberta T6W 1A7</p>",
+      description: "",
       imageSrc: "/Al.FaruqPrayerHall.jpeg",
       duration: 5000,
     },

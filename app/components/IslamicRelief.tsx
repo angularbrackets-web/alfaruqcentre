@@ -1,6 +1,7 @@
 import { BadgeDollarSign } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import EnhancedProgressBar from "./EnhancedProgressBar";
 export default function IslamicRelief() {
     return (
       <div className="card p-4 mb-4 mt-32 mx-4 bg-gray-300 rounded-md shadow-md">
@@ -27,8 +28,16 @@ export default function IslamicRelief() {
                     </div>
                 </div>
                 <div>
-                    <h3 className="font-bold text-blue-500">CAMPAIGN PROGRESS</h3>
-                    <p className="text-3xl font-bold mt-4 leading-loose md:leading-normal whitespace-normal py-2"><span className="bg-blue-800 text-white p-2 rounded break-keep whitespace-nowrap">$ 6,893.00</span> raised <span className="text-blue-800 break-keep whitespace-nowrap">of $ 200,000.00</span></p>
+                    {/* <h3 className="font-bold text-blue-500">CAMPAIGN PROGRESS</h3>
+                    <p className="text-3xl font-bold mt-4 leading-loose md:leading-normal whitespace-normal py-2"><span className="bg-blue-800 text-white p-2 rounded break-keep whitespace-nowrap">$ 8,588.00</span> raised <span className="text-blue-800 break-keep whitespace-nowrap">of $ 200,000.00</span></p> */}
+                    <div>
+      <EnhancedProgressBar 
+        theme="rainbow"
+        variant="modern"
+        height="large"
+        showMilestones={true}
+      />
+    </div>
                 </div>
             </div>
         </div>

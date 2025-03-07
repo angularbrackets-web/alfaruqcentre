@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import logoImage from "../../public/AlFaruqLogo.png";
 import Link from "next/link";
 import Image from "next/image";
-import { BadgeDollarSign } from "lucide-react";
+import { BadgeDollarSign, MapPin } from "lucide-react";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,7 +12,8 @@ const Navbar = () => {
     <nav className="fixed top-0 w-full bg-gray-100 text-gray-900 backdrop-blur-sm z-10">
       <div className="container mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
         {/* Desktop Logo with Brand Name */}
-        <Link href="/" className="flex items-center gap-2 sm:gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
+          <Link href="/">
           <Image
             src={logoImage}
             alt="Al-Faruq Islamic Centre Logo"
@@ -20,10 +21,17 @@ const Navbar = () => {
             width={96}
             height={96}
           />
-          <span className="text-xl sm:text-2xl font-bold hidden lg:block">
-            Al-Faruq Islamic Centre
-          </span>
-        </Link>
+          </Link>
+          <div className="flex-col">
+          <Link href="/">
+            <h3 className="text-xl sm:text-2xl md:text-4xl font-black hidden lg:block text-blue-600">
+              Al-Faruq Islamic Centre
+            </h3>
+            </Link>
+            <Link href="https://maps.app.goo.gl/KfLGQr2edcRhsGqu5" target="_blank" className="text-xs flex gap-2 underline"><MapPin className="h-2 w-2 lg:h-4 lg:w-4"/><span>4410 127 Street SW, Edmonton, Alberta T6W 1A7</span> </Link>
+          </div>
+          
+        </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-2 lg:gap-6 text-lg lg:text-xl">
@@ -35,6 +43,12 @@ const Navbar = () => {
             href="/monthlyprayertimes"
           >
             Prayer Times
+          </Link>
+          <Link
+            className="px-2 lg:px-4 py-2 hover:text-gray-900 whitespace-nowrap"
+            href="/programs"
+          >
+            Programs
           </Link>
           <Link
             className="flex items-center gap-2 rounded-lg bg-emerald-500 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-emerald-700 whitespace-nowrap"
@@ -95,6 +109,9 @@ const Navbar = () => {
         </Link>
         <Link href="/monthlyprayertimes" className="block text-xl text-gray-700 hover:text-gray-900 font-medium" onClick={() => setMobileMenuOpen(false)}>
           Prayer Times
+        </Link> 
+        <Link href="/programs" className="block text-xl text-gray-700 hover:text-gray-900 font-medium" onClick={() => setMobileMenuOpen(false)}>
+          Programs
         </Link>        
       </div>
     </div>

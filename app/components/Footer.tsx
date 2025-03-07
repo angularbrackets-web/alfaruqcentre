@@ -1,12 +1,26 @@
 // components/Footer.tsx
 import React from 'react';
+import Image from 'next/image';
+import logoImage from "../../public/AlFaruqLogo.png";
+import Link from 'next/link';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8">
+    <footer className="bg-gray-950 text-white py-8">
       <div className="container mx-auto px-4">
         {/* Top Section */}
-        <div className="flex flex-col md:flex-row items-center justify-between">
+        <div className="flex flex-col md:flex-row gap-10">
+          <div>
+          <Link href="/">
+          <Image
+            src={logoImage}
+            alt="Al-Faruq Islamic Centre Logo"
+            className="object-cover w-16 sm:w-24"
+            width={96}
+            height={96}
+          />
+          </Link>
+          </div>
           <div className="mb-4 md:mb-0">
             <h2 className="text-2xl font-bold">Al Faruq Islamic Centre</h2>
             <ul>
