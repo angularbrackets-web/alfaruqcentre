@@ -164,11 +164,11 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
         <h3 className="text-xl font-bold text-gray-800">{title}</h3>
         <div className="flex justify-between items-center mt-3 mb-3 gap-10 md:gap-20">
           <p className="text-sm text-gray-600">
-          <span className="bg-blue-500 text-white p-2 rounded break-keep whitespace-nowrap text-lg font-black">{currency} {formatCurrency(currentAmount)}</span>
+          <span className="bg-blue-500 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(currentAmount)}</span>
           <span>  raised</span>
           </p>
           <p className="text-sm text-gray-600">
-            Goal: <span className="bg-green-600 text-white p-2 rounded break-keep whitespace-nowrap text-lg font-black">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
+            Goal: <span className="bg-green-600 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
           </p>
         </div>
       </div>
