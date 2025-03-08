@@ -24,7 +24,7 @@ const Navbar = () => {
           </Link>
           <div className="flex-col">
           <Link href="/">
-            <h3 className="text-xl sm:text-2xl md:text-4xl font-black hidden lg:block text-blue-800">
+            <h3 className="text-xl sm:text-2xl md:text-4xl font-black hidden lg:block text-sky-800">
               Al-Faruq Islamic Centre
             </h3>
             </Link>

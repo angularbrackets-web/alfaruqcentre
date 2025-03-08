@@ -37,7 +37,7 @@ const Donate: React.FC<DonateProps> = ({
       <div className="bg-white bg-opacity-90 p-8 md:p-16"> {/* Add background overlay for better text readability */}
         <div className="text-center">
           {title && (
-            <h3 className="text-5xl font-bold text-blue-800 mb-10">
+            <h3 className="text-5xl font-bold text-sky-900 mb-10">
               {title}
             </h3>
           )}

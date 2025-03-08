@@ -35,7 +35,7 @@ const ContentBlock: React.FC<{ block: ContentBlockType, videoRef: RefObject<HTML
       const videoBlock = block as VideoBlock; // Type assertion for video block
       return (
         <>
-          <h2 className="text-2xl md:text-6xl font-semibold mb-6">{videoBlock.title}</h2>
+          <h2 className="text-2xl md:text-4xl font-black mb-6 text-blue-900">{videoBlock.title}</h2>
           {videoBlock.description && (
             <div
               className="text-lg md:text-xl text-gray-600 max-w-2xl mb-8"
@@ -66,14 +66,14 @@ const ContentBlock: React.FC<{ block: ContentBlockType, videoRef: RefObject<HTML
       return (
         <>
           {imageBlock.pretitle && (
-            <h6 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">
+            <h6 className="text-2xl font-thin tracking-tight text-sky-500 mb-2">
               {imageBlock.pretitle}
             </h6>
           )}
-          <h2 className="text-2xl md:text-6xl font-semibold mb-6">{imageBlock.title}</h2>
+          <h2 className="text-2xl md:text-4xl font-black mb-6 text-sky-900">{imageBlock.title}</h2>
           {imageBlock.description && (
             <div
-              className="text-lg md:text-xl text-gray-600 max-w-2xl mb-8"
+              className="text-sm md:text-md text-gray-500 max-w-2xl mb-8"
               dangerouslySetInnerHTML={{ __html: imageBlock.description }}
             />
           )}
@@ -104,8 +104,23 @@ const HeroSectionTable = () => {
     {
       type: "image",
       pretitle: "",
-      title: "",
-      description: "",
+      title: "Ramadan Fundraiser 2025",
+      description: `
+      <div class="grid grid-cols-12 gap-1 font-semibold">
+        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Date  </span>
+        <span class='col-span-10'>Friday, March 14, 2025</span>
+        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Time  </span>
+        <span class='col-span-10'>Maghreb - Isha</span>
+        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Venue  </span>
+        <div class='col-span-10'>
+          <p>ARCA BANQUET HALL</p>            
+        </div>
+        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Address  </span>
+        <span class='col-span-10'>
+          <a href="https://maps.app.goo.gl/zJUBdmnnPmSmojUbA" target="_blank" class="text-xs underline w-full"><span class='underline w-full'>14525 127 St, Edmonton, AB T6V 0B3</span> </a>
+        </span>
+      </div>
+      `,
       imageSrc: "/RamadanFundraiser2025.jpeg",
       duration: 60000,
     },
@@ -120,7 +135,7 @@ const HeroSectionTable = () => {
     {
       type: "video",
       title: "Al Faruq Islamic School",
-      description: "<p>Empowering Minds and Enriching Souls</p>",
+      description: "<p class='text-blue-600 text-sm md:text-lg'>Empowering Minds and Enriching Souls</p>",
       videoUrl: "/Amana.mp4",
       // cta: (
       //   <button className="flex items-center gap-2 rounded-lg bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-600">

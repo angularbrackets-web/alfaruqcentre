@@ -159,20 +159,20 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto p-6 bg-blue-950 rounded-xl shadow-xl">
+    <div className="w-full max-w-lg mx-auto p-6 bg-gradient-to-r from-blue-950 from-10% via-sky-900 via-30% to-emerald-950 to-90% rounded-xl shadow-xl">
       <div className="mb-4">
         <h3 className="text-xl font-bold text-blue-100">{title.toUpperCase()}</h3>
         <div className="flex justify-between mt-4">
-        <span className='text-blue-200'>  Raised</span>
-        <span className='text-green-200'>  Goal</span>
+        <span className='text-sky-200'>  Raised</span>
+        <span className='text-emerald-200'>  Goal</span>
         </div>
         <div className="flex justify-between items-center mt-3 mb-4 gap-10 md:gap-20">
           <p className="text-sm text-gray-600">
-          <span className="bg-blue-500 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(currentAmount)}</span>
+          <span className="bg-sky-500 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(currentAmount)}</span>
           
           </p>
           <p className="text-sm text-gray-600">
-            <span className="bg-green-600 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
+            <span className="bg-emerald-600 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
           </p>
         </div>
       </div>

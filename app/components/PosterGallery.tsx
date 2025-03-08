@@ -150,17 +150,17 @@ export default function PosterGallery() {
 
   return (
     <>
-      <h2 className="text-3xl font-bold text-blue-600 mb-6 px-5">Our Programs</h2>
+      <h2 className="text-3xl font-bold text-sky-900 mb-6 px-5">Our Programs</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
         {processedPosters.map((poster) => (
           <div key={poster.id}>
           <div className='flex flex-col'>
           <div
             
-            className={`${getPosterOrientationClass(poster.orientationType)} cursor-pointer transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-blue-300 bg-blue-200`}
+            className={`${getPosterOrientationClass(poster.orientationType)} cursor-pointer transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}
             onClick={() => setSelectedPoster(poster)}
           >
-            <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-white p-3">
+            <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
               <div className="relative w-full h-full">
                 {/* Image */}
                 <Image
