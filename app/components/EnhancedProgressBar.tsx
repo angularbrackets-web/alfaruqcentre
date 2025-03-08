@@ -49,7 +49,7 @@ interface ProgressBarProps {
 }
 
 const EnhancedProgressBar: React.FC<ProgressBarProps> = ({ 
-  currentAmount = 8838, 
+  currentAmount = 9932, 
   goalAmount = 200000, 
   currency = '$',
   title = 'Fundraising Progress',
@@ -58,7 +58,7 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   height = 'medium',
   showMilestones = true,
 //   recentDonors = [],
-  donations = 11
+  donations = 16
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -159,16 +159,20 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   }
 
   return (
-    <div className="w-full max-w-lg mx-auto p-6 bg-white rounded-xl shadow-md">
+    <div className="w-full max-w-lg mx-auto p-6 bg-blue-950 rounded-xl shadow-xl">
       <div className="mb-4">
-        <h3 className="text-xl font-bold text-gray-800">{title}</h3>
-        <div className="flex justify-between items-center mt-3 mb-3 gap-10 md:gap-20">
+        <h3 className="text-xl font-bold text-blue-500">{title.toUpperCase()}</h3>
+        <div className="flex justify-between mt-4">
+        <span className='text-blue-200'>  Raised</span>
+        <span className='text-green-200'>  Goal</span>
+        </div>
+        <div className="flex justify-between items-center mt-3 mb-4 gap-10 md:gap-20">
           <p className="text-sm text-gray-600">
           <span className="bg-blue-500 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(currentAmount)}</span>
-          <span>  raised</span>
+          
           </p>
           <p className="text-sm text-gray-600">
-            Goal: <span className="bg-green-600 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
+            <span className="bg-green-600 text-white p-2 rounded break-keep whitespace-nowrap text-sm md:text-lg font-black leading-loose md:leading-normal whitespace-normal">{currency} {formatCurrency(goalAmount).toLocaleString()}</span>
           </p>
         </div>
       </div>
@@ -279,7 +283,7 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
       )} */}
       
       {/* Supporter count */}
-      <div className="mt-1 text-center text-sm text-gray-600">
+      <div className="mt-1 text-center text-sm text-gray-200">
         <span className="font-semibold">{donations}</span> donations
       </div>
     </div>

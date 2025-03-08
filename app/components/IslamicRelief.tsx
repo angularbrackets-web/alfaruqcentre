@@ -7,7 +7,7 @@ export default function IslamicRelief() {
       <div className="card p-4 mb-4 mt-32 mx-4 bg-gray-300 rounded-md shadow-md">
         <div className="card-body">
             <div className="container mx-auto flex flex-wrap gap-16">
-                <div>
+                <div className="items-center justify-center text-center my-[50px]">
                     <Image
                         src="/IslamicReliefLogo.png"
                         alt="Islamic Relief"
@@ -15,9 +15,9 @@ export default function IslamicRelief() {
                         height={200}
                     />
                 </div>
-                <div className="">
+                <div className="my-[30px]">
                     <h4 className="text-blue-500 my-1">Fundraising With Islamic Relief</h4>
-                    <h1 className="font-bold text-3xl my-1">Support Sahaba and Al-Faruq Mosque</h1>
+                    <h1 className="font-bold text-3xl my-1 text-blue-950">Support Sahaba and Al-Faruq Mosque</h1>
                     <p className="font-bold text-blue-500">This Ramadan, For every $2 donated, Islamic Relief Canada will match $1</p>
                     <p>Donate today and be part of this legacy!</p>
                     <div className="mt-4">

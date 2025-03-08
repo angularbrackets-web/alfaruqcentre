@@ -24,31 +24,31 @@ const Navbar = () => {
           </Link>
           <div className="flex-col">
           <Link href="/">
-            <h3 className="text-xl sm:text-2xl md:text-4xl font-black hidden lg:block text-blue-600">
+            <h3 className="text-xl sm:text-2xl md:text-4xl font-black hidden lg:block text-blue-800">
               Al-Faruq Islamic Centre
             </h3>
             </Link>
-            <Link href="https://maps.app.goo.gl/KfLGQr2edcRhsGqu5" target="_blank" className="text-xs flex gap-2 underline"><MapPin className="h-2 w-2 lg:h-4 lg:w-4"/><span>4410 127 Street SW, Edmonton, Alberta T6W 1A7</span> </Link>
+            <Link href="https://maps.app.goo.gl/KfLGQr2edcRhsGqu5" target="_blank" className="text-xs flex gap-2 underline"><MapPin className="h-3 w-3 lg:h-4 lg:w-4"/><span>4410 127 Street SW, Edmonton, Alberta T6W 1A7</span> </Link>
           </div>
           
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-2 lg:gap-6 text-lg lg:text-xl">
-          <Link className="px-2 lg:px-4 py-2 hover:text-gray-900" href="/">
-            Home
+        <div className="hidden md:flex items-center gap-2 lg:gap-6 text-lg lg:text-xl text-blue-900 font-thin">
+          <Link className="px-2 lg:px-4 py-2 hover:text-gray-900 hover:font-black" href="/">
+            HOME
           </Link>
           <Link
-            className="px-2 lg:px-4 py-2 hover:text-gray-900 whitespace-nowrap"
+            className="px-2 lg:px-4 py-2 hover:text-gray-900 whitespace-nowrap hover:text-gray-900 hover:font-black"
             href="/monthlyprayertimes"
           >
-            Prayer Times
+            PRAYER TIMES
           </Link>
           <Link
-            className="px-2 lg:px-4 py-2 hover:text-gray-900 whitespace-nowrap"
+            className="px-2 lg:px-4 py-2 hover:text-gray-900 whitespace-nowrap hover:text-gray-900 hover:font-black"
             href="/programs"
           >
-            Programs
+            PROGRAMS
           </Link>
           <Link
             className="flex items-center gap-2 rounded-lg bg-emerald-500 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-emerald-700 whitespace-nowrap"

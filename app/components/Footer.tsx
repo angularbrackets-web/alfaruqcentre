@@ -16,8 +16,8 @@ const Footer: React.FC = () => {
             src={logoImage}
             alt="Al-Faruq Islamic Centre Logo"
             className="object-cover w-16 sm:w-24"
-            width={96}
-            height={96}
+            width={128}
+            height={128}
           />
           </Link>
           </div>
