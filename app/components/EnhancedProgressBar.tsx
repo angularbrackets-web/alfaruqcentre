@@ -49,7 +49,7 @@ interface ProgressBarProps {
 }
 
 const EnhancedProgressBar: React.FC<ProgressBarProps> = ({ 
-  currentAmount = 9932, 
+  currentAmount = 11082, 
   goalAmount = 200000, 
   currency = '$',
   title = 'Fundraising Progress',
@@ -58,7 +58,7 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   height = 'medium',
   showMilestones = true,
 //   recentDonors = [],
-  donations = 16
+  donations = 22
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
@@ -161,7 +161,7 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   return (
     <div className="w-full max-w-lg mx-auto p-6 bg-blue-950 rounded-xl shadow-xl">
       <div className="mb-4">
-        <h3 className="text-xl font-bold text-blue-500">{title.toUpperCase()}</h3>
+        <h3 className="text-xl font-bold text-blue-100">{title.toUpperCase()}</h3>
         <div className="flex justify-between mt-4">
         <span className='text-blue-200'>  Raised</span>
         <span className='text-green-200'>  Goal</span>
