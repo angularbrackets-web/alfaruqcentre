@@ -115,9 +115,12 @@ const HeroSectionTable = () => {
         <div class='col-span-10'>
           <p>ARCA BANQUET HALL</p>            
         </div>
-        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Address  </span>
+        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center my-auto mr-2'>Address  </span>
         <span class='col-span-10'>
-          <a href="https://maps.app.goo.gl/zJUBdmnnPmSmojUbA" target="_blank" class="text-xs underline w-full"><span class='underline w-full'>14525 127 St, Edmonton, AB T6V 0B3</span> </a>
+          <a href="https://maps.app.goo.gl/zJUBdmnnPmSmojUbA" target="_blank" class="text-xs underline w-full block">
+          <p class='underline w-full'>14525 127 St</p> 
+          <p class='underline w-full'>Edmonton, AB T6V 0B3</p>
+          </a>
         </span>
       </div>
       `,
