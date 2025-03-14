@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, RefObject, ReactNode } from "react";
 import Image from "next/image";
 import {
-  BadgeDollarSign,
+  //BadgeDollarSign,
   // PlayCircle,
   ChevronLeft,
   ChevronRight,
