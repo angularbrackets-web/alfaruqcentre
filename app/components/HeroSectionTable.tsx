@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, RefObject, ReactNode } from "react";
 import Image from "next/image";
 import {
+  BadgeDollarSign,
   // PlayCircle,
   ChevronLeft,
   ChevronRight,
@@ -106,22 +107,29 @@ const HeroSectionTable = () => {
       pretitle: "",
       title: "Ramadan Fundraiser 2025",
       description: `
-      <div class="grid grid-cols-12 gap-1 font-semibold">
-        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Date  </span>
-        <span class='col-span-10'>Friday, March 14, 2025</span>
-        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Time  </span>
-        <span class='col-span-10'>Maghreb - Isha</span>
-        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Venue  </span>
-        <div class='col-span-10'>
+      <p class='mb-3 text-sky-600'>Join us for a delicious iftar at Sahaba Mosque / Al Faruq Mosque - it's going to be a feast to remember!</p>
+      <div class="grid grid-cols-12 gap-1 font-semibold text-sky-600">
+        <span class='col-span-3 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Date  </span>
+        <span class='col-span-9'>Friday, March 14, 2025</span>
+        <span class='col-span-3 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Time  </span>
+        <span class='col-span-9'>Maghreb - Isha</span>
+        <span class='col-span-3 text-sky-800 bg-sky-100 px-2 rounded-xl text-center mr-2'>Venue  </span>
+        <div class='col-span-9'>
           <p>ARCA BANQUET HALL</p>            
         </div>
-        <span class='col-span-2 text-sky-800 bg-sky-100 px-2 rounded-xl text-center my-auto mr-2'>Address  </span>
-        <span class='col-span-10'>
+        <span class='col-span-3 text-sky-800 bg-sky-100 px-2 rounded-xl text-center my-auto mr-2'>Address  </span>
+        <span class='col-span-9'>
           <a href="https://maps.app.goo.gl/zJUBdmnnPmSmojUbA" target="_blank" class="text-xs underline w-full block">
           <p class='underline w-full'>14525 127 St</p> 
           <p class='underline w-full'>Edmonton, AB T6V 0B3</p>
           </a>
         </span>
+      </div>
+      <div class="mt-4">
+          <a href="https://www.eventbrite.ca/e/sahaba-mosque-al-faruq-mosque-iftar-tickets-1278199141039" target="_blank" class="items-center justify-center rounded-lg bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
+          
+          <span>Buy Tickets (CAD20.00)</span>
+          </a>    
       </div>
       `,
       imageSrc: "/RamadanFundraiser2025.jpeg",
