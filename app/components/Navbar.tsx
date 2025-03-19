@@ -18,8 +18,8 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!mobileMenuOpen) return;
-    const handleClickOutside = (e) => {
-      if (e.target.closest('[data-menu-container]')) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (e.target && (e.target as HTMLElement).closest('[data-menu-container]')) return;
       setMobileMenuOpen(false);
     };
     document.addEventListener('mousedown', handleClickOutside);
