@@ -231,67 +231,76 @@ const HeroSectionTable = () => {
 
 
   return (
-    <section className={`min-h-[70vh] w-full px-4 sm:px-6 lg:px-8 mt-16 bg-white`}>
-      <div className={`mx-auto max-w-7xl`}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-12 items-center">
-          {/* Left Column - Mixed Content */}
-          <div className="md:col-span-3 py-12">
-            <div className="relative md:min-h-[800px]">
-              {/* Content */}
-              <div key={currentIndex} className="animate-fade-slide">
-                <ContentBlock
-                  block={contentBlocks[currentIndex]}
-                  videoRef={videoRef}
-                  nextSlide={nextSlide} // Pass nextSlide to ContentBlock
-                />
-              </div>
-                 
-                 {contentBlocks[currentIndex].type === 'video' && contentBlocks[currentIndex].cta && (
-                    <div className="mt-4"> 
-                        {contentBlocks[currentIndex].cta as ReactNode}
-                    </div>
-                 )}
+    <section className="min-h-[70vh] w-full px-4 sm:px-6 lg:px-8 mt-16 bg-white">
+  <div className="mx-auto max-w-7xl">
+    {/* Use a one-column grid on md screens and switch to 4 columns on lg screens */}
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 items-center">
+      {/* Left Column - Mixed Content */}
+      <div className="lg:col-span-3 py-12">
+        <div className="relative min-h-[400px] lg:min-h-[800px]">
+          {/* Content */}
+          <div key={currentIndex} className="animate-fade-slide">
+            <ContentBlock
+              block={contentBlocks[currentIndex]}
+              videoRef={videoRef}
+              nextSlide={nextSlide} // Pass nextSlide to ContentBlock
+            />
+          </div>
 
-
-              {/* Navigation Arrows */}
-              <button
-                onClick={previousSlide}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 p-2 rounded-full bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <ChevronLeft size={24} className="text-gray-600" />
-              </button>
-              <button
-                onClick={nextSlide}
-                className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 p-2 rounded-full bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
-              >
-                <ChevronRight size={24} className="text-gray-600" />
-              </button>
-
-              {/* Dot Navigation */}
-              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2 mb-4">
-                {contentBlocks.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => goToSlide(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      currentIndex === index
-                        ? "bg-blue-600 w-4"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
-                  />
-                ))}
-              </div>
+          {contentBlocks[currentIndex].type === "video" && contentBlocks[currentIndex].cta && (
+            <div className="mt-4">
+              {contentBlocks[currentIndex].cta as ReactNode}
             </div>
-          </div>
+          )}
 
-          {/* Right Column - Table */}
-          <div className="md:col-span-1">
-          <iframe src="https://timing.athanplus.com/masjid/widgets/embed?theme=1&masjid_id=nL1Zq8Aa" width="100%" height="560" frameBorder="0"></iframe>
+          {/* Navigation Arrows */}
+          <button
+            onClick={previousSlide}
+            className="absolute left-0 top-1/2 -translate-y-1/2 -ml-4 p-2 rounded-full bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+          >
+            <ChevronLeft size={24} className="text-gray-600" />
+          </button>
+          <button
+            onClick={nextSlide}
+            className="absolute right-0 top-1/2 -translate-y-1/2 -mr-4 p-2 rounded-full bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+          >
+            <ChevronRight size={24} className="text-gray-600" />
+          </button>
+
+          {/* Dot Navigation */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex gap-2 mb-4">
+            {contentBlocks.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  currentIndex === index
+                    ? "bg-blue-600 w-4"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+              />
+            ))}
           </div>
-          
         </div>
       </div>
-    </section>
+
+      {/* Right Column - Table */}
+      <div className="lg:col-span-1">
+        {/* A wrapper with overflow-hidden prevents horizontal scroll if iframe content overflows */}
+        <div className="overflow-hidden">
+          <iframe
+            src="https://timing.athanplus.com/masjid/widgets/embed?theme=1&masjid_id=nL1Zq8Aa"
+            width="100%"
+            height="560"
+            frameBorder="0"
+            className="block"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
   );
 };
 

@@ -20,21 +20,19 @@ const WeekendSchool: FC = () => {
       };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">
-      
+    <div className="min-h-screen bg-gray-50 text-gray-900">      
 
       {/* Hero Section */}
-      {/* Hero Section */}
-<header className="pt-20 md:pt-28 pb-12 bg-gradient-to-b from-sky-900 to-sky-700 text-white">
+<header className="pt-32 md:pt-28 pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
   <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
     <div className="md:w-1/2 mb-8 md:mb-0">
       <h1 className="text-4xl md:text-5xl font-bold mb-4">Al-Faruq Weekend Quran School</h1>
-      <p className="text-xl mb-6">Nurturing young minds with Quranic education and Islamic values</p>
+      <p className="text-md md:text-xl mb-6 font-medium">Nurturing young minds with <span className='font-black text-sky-200 underline'>Quranic education</span> and <span className='font-black text-sky-200 underline'>Islamic values</span></p>
       <a 
         href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" 
         target="_blank" 
         rel="noopener noreferrer"
-        className="bg-white text-sky-800 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-sky-100 transition-colors inline-block"
+        className="bg-sky-950 text-sky-100 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-950 hover:text-sky-100 transition-colors inline-block"
         aria-label="Register your child for Al-Faruq Weekend Quran School"
       >
         Register Your Child
@@ -66,7 +64,7 @@ const WeekendSchool: FC = () => {
               Al-Faruq Weekend Quran School is dedicated to providing students with Quranic education and fundamental Islamic values. 
               Due to limited teaching time, our curriculum focuses on four key areas:
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-sky-800">
               {[
                 { number: "1", text: "Arabic Reading Skills" },
                 { number: "2", text: "Quran Studies" },
@@ -100,7 +98,7 @@ const WeekendSchool: FC = () => {
                 aria-expanded={activeSections.arabic}
                 aria-controls="arabic-content"
               >
-                <div className="flex items-center">
+                <div className="flex items-center text-sky-800">
                   <div className="bg-sky-100 p-4 rounded-full mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -114,7 +112,7 @@ const WeekendSchool: FC = () => {
               </button>
               <div 
                 id="arabic-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.arabic ? 'block' : 'hidden'}`}
+                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.arabic ? 'block' : 'hidden'}`}
               >
                 <p className="mb-4">
                   To effectively learn the Quran, students must be able to read fluently from the Mushaf with Tajweed. We assess each student&apos;s reading ability and provide targeted instruction to strengthen their skills. Our Arabic reading program consists of 12 progressive levels.
@@ -133,7 +131,7 @@ const WeekendSchool: FC = () => {
                 aria-expanded={activeSections.quran}
                 aria-controls="quran-content"
               >
-                <div className="flex items-center">
+                <div className="flex items-center text-sky-800">
                   <div className="bg-sky-100 p-4 rounded-full mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -147,7 +145,7 @@ const WeekendSchool: FC = () => {
               </button>
               <div 
                 id="quran-content" 
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.quran ? 'block' : 'hidden'}`}
+                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.quran ? 'block' : 'hidden'}`}
               >
                 <p className="mb-4">
                   Our Quran Studies program emphasizes fluency in recitation with Tajweed, ensuring proper pronunciation and application of recitation rules. To support learning, we use an online Quran platform, enabling students to practice and memorize easily at home with parental guidance.
@@ -168,7 +166,7 @@ const WeekendSchool: FC = () => {
                 aria-expanded={activeSections.islamic}
                 aria-controls="islamic-content"
               >
-                <div className="flex items-center">
+                <div className="flex items-center text-sky-800">
                   <div className="bg-sky-100 p-4 rounded-full mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
@@ -182,7 +180,7 @@ const WeekendSchool: FC = () => {
               </button>
               <div 
                 id="islamic-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.islamic ? 'block' : 'hidden'}`}
+                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.islamic ? 'block' : 'hidden'}`}
               >
                 <p className="mb-4">Al-Faruq Weekend School provides essential Islamic education, including:</p>
                 <ul className="list-disc pl-6 space-y-2">
@@ -201,7 +199,7 @@ const WeekendSchool: FC = () => {
                 aria-expanded={activeSections.seerah}
                 aria-controls="seerah-content"
               >
-                <div className="flex items-center">
+                <div className="flex items-center text-sky-800">
                   <div className="bg-sky-100 p-4 rounded-full mr-4">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
@@ -215,7 +213,7 @@ const WeekendSchool: FC = () => {
               </button>
               <div 
                 id="seerah-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.seerah ? 'block' : 'hidden'}`}
+                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.seerah ? 'block' : 'hidden'}`}
               >
                 <p>
                   Children naturally learn through imitation. Our Seerah sessions introduce students to the life of Prophet Muhammad (peace be upon him) and his companions, offering them strong role models to follow in their daily lives.
@@ -229,7 +227,7 @@ const WeekendSchool: FC = () => {
         <section id="location" className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Location */}
 <div className="bg-white rounded-lg shadow-md p-6">
-  <h2 className="text-2xl font-bold mb-4 text-emerald-800">Location</h2>
+  <h2 className="text-2xl font-bold mb-4 text-sky-800">Location</h2>
   <p className="mb-4">All classes are held at Al-Faruq Islamic Centre.</p>
   <address className="not-italic mb-6">
     4410 127 St SW<br />
@@ -320,7 +318,7 @@ const WeekendSchool: FC = () => {
                 }
               ].map((faq, index) => (
                 <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="text-lg font-semibold mb-2">{faq.q}</h3>
+                  <h3 className="text-lg font-semibold mb-2 text-sky-500">{faq.q}</h3>
                   <p>{faq.a}</p>
                 </div>
               ))}
