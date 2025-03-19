@@ -69,7 +69,7 @@ const WeekendSchool: FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               {[
                 { number: "1", text: "Arabic Reading Skills" },
-                { number: "2", text: "Qur'an Studies" },
+                { number: "2", text: "Quran Studies" },
                 { number: "3", text: "Islamic Studies" },
                 { number: "4", text: "Seerah of the Prophet S.A.W" }
               ].map((item, index) => (
@@ -117,7 +117,7 @@ const WeekendSchool: FC = () => {
                 className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.arabic ? 'block' : 'hidden'}`}
               >
                 <p className="mb-4">
-                  To effectively learn the Quran, students must be able to read fluently from the Mushaf with Tajweed. We assess each student's reading ability and provide targeted instruction to strengthen their skills. Our Arabic reading program consists of 12 progressive levels.
+                  To effectively learn the Quran, students must be able to read fluently from the Mushaf with Tajweed. We assess each student&apos;s reading ability and provide targeted instruction to strengthen their skills. Our Arabic reading program consists of 12 progressive levels.
                 </p>
                 <p>
                   While students are in the reading program, they collectively memorize Surah An-Nas to Surah Al-Asr, along with Surah Al-Fatiha, through repetition. Once they complete the reading course, they begin individual Quran lessons.
@@ -125,7 +125,7 @@ const WeekendSchool: FC = () => {
               </div>
             </div>
 
-            {/* Qur'an Studies */}
+            {/* Quran Studies */}
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <button 
                 onClick={() => toggleSection('quran')}
@@ -139,7 +139,7 @@ const WeekendSchool: FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                     </svg>
                   </div>
-                  <h3 className="text-xl font-semibold">Qur'an Studies</h3>
+                  <h3 className="text-xl font-semibold">Quran Studies</h3>
                 </div>
                 <svg className={`w-6 h-6 transform transition-transform ${activeSections.quran ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
@@ -150,7 +150,7 @@ const WeekendSchool: FC = () => {
                 className={`px-6 pb-6 transition-all duration-300 ease-in-out ${activeSections.quran ? 'block' : 'hidden'}`}
               >
                 <p className="mb-4">
-                  Our Qur'an Studies program emphasizes fluency in recitation with Tajweed, ensuring proper pronunciation and application of recitation rules. To support learning, we use an online Quran platform, enabling students to practice and memorize easily at home with parental guidance.
+                  Our Quran Studies program emphasizes fluency in recitation with Tajweed, ensuring proper pronunciation and application of recitation rules. To support learning, we use an online Quran platform, enabling students to practice and memorize easily at home with parental guidance.
                 </p>
                 <p className="mb-2">Due to the challenges some students face, we have divided Quran learning into two sessions:</p>
                 <ul className="list-disc pl-6 mb-4 space-y-2">
@@ -316,7 +316,7 @@ const WeekendSchool: FC = () => {
                 },
                 {
                   q: "Is there homework assigned?",
-                  a: "Yes, students receive homework to practice their reading and memorization skills. Parental support at home is crucial for students' progress."
+                  a: "Yes, students receive homework to practice their reading and memorization skills. Parental support at home is crucial for students&apos; progress."
                 }
               ].map((faq, index) => (
                 <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
