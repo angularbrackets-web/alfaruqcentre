@@ -39,3 +39,12 @@ body {
 .animate-fade-slide {
   animation: fadeSlide 3s ease-out forwards;
 }
+
+.hide-scrollbar {
+  /* For Webkit-based browsers */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

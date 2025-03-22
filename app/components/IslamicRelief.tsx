@@ -32,7 +32,7 @@ export default function IslamicRelief() {
               <Link
                 href="https://fundraise.islamicreliefcanada.org/campaign/support-sahaba-and-al-faruq-mosque-2398"
                 target="_blank"
-                className="flex items-center justify-center text-center gap-4 rounded-lg bg-blue-500 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 w-96 mx-auto lg:mx-0"
+                className="flex items-center justify-center text-center gap-4 rounded-lg bg-blue-500 px-4 lg:px-6 py-2 lg:py-3 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 w-full md:w-96 mx-auto lg:mx-0"
               >
                 <BadgeDollarSign className="h-4 w-4 lg:h-6 lg:w-6" />
                 <span>Donate with Islamic Relief Canada</span>

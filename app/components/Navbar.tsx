@@ -77,7 +77,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1 xl:space-x-4">
             <NavLink href="/">HOME</NavLink>
-            <NavLink href="/monthlyprayertimes">PRAYER TIMES</NavLink>
+            <NavLink href="/prayertimes">PRAYER TIMES</NavLink>
             <NavLink href="/programs">PROGRAMS</NavLink>
             <NavLink href="/weekendschool">WEEKEND SCHOOL</NavLink>
             <DonateButton />
@@ -133,7 +133,7 @@ const Navbar = () => {
             <MobileNavLink href="/" onClick={() => setMobileMenuOpen(false)}>
               Home
             </MobileNavLink>
-            <MobileNavLink href="/monthlyprayertimes" onClick={() => setMobileMenuOpen(false)}>
+            <MobileNavLink href="/prayertimes" onClick={() => setMobileMenuOpen(false)}>
               Prayer Times
             </MobileNavLink>
             <MobileNavLink href="/programs" onClick={() => setMobileMenuOpen(false)}>
