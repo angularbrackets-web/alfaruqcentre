@@ -5,7 +5,7 @@ import EnhancedProgressBar from "./EnhancedProgressBar";
 
 export default function IslamicRelief() {
   return (
-    <div className="card p-4 mb-4 mt-8 lg:mt-32 mx-4 bg-gray-300 rounded-md shadow-md">
+    <div className="card p-4 mb-4 mx-4 bg-gray-300 rounded-md shadow-md">
       <div className="card-body">
         <div className="container mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
           {/* Logo Section */}
