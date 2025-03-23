@@ -3,7 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['media4.giphy.com','media0.giphy.com'],
+    remotePatterns: [
+      { protocol: 'https', hostname: 'media4.giphy.com' },
+      { protocol: 'https', hostname: 'media0.giphy.com' },
+    ],
   }
 };
 
