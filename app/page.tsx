@@ -10,7 +10,10 @@ export default function Home() {
     <div>
       <IslamicRelief />
       <HeroSectionTable />
-      <PosterGallery /> 
+      <div className="my-8">
+        <PosterGallery />
+      </div>
+       
       <IslamicSchool />  
       <Donate />
      
