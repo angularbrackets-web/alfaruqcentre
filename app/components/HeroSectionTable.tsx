@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import Image from "next/image";
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
 
 interface ImageBlock {
   type: "image";
@@ -101,6 +101,7 @@ const ContentBlock: React.FC<{
               {imageBlock.introduction}
             </div>
           )}
+          {imageBlock.imageSrc && (
           <div className="relative w-full min-h-[500px] mb-6">
             <Image
               src={imageBlock.imageSrc || "/fallback-image.png"}
@@ -111,6 +112,7 @@ const ContentBlock: React.FC<{
               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           </div>
+          )}
           {imageBlock.description && (
             <div>
               {imageBlock.description}
@@ -145,11 +147,6 @@ const HeroSectionTable = () => {
             <h2 className="text-lg font-semibold text-gray-800 mb-6">
               with Al-Faruq Islamic School & Amana Academy
             </h2>
-            
-            {/* <p className="text-gray-700 text-md">
-              As the public school system increasingly pushes agendas that conflict with our values, 
-              parents are left with a critical decision: Who will shape your child&apos;s future?
-            </p> */}
 
 <div className="bg-amber-100 border-l-4 border-amber-500 p-2 mb-8 rounded">
               <p className="text-amber-800 font-medium text-xs">
@@ -172,35 +169,76 @@ const HeroSectionTable = () => {
                 Call (780) 243-8811
               </Link>
             </div>
+            <div className="mt-4 w-full">
+              <Link href="https://tinyurl.com/AFIS2025" target="_blank">
+                <Image src="/AlFaruqIslamicSchoolPoster.March2025.jpeg" alt="" className="w-full" width={400} height={400} />
+              </Link>
+            </div>
           </div>
         ),
         description: null
-        // (
-        //   <div className="">
-            
-            
-        //     <div className="space-y-4 mb-8">
-        //       <div className="flex items-start">
-        //         <CheckCircle className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-        //         <p className="text-gray-700">Academic Excellence with a strong Islamic foundation</p>
-        //       </div>
-              
-        //       <div className="flex items-start">
-        //         <CheckCircle className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-        //         <p className="text-gray-700">Small Class Sizes for personalized learning</p>
-        //       </div>
-              
-        //       <div className="flex items-start">
-        //         <CheckCircle className="h-6 w-6 text-emerald-600 mr-2 flex-shrink-0 mt-0.5" />
-        //         <p className="text-gray-700">A Safe Alternative to the shifting public school landscape</p>
-        //       </div>
-        //     </div>
-            
-            
-        //   </div>
-        // )
         ,
-        imageSrc: "/AlFaruqIslamicSchoolPoster.March2025.jpeg",
+        duration: 15000,
+      },
+      {
+        type: "image",
+        pretitle: "",
+        title: "",
+        introduction: (
+          <div>
+            
+            
+            <h1 className="text-xl font-bold text-gray-900 mb-4">
+            <span className="text-emerald-600">Al-Faruq Weekend Quran School</span>
+              <span className="text-xs block mt-2">5 to 12 years</span>
+            </h1>
+            <div className="inline-block px-4 py-1 mb-4 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium">
+              Saturday and Sunday, 11:00 AM - 02:00 PM
+            </div>
+            <h2 className="text-sm font-semibold text-gray-800 mb-6">
+            Invest in your Child&apos;s Here and Hereafter 
+            </h2>
+
+            <div className="space-y-4 mb-8 text-gray-800 text-sm">
+              <div className="flex items-start">
+                <CheckCircle className="h-6 w-6 mr-2 flex-shrink-0 mt-0.5" />
+                <p>Teaching how to read Arabic fluently</p>
+              </div>
+              
+              <div className="flex items-start">
+                <CheckCircle className="h-6 w-6 mr-2 flex-shrink-0 mt-0.5" />
+                <p>Quran Recitation and Memorization</p>
+              </div>
+              
+              <div className="flex items-start">
+                <CheckCircle className="h-6 w-6 mr-2 flex-shrink-0 mt-0.5" />
+                <p>Adhkar, Sheeran and Islamic Studies</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-4">
+            <Link 
+                href="/weekendschool"
+                className="border border-gray-300 hover:border-emerald-600 hover:text-emerald-600 px-6 py-3 rounded-lg font-medium text-center transition duration-200 text-sm"
+              >
+                Learn More
+              </Link>
+              <Link 
+                href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" target="_blank"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium text-center transition duration-200 shadow-lg hover:shadow-xl text-sm"
+              >
+                Apply Now
+              </Link>
+            </div>
+            <div>
+              <Link href="/weekendschool">
+                <Image src="/AlFaruqWeekendQuranSchool.March2025.jpeg" alt="" width={350} height={400} />
+              </Link>
+            </div>
+          </div>
+        ),
+        description: null
+        ,
         duration: 15000,
       },
       {

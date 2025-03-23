@@ -28,12 +28,12 @@ const posters: Poster[] = [
   },
   {
     id: '2',
-    src: '/AlFaruqIslamicSchool.Approved.July2024.jpeg',
+    src: '/AlFaruqIslamicSchoolPoster.March2025.jpeg',
     alt: 'Islamic School',
   },
   {
     id: '3',
-    src: '/AlFaruqWeekendQuranSchool.jpg',
+    src: '/AlFaruqWeekendQuranSchool.March2025.jpeg',
     alt: 'Weekend Quran School',
     url: 'https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform',
     linkText: 'Register',

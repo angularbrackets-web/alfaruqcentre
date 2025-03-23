@@ -58,7 +58,12 @@ const WeekendSchool: FC = () => {
       <main className="container mx-auto px-4 py-12">
         {/* Mission Section */}
         <section id="mission" className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Mission</h2>
+            <div className='flex flex-col lg:flex-row gap-4'>
+                <div>
+<Image src='/AlFaruqWeekendQuranSchool.March2025.jpeg' alt='Al-Faruq Weekend Quran School Poster' width={400} height={200} className='mx-auto' />
+                </div>
+                <div>
+                    <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Mission</h2>
           <div className="bg-white rounded-lg shadow-md p-6">
             <p className="mb-6">
               Al-Faruq Weekend Quran School is dedicated to providing students with Quranic education and fundamental Islamic values. 
@@ -73,15 +78,18 @@ const WeekendSchool: FC = () => {
               ].map((item, index) => (
                 <div key={index} className="bg-sky-50 p-6 rounded-lg border-l-4 border-sky-600">
                   <div className="flex items-center">
-                    <div className="bg-sky-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold">
+                    {/* <div className="bg-sky-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold">
                       {item.number}
-                    </div>
-                    <h3 className="font-semibold text-lg">{item.text}</h3>
+                    </div> */}
+                    <h3 className="font-semibold text-md">{item.text}</h3>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+                </div>
+            </div>
+          
         </section>
 
         {/* Programs Section */}
