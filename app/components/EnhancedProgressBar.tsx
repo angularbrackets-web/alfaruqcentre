@@ -49,7 +49,7 @@ interface ProgressBarProps {
 }
 
 const EnhancedProgressBar: React.FC<ProgressBarProps> = ({ 
-  currentAmount = 35332, 
+  currentAmount = 37477, 
   goalAmount = 200000, 
   currency = '$',
   title = 'Fundraising Progress',
@@ -58,7 +58,7 @@ const EnhancedProgressBar: React.FC<ProgressBarProps> = ({
   height = 'medium',
   showMilestones = true,
 //   recentDonors = [],
-  donations = 119
+  donations = 128
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   
