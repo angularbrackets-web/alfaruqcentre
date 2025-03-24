@@ -80,6 +80,12 @@ const Navbar = () => {
             <NavLink href="/prayertimes">PRAYER TIMES</NavLink>
             <NavLink href="/programs">PROGRAMS</NavLink>
             <NavLink href="/weekendschool">WEEKEND SCHOOL</NavLink>
+            <NavLink href="/nowhiring">
+  <span className="px-3 py-2 text-sm font-bold text-red-600 hover:text-red-500 hover:underline transition-colors relative group">
+    NOW HIRING
+  </span>
+</NavLink>
+
             <DonateButton />
           </div>
 
@@ -142,6 +148,12 @@ const Navbar = () => {
             <MobileNavLink href="/weekendschool" onClick={() => setMobileMenuOpen(false)}>
               Weekend School
             </MobileNavLink>
+            <MobileNavLink href="/nowhiring" onClick={() => setMobileMenuOpen(false)}>
+  <span className="text-lg font-bold text-red-600 hover:text-red-500 transition-colors">
+    Now Hiring
+  </span>
+</MobileNavLink>
+
             <div className="pt-4">
               <DonateButton mobile />
             </div>
