@@ -129,7 +129,19 @@ const ContentBlock: React.FC<{
 const HeroSectionTable = () => {
   const contentBlocks = useMemo<ContentBlockType[]>(
     () => [
-      
+      {
+        type: "image",
+        pretitle: "",
+        title: "",
+        introduction: null,
+        description: (
+          <div className="mt-32">
+            <Image src="/AlFaruq.KhatimalQuran.jpeg" alt="" className="w-full" width={400} height={400} />
+          </div>
+        ), // or you can pass JSX here if needed
+        imageSrc: "",
+        duration: 15000,
+      },
       {
         type: "image",
         pretitle: "",
