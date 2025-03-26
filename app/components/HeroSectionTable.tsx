@@ -10,6 +10,7 @@ import React, {
 import Image from "next/image";
 import Link from 'next/link';
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import GlassmorphicPrayerTimes from "./GlassmorphicPrayerTimes";
 
 interface ImageBlock {
   type: "image";
@@ -425,7 +426,8 @@ const HeroSectionTable = () => {
           </div>
 
           {/* Right Column: Prayer Times Widget */}
-          <div className="overflow-hidden h-[560px]">
+          <GlassmorphicPrayerTimes />
+          {/* <div className="overflow-hidden h-[560px]">
             <iframe
               src="https://timing.athanplus.com/masjid/widgets/embed?theme=1&masjid_id=nL1Zq8Aa"
               width="100%"
@@ -434,7 +436,7 @@ const HeroSectionTable = () => {
               className="block"
               scrolling="no"
             ></iframe>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
