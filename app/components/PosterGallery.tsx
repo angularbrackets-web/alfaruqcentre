@@ -47,10 +47,8 @@ const posters: Poster[] = [
 
 export default function PosterGallery() {
   const [processedPosters, setProcessedPosters] = useState<PosterWithDimensions[]>([]);
-  const [selectedPoster, setSelectedPoster] = useState<PosterWithDimensions | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Process poster dimensions on component mount
   useEffect(() => {
     const loadImageDimensions = async () => {
       setLoading(true);
@@ -82,7 +80,6 @@ export default function PosterGallery() {
               });
             };
             
-            // Fallback in case image fails to load
             img.onerror = () => {
               resolve({
                 ...poster,
@@ -105,28 +102,6 @@ export default function PosterGallery() {
     loadImageDimensions();
   }, []);
 
-  // Close modal when clicking escape key
-  useEffect(() => {
-    const handleEscKey = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setSelectedPoster(null);
-      }
-    };
-
-    window.addEventListener('keydown', handleEscKey);
-    return () => {
-      window.removeEventListener('keydown', handleEscKey);
-    };
-  }, []);
-
-  // Close modal when clicking outside
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      setSelectedPoster(null);
-    }
-  };
-
-  // Get CSS class based on poster orientation
   const getPosterOrientationClass = (orientationType: string) => {
     switch (orientationType) {
       case 'portrait':
@@ -153,87 +128,55 @@ export default function PosterGallery() {
       <h2 className="text-3xl font-bold text-sky-900 mb-6 px-5">Our Programs</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
         {processedPosters.map((poster) => (
-          <div key={poster.id}>
-          <div className='flex flex-col'>
-          <div
-            
-            className={`${getPosterOrientationClass(poster.orientationType)} cursor-pointer transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}
-            onClick={() => setSelectedPoster(poster)}
-          >
-            <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
-              <div className="relative w-full h-full">
-                {/* Image */}
-                <Image
-                  src={poster.src}
-                  alt={poster.alt}
-                  fill
-                  sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-          {poster.url && (
-                  <div className="">
-                    <Link 
-                      href={poster.url} 
-                      target="_blank" 
-                      onClick={(e) => e.stopPropagation()} 
-                      className="inline-block rounded-lg bg-blue-500 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 px-4 py-1 my-2"
-                    >
-                      {poster.linkText!}
-                    </Link>
+          <div key={poster.id} className='flex flex-col'>
+            {poster.url ? (
+              <a
+                href={poster.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`${getPosterOrientationClass(poster.orientationType)} transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}
+              >
+                <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={poster.src}
+                      alt={poster.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover rounded-lg"
+                    />
                   </div>
-                )}
                 </div>
+              </a>
+            ) : (
+              <div className={`${getPosterOrientationClass(poster.orientationType)} max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}>
+                <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
+                  <div className="relative w-full h-full">
+                    <Image
+                      src={poster.src}
+                      alt={poster.alt}
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
+                </div>
+              </div>
+            )}
+            {poster.url && (
+              <div>
+                <Link 
+                  href={poster.url} 
+                  target="_blank" 
+                  className="inline-block rounded-lg bg-blue-500 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 px-4 py-1 my-2"
+                >
+                  {poster.linkText!}
+                </Link>
+              </div>
+            )}
           </div>
         ))}
       </div>
-
-
-
-      {/* Modal Popup */}
-      {selectedPoster && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-          onClick={handleBackdropClick}
-        >
-          <div className="relative bg-white rounded-lg max-w-4xl max-h-full overflow-auto">
-            <button
-              className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-black bg-opacity-50 text-white hover:bg-opacity-70 transition-opacity"
-              onClick={() => setSelectedPoster(null)}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            <div className="p-1">
-              <div className="relative">
-                <Image
-                  src={selectedPoster.src}
-                  alt={selectedPoster.alt}
-                  width={selectedPoster.width}
-                  height={selectedPoster.height}
-                  className="max-h-[85vh] w-auto h-auto"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Custom CSS for different aspect ratios */}
       <style jsx global>{`
         .poster-portrait {
           aspect-ratio: 2/3;
