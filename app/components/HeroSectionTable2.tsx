@@ -268,17 +268,17 @@ const HeroSectionTable2 = () => {
         introduction: (
           <Card imageUrl="/Al.FaruqPrayerHall.jpeg">
           <h1 
-          className="text-lg font-bold mb-6 text-sky-600"
+          className="text-xl font-bold mb-6 text-sky-600"
         >
           Welcome to Al Faruq Islamic Centre
         </h1>
         <p 
-          className="text-md md:text-xl mb-6 text-gray-900"
+          className="text-lg mb-6 text-gray-900"
         >
           A Place of Worship, Learning, and Community in South Edmonton.
         </p>
         <p 
-          className="text-sm md:text-lg mb-8 text-gray-700"
+          
         >
           Located in the heart of South Edmonton, Al Faruq Islamic Centre is a welcoming space dedicated to fostering faith, education, and unity. 
         </p>
@@ -388,24 +388,24 @@ const HeroSectionTable2 = () => {
       {/* Left Column: Carousel with stacked content */}
       <div className="relative">
         {/* Navigation Buttons spaced out on either side */}
-        <div className="absolute top-4 left-4 flex justify-between w-full px-4 z-10">
+        <div className="top-4 left-4 flex justify-between w-full px-4 z-10">
           <button
             onClick={previousSlide}
-            className="px-4 py-2 rounded-lg bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
             aria-label="Previous Slide"
           >
-            <ArrowLeftCircleIcon size={24} className="text-gray-600" />
+            <ArrowLeftCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600" />
           </button>
           <button
             onClick={nextSlide}
-            className="px-4 py-2 rounded-lg bg-white/80 shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
             aria-label="Next Slide"
           >
-            <ArrowRightCircleIcon size={24} className="text-gray-600" />
+            <ArrowRightCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600" />
           </button>
         </div>
 
-        <div className="p-8 relative z-0">
+        <div className="p-8 z-0">
           <div key={currentIndex} className="animate-fade-slide">
             <ContentBlock
               block={contentBlocks[currentIndex]}
