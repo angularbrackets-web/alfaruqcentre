@@ -49,15 +49,26 @@ const CountdownTimer = () => {
 
   const getNextIqamahTime = useMemo(() => {
     return (now: Date) => {
+      // Check for upcoming prayers in the current day.
       for (let i = 0; i < prayerList.length; i++) {
         const iqamahTime = parseTimeForDate(prayerList[i].timeStr, now);
         if (iqamahTime && now < iqamahTime) {
           return { prayerName: prayerList[i].name, time: iqamahTime };
         }
       }
+      // If no upcoming prayer is found, it means Isha has passed for today.
+      // Calculate tomorrow's Fajr iqamah time.
+      const tomorrow = new Date(now);
+      tomorrow.setDate(now.getDate() + 1);
+      const tomorrowNumber = tomorrow.getDate().toString();
+      const tomorrowData = prayerTimes.find(day => day.date === tomorrowNumber) || prayerTimes[0];
+      const fajrTimeTomorrow = parseTimeForDate(tomorrowData.fajr.iqamah, tomorrow);
+      if (fajrTimeTomorrow) {
+        return { prayerName: 'Fajr', time: fajrTimeTomorrow };
+      }
       return null;
     };
-  }, [prayerList]);
+  }, [prayerList, prayerTimes]);
 
   const [countdown, setCountdown] = useState<{ hours: number; minutes: number; seconds: number }>({
     hours: 0, 

@@ -14,7 +14,7 @@ interface DonateProps {
 }
 
 const Donate: React.FC<DonateProps> = ({
-  paymentLink="https://www.canadahelps.org/en/dn/103035",
+  paymentLink="https://donorchoice.ca/dia",
   buttonText = "Donate Now",
   title = "Donate generously to support Al-Faruq Islamic Center and Islamic School",
   thankYouMessage = "Thank you for your generous donation!",

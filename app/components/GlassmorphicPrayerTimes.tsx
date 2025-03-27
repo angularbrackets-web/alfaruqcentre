@@ -24,11 +24,6 @@ interface DayPrayerTimes {
   maghrib: PrayerTime;
   isha: PrayerTime;
 }
-const options = { year: "numeric" as const, month: "long" as const, day: "numeric" as const, calendar: "islamic" };
-const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(new Date());
-
-
-
 
 const GlassmorphicPrayerTimes = () => {
   const prayerTimes: DayPrayerTimes[] = prayerTimesData;
@@ -79,6 +74,9 @@ const GlassmorphicPrayerTimes = () => {
 
   const options = { year: "numeric" as const, month: "long" as const, day: "numeric" as const };
   const currentDate = new Date().toLocaleDateString('en-US', options);
+
+  const hijriDateOptions = { year: "numeric" as const, month: "long" as const, day: "numeric" as const, calendar: "islamic" };
+  const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', hijriDateOptions).format(new Date());
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">

@@ -46,7 +46,7 @@ const jobOpportunities: JobOpportunity[] = [
       "Excellent communication and interpersonal skills."
     ],
     additional: {
-      education: "Bachelor's Degree (preferred)",
+      education: "Bachelor's Degree (required)",
       workLocation: "In person"
     },
     applyLink: "https://ca.indeed.com/viewjob?jk=86676fea6f3348da"

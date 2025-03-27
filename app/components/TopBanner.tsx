@@ -48,7 +48,7 @@ const TopBanner = ({ iconSize = 24, iconCount = 10 }) => {
 
       {/* External link */}
       <a
-        href="https://donorchoice.ca/dia/zakatulfitr"
+        href="https://donorchoice.ca/dia"
         target="_blank"
         rel="noopener noreferrer"
         className="relative flex flex-col md:flex-row items-center justify-center bg-gray-900 text-white px-4 py-2 rounded-lg shadow-md transition-all hover:scale-105 hover:bg-gray-800 no-underline font-bold z-10"
