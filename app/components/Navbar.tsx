@@ -214,7 +214,7 @@ interface DonateButtonProps {
 
 const DonateButton = ({ mobile }: DonateButtonProps) => (
   <Link
-    href="https://www.canadahelps.org/en/dn/103035"
+    href="https://donorchoice.ca/dia"
     target="_blank"
     rel="noopener noreferrer"
     className={`
