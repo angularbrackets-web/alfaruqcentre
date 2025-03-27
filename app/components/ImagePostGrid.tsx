@@ -11,7 +11,7 @@ const ImagePostGrid = () => {
     },
     {
       id: 2,
-      imageUrl: "/AlFaruq.Weekend.Quran.School.March2025",
+      imageUrl: "/AlFaruq.Weekend.Quran.School.March2025.jpeg",
       text: null
     },
     {
