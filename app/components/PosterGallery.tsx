@@ -11,6 +11,7 @@ type Poster = {
   alt: string;
   url?: string;
   linkText?: string;
+  linkUrl?: string;
 };
 
 type PosterWithDimensions = Poster & {
@@ -35,8 +36,9 @@ const posters: Poster[] = [
     id: '3',
     src: '/AlFaruq.Weekend.Quran.School.March2025.jpeg',
     alt: 'Weekend Quran School',
-    url: 'https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform',
+    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform',
     linkText: 'Register',
+    url: '/weekendschool'
   },
   {
     id: '4',
@@ -132,7 +134,6 @@ export default function PosterGallery() {
             {poster.url ? (
               <a
                 href={poster.url}
-                target="_blank"
                 rel="noopener noreferrer"
                 className={`${getPosterOrientationClass(poster.orientationType)} transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}
               >
@@ -163,10 +164,10 @@ export default function PosterGallery() {
                 </div>
               </div>
             )}
-            {poster.url && (
+            {poster.linkUrl && (
               <div>
                 <Link 
-                  href={poster.url} 
+                  href={poster.linkUrl} 
                   target="_blank" 
                   className="inline-block rounded-lg bg-blue-500 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 px-4 py-1 my-2"
                 >

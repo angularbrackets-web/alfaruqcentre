@@ -60,7 +60,7 @@ const WeekendSchool: FC = () => {
         <section id="mission" className="mb-16">
             <div className='flex flex-col lg:flex-row gap-4'>
                 <div>
-<Image src='/AlFaruqWeekendQuranSchool.March2025.jpeg' alt='Al-Faruq Weekend Quran School Poster' width={400} height={200} className='mx-auto' />
+<Image src='/AlFaruq.Weekend.Quran.School.March2025.jpeg' alt='Al-Faruq Weekend Quran School Poster' width={400} height={200} className='mx-auto' />
                 </div>
                 <div>
                     <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Mission</h2>
