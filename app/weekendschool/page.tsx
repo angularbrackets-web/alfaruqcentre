@@ -310,7 +310,7 @@ const WeekendSchool: FC = () => {
               {[
                 {
                   q: "What age groups do you accept?",
-                  a: "We accept students from ages 5 to 16 years old."
+                  a: "We accept students from ages 5 to 16 years old. If your child is older than 12 years, we have Al-Tarteel Quran Institute available. Please feel free to reach out for more information."
                 },
                 {
                   q: "Do you provide textbooks?",
