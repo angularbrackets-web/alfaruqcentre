@@ -377,7 +377,7 @@ const HeroSectionTable2 = () => {
       {/* Left Column: Carousel with stacked content */}
       <div className="relative">
         {/* Navigation Buttons spaced out on either side */}
-        <div className="top-4 left-4 flex justify-between w-full px-4 z-10">
+        <div className="top-1 left-4 flex justify-between w-full px-4 z-10">
           <button
             onClick={previousSlide}
             className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -422,7 +422,10 @@ const HeroSectionTable2 = () => {
       </div>
 
       {/* Right Column: Prayer Times */}
-      <GlassmorphicPrayerTimes />
+      <div className="mt-1 md:mt-12">
+        <GlassmorphicPrayerTimes />
+      </div>
+      
     </div>
   </div>
 </section>
