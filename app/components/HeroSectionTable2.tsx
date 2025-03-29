@@ -149,7 +149,7 @@ const HeroSectionTable2 = () => {
         title: "",
         introduction: null,
         description: (
-          <Card title="" imageUrl="/EidAlFitrPrayer2025.jpeg" />
+          <Card title="" imageUrl="/EidAlFitrPrayer2025.1.jpeg" />
           
         ),
         imageSrc: "",
