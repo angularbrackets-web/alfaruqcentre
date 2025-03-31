@@ -377,24 +377,26 @@ const HeroSectionTable2 = () => {
       {/* Left Column: Carousel with stacked content */}
       <div className="relative">
         {/* Navigation Buttons spaced out on either side */}
-        <div className="top-1 left-4 flex justify-between w-full px-4 z-10">
+        <div className="top-1 left-4 flex justify-between w-full z-10">
           <button
             onClick={previousSlide}
-            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center items-center justify-center flex gap-2"
             aria-label="Previous Slide"
           >
-            <ArrowLeftCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600" />
+            <ArrowLeftCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600 text-center items-center justify-center" />
+            <span>Previous</span>
           </button>
           <button
             onClick={nextSlide}
-            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center items-center justify-center flex gap-2"
             aria-label="Next Slide"
           >
             <ArrowRightCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600" />
+            <span>Next</span>
           </button>
         </div>
 
-        <div className="p-8 z-0">
+        <div className="py-8 z-0 mt-[-30px]">
           <div key={currentIndex} className="animate-fade-slide">
             <ContentBlock
               block={contentBlocks[currentIndex]}
@@ -422,7 +424,7 @@ const HeroSectionTable2 = () => {
       </div>
 
       {/* Right Column: Prayer Times */}
-      <div className="mt-1 md:mt-12">
+      <div className="mt-1 md:mt-4">
         <GlassmorphicPrayerTimes />
       </div>
       
