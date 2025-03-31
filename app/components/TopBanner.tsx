@@ -66,7 +66,7 @@ const TopBanner = ({ iconSize = 24, iconCount = 10 }) => {
         {/* Text & Icon */}
         <div className="flex items-center">
           <DollarSign className="mr-1 text-yellow-300" />
-          <span>Pay your Zakat Al Fitr here</span>
+          <span>Support your Masjid</span>
         </div>
 
         {/* Right GIF */}
@@ -80,7 +80,7 @@ const TopBanner = ({ iconSize = 24, iconCount = 10 }) => {
 
         {/* Price */}
         <span className="ml-3 bg-yellow-500 text-gray-900 font-bold px-2 py-1 rounded-lg">
-          $15 per person
+          Donate here
         </span>
       </a>
     </div>
