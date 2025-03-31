@@ -132,18 +132,18 @@ const HeroSectionTable2 = () => {
   const contentBlocks = useMemo<ContentBlockType[]>(
     () => [
       
-      {
-        type: "image",
-        pretitle: "",
-        title: "",
-        introduction: null,
-        description: (
-          <Card title="" imageUrl="/EidAlFitrPrayer2025.1.jpeg" />
+      // {
+      //   type: "image",
+      //   pretitle: "",
+      //   title: "",
+      //   introduction: null,
+      //   description: (
+      //     <Card title="" imageUrl="/EidAlFitrPrayer2025.1.jpeg" />
           
-        ),
-        imageSrc: "",
-        duration: 15000,
-      },
+      //   ),
+      //   imageSrc: "",
+      //   duration: 15000,
+      // },
       {
         type: "image",
         pretitle: "",
