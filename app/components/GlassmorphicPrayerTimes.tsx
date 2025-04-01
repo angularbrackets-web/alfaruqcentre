@@ -39,11 +39,11 @@ const GlassmorphicPrayerTimes = () => {
   );
 
   const nextDayData = useMemo(() => {
-    const currentIndex = prayerTimes.findIndex((day) => day.date === currentDayData.date);
+    const currentIndex = prayerTimes.findIndex((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear);
     return currentIndex >= 0 && currentIndex < prayerTimes.length - 1
       ? prayerTimes[currentIndex + 1]
       : prayerTimes[0];
-  }, [currentDayData.date, prayerTimes]);
+  }, [currentDay, currentMonth, currentYear, prayerTimes]);
 
   const prayerList = useMemo(() => [
     { name: 'Fajr', icon: <Clock className="w-5 h-5 text-blue-600" />, data: currentDayData.fajr },
