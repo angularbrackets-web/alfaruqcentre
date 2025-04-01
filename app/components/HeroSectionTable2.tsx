@@ -151,7 +151,7 @@ const HeroSectionTable2 = () => {
         introduction: null,
         description: (
           <div>
-            <Card title="" imageUrl="/AlFaruqIslamicSchoolPoster.March2025.jpeg" >
+            <Card title="" imageUrl="/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.jpeg" >
             <div>
             <div className="inline-block px-4 py-1 mb-4 bg-emerald-100 text-emerald-800 rounded-full text-sm font-medium">
               Alberta Education Accredited

@@ -22,15 +22,13 @@ type PosterWithDimensions = Poster & {
 };
 
 const posters: Poster[] = [
-  {
-    id: '1',
-    src: '/AlFaruqRamadanPrograms2025.jpeg',
-    alt: 'Ramadan Programs 2025',
-  },
+  
   {
     id: '2',
-    src: '/AlFaruqIslamicSchoolPoster.March2025.jpeg',
+    src: '/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.jpeg',
     alt: 'Islamic School',
+    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScBGnya-MWf-d39tWtyDQNgEP_2Ft_86aslmSndZAY2BfRqwg/viewform',
+    linkText: 'Register',
   },
   {
     id: '3',
