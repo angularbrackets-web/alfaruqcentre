@@ -27,11 +27,15 @@ interface DayPrayerTimes {
 
 const GlassmorphicPrayerTimes = () => {
   const prayerTimes: DayPrayerTimes[] = prayerTimesData;
-  const todayNumber = new Date().getDate().toString();
   
+  const today = new Date();
+  const currentDay = today.getDate().toString();
+  const currentMonth = (today.getMonth() + 1).toString().replace(/^0/, '');
+  const currentYear = today.getFullYear().toString();
+
   const currentDayData: DayPrayerTimes = useMemo(() => 
-    prayerTimes.find((day) => day.date === todayNumber) || prayerTimes[0], 
-    [prayerTimes, todayNumber]
+    prayerTimes.find((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear) || prayerTimes[0], 
+    [currentDay, currentMonth, currentYear, prayerTimes]
   );
 
   const nextDayData = useMemo(() => {
