@@ -4,6 +4,8 @@ import prayerTimesData from '../data/prayerTimes.json';
 
 interface DayPrayerTimes {
   date: string;
+  month: string;
+  year: string;
   fajr: { iqamah: string };
   zuhr: { iqamah: string };
   asr: { iqamah: string };
@@ -32,12 +34,15 @@ const parseTimeForDate = (timeStr: string, referenceDate: Date): Date | null => 
 
 const CountdownTimer = () => {
   const prayerTimes: DayPrayerTimes[] = prayerTimesData;
-  const todayNumber = new Date().getDate().toString();
+  const today = new Date();
+    const currentDay = today.getDate().toString();
+    const currentMonth = (today.getMonth() + 1).toString().replace(/^0/, '');
+    const currentYear = today.getFullYear().toString();
   
-  const currentDayData = useMemo(() => 
-    prayerTimes.find((day) => day.date === todayNumber) || prayerTimes[0], 
-    [prayerTimes, todayNumber]
-  );
+    const currentDayData: DayPrayerTimes = useMemo(() => 
+      prayerTimes.find((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear) || prayerTimes[0], 
+      [currentDay, currentMonth, currentYear, prayerTimes]
+    );
 
   const prayerList = useMemo(() => [
     { name: 'Fajr', timeStr: currentDayData.fajr.iqamah },
