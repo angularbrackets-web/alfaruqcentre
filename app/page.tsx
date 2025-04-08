@@ -1,5 +1,5 @@
 "use client";
-import Donate from "./components/Donate";
+import Donate3 from "./components/Donate3";
 import HeroSectionTable from "./components/HeroSectionTable2";
 import IslamicSchool from "./components/IslamicSchool";
 import PosterGallery from "./components/PosterGallery";
@@ -24,8 +24,7 @@ export default function Home() {
       </div>
        
       <IslamicSchool />  
-      <Donate />
-     
+      <Donate3 />
     </div>
   );
 }
