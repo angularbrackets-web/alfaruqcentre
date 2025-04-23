@@ -25,7 +25,7 @@ const posters: Poster[] = [
   
   {
     id: '2',
-    src: '/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.jpeg',
+    src: '/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.1.jpeg',
     alt: 'Islamic School',
     linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScBGnya-MWf-d39tWtyDQNgEP_2Ft_86aslmSndZAY2BfRqwg/viewform',
     linkText: 'Register',
