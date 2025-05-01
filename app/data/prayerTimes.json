@@ -1719,7 +1719,7 @@
           "sunrise": "5:59 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
@@ -1731,8 +1731,8 @@
           "iqamah": "9:11 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:36 PM",
+          "iqamah": "10:41 PM"
         }
       },
       {
@@ -1747,11 +1747,11 @@
           "sunrise": "5:57 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:38 AM",
+          "azzan": "5:38 PM",
           "iqamah": "6:00 PM"
         },
         "maghrib": {
@@ -1759,8 +1759,8 @@
           "iqamah": "9:13 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:38 PM",
+          "iqamah": "10:43 PM"
         }
       },
       {
@@ -1775,11 +1775,11 @@
           "sunrise": "5:55 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:38 AM",
+          "azzan": "5:38 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1787,8 +1787,8 @@
           "iqamah": "9:15 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:40 PM",
+          "iqamah": "10:45 PM"
         }
       },
       {
@@ -1799,15 +1799,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:41 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:53 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:39 AM",
+          "azzan": "5:39 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1815,8 +1815,8 @@
           "iqamah": "9:17 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:42 PM",
+          "iqamah": "10:47 PM"
         }
       },
       {
@@ -1827,15 +1827,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:40 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:51 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:40 AM",
+          "azzan": "5:40 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1843,8 +1843,8 @@
           "iqamah": "9:18 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:43 PM",
+          "iqamah": "10:48 PM"
         }
       },
       {
@@ -1855,15 +1855,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:39 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:49 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:40 AM",
+          "azzan": "5:40 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1871,8 +1871,8 @@
           "iqamah": "9:20 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:45 PM",
+          "iqamah": "10:50 PM"
         }
       },
       {
@@ -1883,15 +1883,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:38 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:47 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:41 AM",
+          "azzan": "5:41 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1899,8 +1899,8 @@
           "iqamah": "9:22 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:47 PM",
+          "iqamah": "10:52 PM"
         }
       },
       {
@@ -1911,15 +1911,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:37 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:45 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:42 AM",
+          "azzan": "5:42 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1927,27 +1927,27 @@
           "iqamah": "9:24 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:49 PM",
+          "iqamah": "10:54 PM"
         }
       },
       {
         "date": "9",
-        "day": "Thu",
+        "day": "Fri",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:36 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:43 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:43 AM",
+          "azzan": "5:43 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1955,27 +1955,27 @@
           "iqamah": "9:25 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:50 PM",
+          "iqamah": "10:55 PM"
         }
       },
       {
         "date": "10",
-        "day": "Fri",
+        "day": "Sat",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:35 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:41 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:43 AM",
+          "azzan": "5:43 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -1983,27 +1983,27 @@
           "iqamah": "9:27 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
+          "azzan": "10:52 PM",
+          "iqamah": "10:57 PM"
         }
       },
       {
         "date": "11",
-        "day": "Sat",
+        "day": "Sun",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:34 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:40 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:44 AM",
+          "azzan": "5:44 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2011,27 +2011,28 @@
           "iqamah": "9:29 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "10:54 PM",
+          "iqamah": "10:59 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "12",
-        "day": "Sun",
+        "day": "Mon",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:33 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:38 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:45 AM",
+          "azzan": "5:45 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2039,27 +2040,28 @@
           "iqamah": "9:31 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "10:56 PM",
+          "iqamah": "11:01 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "13",
-        "day": "Mon",
+        "day": "Tue",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:33 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:36 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:45 AM",
+          "azzan": "5:45 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2067,27 +2069,28 @@
           "iqamah": "9:32 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "10:57 PM",
+          "iqamah": "11:02 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "14",
-        "day": "Tue",
+        "day": "Wed",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:32 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:34 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:46 AM",
+          "azzan": "5:46 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2095,9 +2098,10 @@
           "iqamah": "9:34 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "10:59 PM",
+          "iqamah": "11:04 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "15",
@@ -2107,15 +2111,15 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:31 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:33 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:47 AM",
+          "azzan": "5:47 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2123,27 +2127,28 @@
           "iqamah": "9:36 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:01 PM",
+          "iqamah": "11:06 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "16",
-        "day": "Wed",
+        "day": "Fri",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:30 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:31 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:47 AM",
+          "azzan": "5:47 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2151,27 +2156,28 @@
           "iqamah": "9:37 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:02 PM",
+          "iqamah": "11:07 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "17",
-        "day": "Thu",
+        "day": "Sat",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:29 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:29 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:48 AM",
+          "azzan": "5:48 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2179,27 +2185,28 @@
           "iqamah": "9:39 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:04 PM",
+          "iqamah": "11:09 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "18",
-        "day": "Fri",
+        "day": "Sun",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:29 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "5:00 AM",
           "sunrise": "5:28 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:49 AM",
+          "azzan": "5:49 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2207,13 +2214,14 @@
           "iqamah": "9:41 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:06 PM",
+          "iqamah": "11:11 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "19",
-        "day": "Sat",
+        "day": "Mon",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2223,11 +2231,11 @@
           "sunrise": "5:26 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:49 AM",
+          "azzan": "5:49 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2235,13 +2243,14 @@
           "iqamah": "9:42 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:07 PM",
+          "iqamah": "11:12 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "20",
-        "day": "Sun",
+        "day": "Tue",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2251,11 +2260,11 @@
           "sunrise": "5:25 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:50 AM",
+          "azzan": "5:50 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2263,13 +2272,14 @@
           "iqamah": "9:44 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:09 PM",
+          "iqamah": "11:14 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "21",
-        "day": "Mon",
+        "day": "Wed",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2279,11 +2289,11 @@
           "sunrise": "5:24 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:50 AM",
+          "azzan": "5:50 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2291,9 +2301,10 @@
           "iqamah": "9:45 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:10 PM",
+          "iqamah": "11:15 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "22",
@@ -2307,11 +2318,11 @@
           "sunrise": "5:22 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:51 AM",
+          "azzan": "5:51 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2319,13 +2330,14 @@
           "iqamah": "9:47 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:12 PM",
+          "iqamah": "11:17 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "23",
-        "day": "Tue",
+        "day": "Fri",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2335,11 +2347,11 @@
           "sunrise": "5:21 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:52 AM",
+          "azzan": "5:52 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2347,13 +2359,14 @@
           "iqamah": "9:48 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:13 PM",
+          "iqamah": "11:18 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "24",
-        "day": "Wed",
+        "day": "Sat",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2363,11 +2376,11 @@
           "sunrise": "5:20 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:52 AM",
+          "azzan": "5:52 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2375,13 +2388,14 @@
           "iqamah": "9:50 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:15 PM",
+          "iqamah": "11:20 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "25",
-        "day": "Thu",
+        "day": "Sun",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2391,11 +2405,11 @@
           "sunrise": "5:18 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:53 AM",
+          "azzan": "5:53 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2403,13 +2417,14 @@
           "iqamah": "9:51 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:16 PM",
+          "iqamah": "11:21 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "26",
-        "day": "Fri",
+        "day": "Mon",
         "dst": true,
         "month": "5",
         "year": "2025",
@@ -2419,11 +2434,11 @@
           "sunrise": "5:17 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:53 AM",
+          "azzan": "5:53 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2431,27 +2446,28 @@
           "iqamah": "9:53 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:18 PM",
+          "iqamah": "11:23 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "27",
-        "day": "Sat",
+        "day": "Tue",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:16 AM",
-          "iqamah": "4:15 AM",
+          "iqamah": "4:30 AM",
           "sunrise": "5:16 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:54 AM",
+          "azzan": "5:54 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2459,27 +2475,28 @@
           "iqamah": "9:54 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:19 PM",
+          "iqamah": "11:24 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "28",
-        "day": "Sun",
+        "day": "Wed",
         "dst": true,
         "month": "5",
         "year": "2025",
         "fajr": {
           "azzan": "3:14 AM",
-          "iqamah": "4:15 AM",
+          "iqamah": "4:30 AM",
           "sunrise": "5:15 AM"
         },
         "zuhr": {
-          "azzan": "1:32 AM",
+          "azzan": "1:32 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:54 AM",
+          "azzan": "5:54 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2487,9 +2504,10 @@
           "iqamah": "9:55 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:20 PM",
+          "iqamah": "11:25 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "29",
@@ -2503,11 +2521,11 @@
           "sunrise": "5:14 AM"
         },
         "zuhr": {
-          "azzan": "1:33 AM",
+          "azzan": "1:33 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:55 AM",
+          "azzan": "5:55 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2515,9 +2533,10 @@
           "iqamah": "9:57 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:22 PM",
+          "iqamah": "11:27 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "30",
@@ -2531,11 +2550,11 @@
           "sunrise": "5:13 AM"
         },
         "zuhr": {
-          "azzan": "1:33 AM",
+          "azzan": "1:33 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:56 AM",
+          "azzan": "5:56 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2543,9 +2562,10 @@
           "iqamah": "9:58 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:23 PM",
+          "iqamah": "11:28 PM"
+        },
+        "maghrib_isha_combined": true
       },
       {
         "date": "31",
@@ -2559,11 +2579,11 @@
           "sunrise": "5:12 AM"
         },
         "zuhr": {
-          "azzan": "1:33 AM",
+          "azzan": "1:33 PM",
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:56 AM",
+          "azzan": "5:56 PM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2571,9 +2591,10 @@
           "iqamah": "9:59 PM"
         },
         "isha": {
-          "azzan": "",
-          "iqamah": "combined"
-        }
+          "azzan": "11:24 PM",
+          "iqamah": "11:29 PM"
+        },
+        "maghrib_isha_combined": true
       }
   ]
   
