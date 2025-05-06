@@ -1751,7 +1751,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:38 PM",
+          "azzan": "5:38 AM",
           "iqamah": "6:00 PM"
         },
         "maghrib": {
@@ -1779,8 +1779,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:38 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:38 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:10 PM",
@@ -1807,8 +1807,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:39 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:39 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:12 PM",
@@ -1835,8 +1835,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:40 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:40 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:13 PM",
@@ -1863,8 +1863,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:40 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:40 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:15 PM",
@@ -1891,8 +1891,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:41 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:41 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:17 PM",
@@ -1919,8 +1919,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:42 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:42 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:19 PM",
@@ -1947,8 +1947,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:43 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:43 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:20 PM",
@@ -1975,8 +1975,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:43 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:43 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:22 PM",
@@ -2003,8 +2003,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:44 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:44 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:24 PM",
@@ -2032,8 +2032,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:45 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:45 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:26 PM",
@@ -2061,8 +2061,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:45 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:45 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:27 PM",
@@ -2090,8 +2090,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:46 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:46 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:29 PM",
@@ -2119,8 +2119,8 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:47 PM",
-          "iqamah": "6:15 PM"
+          "azzan": "5:47 AM",
+          "iqamah": "6:00 PM"
         },
         "maghrib": {
           "azzan": "9:31 PM",
@@ -2140,7 +2140,7 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:30 AM",
-          "iqamah": "5:00 AM",
+          "iqamah": "4:30 AM",
           "sunrise": "5:31 AM"
         },
         "zuhr": {
@@ -2148,7 +2148,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:47 PM",
+          "azzan": "5:47 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2169,7 +2169,7 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:29 AM",
-          "iqamah": "5:00 AM",
+          "iqamah": "4:30 AM",
           "sunrise": "5:29 AM"
         },
         "zuhr": {
@@ -2177,7 +2177,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:48 PM",
+          "azzan": "5:48 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2198,7 +2198,7 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:29 AM",
-          "iqamah": "5:00 AM",
+          "iqamah": "4:30 AM",
           "sunrise": "5:28 AM"
         },
         "zuhr": {
@@ -2206,7 +2206,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:49 PM",
+          "azzan": "5:49 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2235,7 +2235,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:49 PM",
+          "azzan": "5:49 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2264,7 +2264,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:50 PM",
+          "azzan": "5:50 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2293,7 +2293,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:50 PM",
+          "azzan": "5:50 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2322,7 +2322,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:51 PM",
+          "azzan": "5:51 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2351,7 +2351,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:52 PM",
+          "azzan": "5:52 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2380,7 +2380,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:52 PM",
+          "azzan": "5:52 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2409,7 +2409,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:53 PM",
+          "azzan": "5:53 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2438,7 +2438,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:53 PM",
+          "azzan": "5:53 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2459,7 +2459,7 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:16 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "4:15 AM",
           "sunrise": "5:16 AM"
         },
         "zuhr": {
@@ -2467,7 +2467,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:54 PM",
+          "azzan": "5:54 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2488,7 +2488,7 @@
         "year": "2025",
         "fajr": {
           "azzan": "3:14 AM",
-          "iqamah": "4:30 AM",
+          "iqamah": "4:15 AM",
           "sunrise": "5:15 AM"
         },
         "zuhr": {
@@ -2496,7 +2496,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:54 PM",
+          "azzan": "5:54 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2525,7 +2525,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:55 PM",
+          "azzan": "5:55 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2554,7 +2554,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:56 PM",
+          "azzan": "5:56 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
@@ -2583,7 +2583,7 @@
           "iqamah": "2:00 PM"
         },
         "asr": {
-          "azzan": "5:56 PM",
+          "azzan": "5:56 AM",
           "iqamah": "6:15 PM"
         },
         "maghrib": {
