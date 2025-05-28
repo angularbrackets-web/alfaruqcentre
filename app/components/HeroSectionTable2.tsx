@@ -182,6 +182,43 @@ const HeroSectionTable2 = () => {
         ),
         description: null, // or you can pass JSX here if needed
         duration: 15000,
+      },
+      {
+        type: "image",
+        title: "Al-Faruq Summer Camp – Registration Now Open!",
+        introduction: (
+          <Card imageUrl="/AFIS.SummerCamp.2025.jpeg">
+          <h1 
+          className="text-xl font-bold mb-6 text-sky-600"
+        >
+          Al-Faruq Summer Camp – Registration Now Open!
+        </h1>
+        <p 
+          className="text-lg mb-6 text-gray-900"
+        >
+          Get ready for a summer full of learning, fun, and unforgettable memories!
+        </p>
+        <p 
+          
+        >
+          Al-Faruq Summer Camp is now accepting registrations.</p>
+        <p>
+        Our program includes engaging courses in Qur’an, Arabic, Islamic Studies, Language Arts, and Math—alongside exciting activities like sports, games, and field trips.
+        </p>
+        <p>Spaces are limited, so don’t wait!</p>
+        <div className="my-2">
+          <Link 
+                href="https://forms.gle/eaNc7Wi7L2LRiApL9" target="_blank"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium text-center transition duration-200 shadow-lg hover:shadow-xl text-sm"
+              >
+                Register Now
+              </Link>
+        </div>
+        
+          </Card>
+        ),
+        description: null, // or you can pass JSX here if needed
+        duration: 15000,
       }
       //,
       // {
