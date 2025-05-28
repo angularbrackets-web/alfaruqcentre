@@ -146,6 +146,63 @@ const HeroSectionTable2 = () => {
       // },
       {
         type: "image",
+        title: "Support your Masjid",
+        introduction: (
+          <Card imageUrl="/SupportYourMasjid.jpeg">
+          <h1 
+          className="text-xl font-bold mb-6 text-sky-600"
+        >
+          Support your Masjid
+        </h1>
+        <p 
+          className="text-lg mb-6 text-gray-900"
+        >
+          Other institutions may raise millions at once — But our strength is in consistent giving.
+        </p>
+        <p 
+          
+        >
+          Be part of a movement of small, daily sacrifices that earn big rewards. The Prophet (peace be upon him) said that angels make duaa every morning for those who give. 
+        </p>
+        <p>
+        Just $1 a day = $30/month
+        </p>
+        <p>Set up your monthly donation now and bring barakah into your sustenance.</p>
+        <p>Click here to support your masjid</p>
+        <div className="my-2">
+          <Link 
+                href="https://tinyurl.com/SupportYourMasjid" target="_blank"
+                className="bg-emerald-600 hover:bg-emerald-700 text-white px-6 py-3 rounded-lg font-medium text-center transition duration-200 shadow-lg hover:shadow-xl text-sm"
+              >
+                Donate
+              </Link>
+        </div>
+        
+          </Card>
+        ),
+        description: null, // or you can pass JSX here if needed
+        duration: 15000,
+      }
+      //,
+      // {
+      //   type: "video",
+      //   title: "Al Faruq Islamic School",
+      //   description: (
+      //     <p className="text-blue-600 text-sm md:text-lg">
+      //       Empowering Minds and Enriching Souls
+      //     </p>
+      //   ),
+      //   videoUrl: "/Amana.mp4",
+      //   // Uncomment and adjust the CTA if needed:
+      //   // cta: (
+      //   //   <button className="flex items-center gap-2 rounded-lg bg-purple-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-blue-600">
+      //   //     <PlayCircle size={24} /> Register
+      //   //   </button>
+      //   // ),
+      // },
+      ,
+      {
+        type: "image",
         pretitle: "",
         title: "",
         introduction: null,

@@ -79,6 +79,7 @@ const Navbar = () => {
             <NavLink href="/">HOME</NavLink>
             <NavLink href="/prayertimes">PRAYER TIMES</NavLink>
             <NavLink href="/programs">PROGRAMS</NavLink>
+            <NavLink href="/events">EVENTS</NavLink>
             <NavLink href="/weekendschool">WEEKEND SCHOOL</NavLink>
             <NavLink href="/nowhiring">
   <span className="px-3 py-2 text-sm font-bold text-red-600 hover:text-red-500 hover:underline transition-colors relative group">
@@ -144,6 +145,9 @@ const Navbar = () => {
             </MobileNavLink>
             <MobileNavLink href="/programs" onClick={() => setMobileMenuOpen(false)}>
               Programs
+            </MobileNavLink>
+            <MobileNavLink href="/events" onClick={() => setMobileMenuOpen(false)}>
+              Events
             </MobileNavLink>
             <MobileNavLink href="/weekendschool" onClick={() => setMobileMenuOpen(false)}>
               Weekend School

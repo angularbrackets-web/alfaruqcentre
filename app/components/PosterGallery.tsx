@@ -22,7 +22,13 @@ type PosterWithDimensions = Poster & {
 };
 
 const posters: Poster[] = [
-  
+  {
+    id: '1',
+    src: '/AFIS.SummerCamp.2025.jpeg',
+    alt: 'Summer Camp 2025',
+    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSc6U1ur8QSSrfBBO-Ws7BxCBOCMh4RU_hwN7bvF9RfObB_xhg/viewform',
+    linkText: 'Register',
+  },
   {
     id: '2',
     src: '/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.1.jpeg',
