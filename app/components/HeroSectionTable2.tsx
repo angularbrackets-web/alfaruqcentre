@@ -146,6 +146,19 @@ const HeroSectionTable2 = () => {
       // },
       {
         type: "image",
+        pretitle: "Welcome to",
+        title: "Al Faruq Islamic Centre",
+        introduction: (
+          <Card imageUrl="/AlFaruq.EidAlAdha.Prayer2025.jpeg">
+          
+          </Card>
+        ),
+        description: null, // or you can pass JSX here if needed
+        duration: 20000,
+      }
+      ,
+      {
+        type: "image",
         title: "Support your Masjid",
         introduction: (
           <Card imageUrl="/SupportYourMasjid.jpeg">
