@@ -50,7 +50,45 @@ const jobOpportunities: JobOpportunity[] = [
       workLocation: "In person"
     },
     applyLink: "https://ca.indeed.com/viewjob?jk=86676fea6f3348da"
-  },
+  }
+  ,
+  {
+    id: 2,
+    title: "Quran and Islamic Studies Teacher",
+    company: "Al-Faruq Islamic School",
+    location: "4410 127 St SW, Edmonton, AB",
+    salary: "$20.00 per hour",
+    jobType: "Part-time (Expected hours: 20 per week)",
+    overview:
+      "The Al-Faruq Islamic Centre is seeking passionate and knowledgeable Part-Time Teachers to join our team, specializing in Quran, Hifz (memorization), and Islamic Studies. We are looking for educators who are committed to nurturing students’ spiritual and academic development through high-quality Islamic instruction.",
+    responsibilities: [
+      "Instruct students of varying ages and skill levels in Quranic recitation and memorization (Hifz).",
+      "Deliver engaging, age-appropriate lessons in Islamic Studies, including Fiqh, Aqeedah, Seerah, and Islamic studies.",
+      "Teach proper Tajweed and equip students with effective memorization strategies.",
+      "Provide personalized support to enhance student comprehension and retention.",
+      "Develop and implement lesson plans that foster both spiritual development and academic achievement.",
+      "Monitor and assess student progress, offering constructive feedback to students and parents.",
+      "Cultivate a respectful, well-disciplined, and inclusive classroom atmosphere.",
+      "Arrive at least 10 minutes early to prepare for class and demonstrate a professional attitude.",
+      "Participate actively in staff meetings, school events, and professional development opportunities.",
+      "Maintain accurate records of attendance, assessments, and student performance.",
+      "Communicate clearly and consistently with students, parents, and administration regarding academic and behavioral matters."
+    ],
+    qualifications: [
+      "Ijazah with sanad in Hafs an Asim (Preferred).",
+      "Strong understanding of the Quran, Tajweed, and fundamental Islamic teachings.",
+      "Prior teaching experience in Quran, Hifz, or Islamic Studies is preferred.",
+      "Ability to engage students and manage classroom dynamics positively.",
+      "Excellent communication, organizational, and interpersonal skills.",
+      "Certification or formal education in Islamic or Quranic Studies is an asset.",
+      "Fluency in English is preferred."
+    ],
+    additional: {
+      education: "Certification or formal education in Islamic or Quranic Studies (asset)",
+      workLocation: "In person"
+    },
+    applyLink: "https://ca.indeed.com/viewjob?from=appshareios&jk=fe90262726c28dc3"
+  }
   // Additional opportunity example:
 //   {
 //     id: 2,
