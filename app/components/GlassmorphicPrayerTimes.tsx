@@ -145,7 +145,7 @@ const GlassmorphicPrayerTimes = () => {
                     className="border-b last:border-b-0 hover:bg-blue-50 transition-colors font-bold text-blue-800"
                   >
                     <td className="p-2 items-center text-center">
-                      <span>02:00 PM</span>
+                      <span>01:45 PM</span>
                     </td>
                     <td className="p-2 text-center">
                     <span>03:00 PM</span>
