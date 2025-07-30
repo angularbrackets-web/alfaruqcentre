@@ -408,13 +408,13 @@ const HeroSectionTable2 = () => {
   );
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const nextSlide = useCallback(() => {
-    console.log("nextSlide called - Current Index:", currentIndex);
     setCurrentIndex((prevIndex) => (prevIndex + 1) % contentBlocks.length);
-  }, [contentBlocks.length, currentIndex]);
+  }, [contentBlocks.length]);
 
   const previousSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
@@ -438,43 +438,70 @@ const HeroSectionTable2 = () => {
     [nextSlide]
   );
 
+  // Effect for reloading the page periodically to get fresh data
   useEffect(() => {
+    if (!isAutoPlaying) return;
+
+    // Reload the page every hour to get fresh data
+    const reloadInterval = setInterval(() => {
+      window.location.reload();
+    }, 60 * 60 * 1000); // 1 hour
+
+    return () => clearInterval(reloadInterval);
+  }, [isAutoPlaying]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        previousSlide();
+      } else if (event.key === 'ArrowRight') {
+        nextSlide();
+      } else if (event.key === ' ') { // Space bar
+        event.preventDefault();
+        setIsAutoPlaying(prev => !prev);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
-  }, []);
+  }, [nextSlide, previousSlide]);
 
   useEffect(() => {
     const currentBlock = contentBlocks[currentIndex];
-    console.log(
-      "useEffect triggered - Current Index:",
-      currentIndex,
-      "Block Type:",
-      currentBlock.type
-    );
 
-    if (videoRef.current) {
-      videoRef.current.pause();
-    }
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    if (currentBlock.type === "video") {
+    const cleanupCurrentMedia = () => {
       if (videoRef.current) {
-        videoRef.current.currentTime = 0;
-        videoRef.current
-          .play()
-          .catch((error) =>
-            console.error("Video play failed:", error)
-          );
+        videoRef.current.pause();
       }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+
+    cleanupCurrentMedia();
+
+    if (!isAutoPlaying) return;
+
+    // Instead of fetching the JSON file, we'll use the imported data
+    // since it's already available and updated on each page load
+    if (currentBlock.type === "video" && videoRef.current) {
+      videoRef.current.currentTime = 0;
+      videoRef.current.play().catch(error => {
+        console.error("Video playback failed:", error);
+        nextSlide(); // Skip to next slide if video fails
+      });
     } else if (currentBlock.type === "image" && currentBlock.duration) {
       startTimer(currentBlock.duration);
     }
-  }, [currentIndex, contentBlocks, startTimer]);
+
+    return cleanupCurrentMedia;
+  }, [currentIndex, contentBlocks, startTimer, isAutoPlaying, nextSlide]);
 
   return (
     <section className="min-h-[70vh] w-full px-4 sm:px-6 lg:px-8 bg-white">
@@ -484,22 +511,35 @@ const HeroSectionTable2 = () => {
       {/* Left Column: Carousel with stacked content */}
       <div className="relative">
         {/* Navigation Buttons spaced out on either side */}
-        <div className="top-1 left-4 flex justify-between w-full z-10">
+        <div className="mt-4 mb-2 flex justify-between items-center w-full z-10">
+          <div className="flex gap-2">
+            <button
+              onClick={previousSlide}
+              className="px-4 py-2 rounded-lg bg-white border border-gray-200 text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 flex items-center gap-2 group"
+              aria-label="Previous Slide"
+            >
+              <ArrowLeftCircleIcon size={20} className="text-gray-600 group-hover:text-blue-600 transition-colors" />
+              <span className="font-medium">Previous</span>
+            </button>
+            <button
+              onClick={nextSlide}
+              className="px-4 py-2 rounded-lg bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center gap-2 group"
+              aria-label="Next Slide"
+            >
+              <span className="font-medium">Next</span>
+              <ArrowRightCircleIcon size={20} className="text-white group-hover:translate-x-0.5 transition-transform" />
+            </button>
+          </div>
           <button
-            onClick={previousSlide}
-            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center items-center justify-center flex gap-2"
-            aria-label="Previous Slide"
+            onClick={() => setIsAutoPlaying(prev => !prev)}
+            className={`px-3 py-1 rounded-full text-sm font-medium transition-colors
+              ${isAutoPlaying 
+                ? 'bg-green-100 text-green-800 hover:bg-green-200' 
+                : 'bg-red-100 text-red-800 hover:bg-red-200'
+              }`}
+            aria-label={isAutoPlaying ? 'Pause Slideshow' : 'Play Slideshow'}
           >
-            <ArrowLeftCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600 text-center items-center justify-center" />
-            <span>Previous</span>
-          </button>
-          <button
-            onClick={nextSlide}
-            className="px-4 py-2 mx-2 rounded-lg bg-gray-500 text-gray-100 shadow-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-600 text-center items-center justify-center flex gap-2"
-            aria-label="Next Slide"
-          >
-            <ArrowRightCircleIcon size={24} className="bg-gray-500 text-gray-100 hover:bg-gray-600" />
-            <span>Next</span>
+            {isAutoPlaying ? 'Auto' : 'Paused'}
           </button>
         </div>
 

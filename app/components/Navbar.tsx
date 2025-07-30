@@ -1,35 +1,157 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { BadgeDollarSign, MapPin, Menu, X } from "lucide-react";
+import { NAV_LINKS } from './nav-links';
+
+// Reusable button components
+interface NavLinkProps {
+  href: string;
+  children: React.ReactNode;
+  isHighlighted?: boolean;
+}
+
+const NavLink = memo(({ href, children, isHighlighted }: NavLinkProps) => (
+  <Link 
+    href={href}
+    className={`px-3 py-2 text-sm font-medium transition-colors relative group
+      ${isHighlighted 
+        ? 'text-red-600 hover:text-red-500 font-bold hover:underline' 
+        : 'text-sky-800 hover:text-sky-500 hover:font-black'
+      }`}
+  >
+    {children}
+    {!isHighlighted && (
+      <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+    )}
+  </Link>
+));
+
+NavLink.displayName = 'NavLink';
+
+interface MobileNavLinkProps {
+  href: string;
+  onClick?: () => void;
+  children: React.ReactNode;
+  isHighlighted?: boolean;
+}
+
+const MobileNavLink = memo(({ href, onClick, children, isHighlighted }: MobileNavLinkProps) => (
+  <Link 
+    href={href}
+    onClick={onClick}
+    className={`text-lg font-medium transition-colors
+      ${isHighlighted 
+        ? 'text-red-600 hover:text-red-500 font-bold' 
+        : 'text-gray-800 hover:text-sky-800'
+      }`}
+  >
+    {children}
+  </Link>
+));
+
+MobileNavLink.displayName = 'MobileNavLink';
+
+interface DonateButtonProps {
+  mobile?: boolean;
+}
+
+const DonateButton = memo(({ mobile }: DonateButtonProps) => (
+  <Link
+    href="https://donorchoice.ca/dia"
+    target="_blank"
+    rel="noopener noreferrer"
+    className={`
+      flex items-center justify-center gap-2 
+      bg-emerald-600 hover:bg-emerald-700 
+      text-white font-medium 
+      rounded-lg transition-colors 
+      ${mobile ? "w-full py-3 text-base" : "px-4 py-2 text-sm"}
+    `}
+    aria-label="Donate to Al-Faruq Islamic Centre"
+  >
+    <BadgeDollarSign className={mobile ? "h-5 w-5" : "h-4 w-4"} />
+    <span>Donate</span>
+  </Link>
+));
+
+DonateButton.displayName = 'DonateButton';
+
+// Logo component
+const Logo = memo(() => (
+  <div className="flex items-center gap-3">
+    <div className="flex items-center">
+      <Link href="/" aria-label="Al-Faruq Islamic Centre Home">
+        <Image
+          src="/AlFaruqLogo.png"
+          alt="Al-Faruq Islamic Centre Logo"
+          width={96}
+          height={96}
+          className="w-14 h-14 md:w-16 md:h-16 object-contain"
+          priority
+        />
+      </Link>
+      <div className="ml-2 flex flex-col">
+        <Link href="/">
+          <h1 className="text-lg md:text-xl font-bold text-sky-800 hidden sm:block">
+            Al-Faruq Islamic Centre
+          </h1>
+        </Link>
+        <div className="flex items-center text-xs text-gray-600 hover:text-sky-700 transition-colors">
+          <Link 
+            href="https://maps.app.goo.gl/KfLGQr2edcRhsGqu5" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 hover:underline"
+            aria-label="View our location on Google Maps"
+          >
+            <MapPin className="h-3 w-3" />
+            <span className="inline">4410 127 Street SW, Edmonton, AB</span>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+));
+
+Logo.displayName = 'Logo';
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const handleScroll = useCallback(() => {
+    const shouldBeScrolled = window.scrollY > 10;
+    if (scrolled !== shouldBeScrolled) {
+      setScrolled(shouldBeScrolled);
+    }
+  }, [scrolled]);
+
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (!mobileMenuOpen) return;
+    if (e.target && (e.target as HTMLElement).closest('[data-menu-container]')) return;
+    setMobileMenuOpen(false);
+  }, [mobileMenuOpen]);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
-    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   useEffect(() => {
-    if (!mobileMenuOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (e.target && (e.target as HTMLElement).closest('[data-menu-container]')) return;
-      setMobileMenuOpen(false);
+    if (mobileMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.body.style.overflow = 'unset';
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [mobileMenuOpen]);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileMenuOpen ? 'hidden' : 'unset';
-    return () => { document.body.style.overflow = 'unset'; };
-  }, [mobileMenuOpen]);
+  }, [mobileMenuOpen, handleClickOutside]);
 
   return (
     <>
@@ -76,16 +198,15 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-1 xl:space-x-4">
-            <NavLink href="/">HOME</NavLink>
-            <NavLink href="/prayertimes">PRAYER TIMES</NavLink>
-            <NavLink href="/programs">PROGRAMS</NavLink>
-            <NavLink href="/events">EVENTS</NavLink>
-            <NavLink href="/weekendschool">WEEKEND SCHOOL</NavLink>
-            <NavLink href="/nowhiring">
-  <span className="px-3 py-2 text-sm font-bold text-red-600 hover:text-red-500 hover:underline transition-colors relative group">
-    NOW HIRING
-  </span>
-</NavLink>
+            {NAV_LINKS.map((link) => (
+              <NavLink 
+                key={link.href} 
+                href={link.href}
+                isHighlighted={link.isHighlighted}
+              >
+                {link.label}
+              </NavLink>
+            ))}
 
             <DonateButton />
           </div>
@@ -137,26 +258,16 @@ const Navbar = () => {
           </div>
 
           <div className="flex flex-col pt-6 pb-8 px-6 space-y-6">
-            <MobileNavLink href="/" onClick={() => setMobileMenuOpen(false)}>
-              Home
-            </MobileNavLink>
-            <MobileNavLink href="/prayertimes" onClick={() => setMobileMenuOpen(false)}>
-              Prayer Times
-            </MobileNavLink>
-            <MobileNavLink href="/programs" onClick={() => setMobileMenuOpen(false)}>
-              Programs
-            </MobileNavLink>
-            <MobileNavLink href="/events" onClick={() => setMobileMenuOpen(false)}>
-              Events
-            </MobileNavLink>
-            <MobileNavLink href="/weekendschool" onClick={() => setMobileMenuOpen(false)}>
-              Weekend School
-            </MobileNavLink>
-            <MobileNavLink href="/nowhiring" onClick={() => setMobileMenuOpen(false)}>
-  <span className="text-lg font-bold text-red-600 hover:text-red-500 transition-colors">
-    Now Hiring
-  </span>
-</MobileNavLink>
+            {NAV_LINKS.map((link) => (
+              <MobileNavLink 
+                key={link.href}
+                href={link.href} 
+                onClick={() => setMobileMenuOpen(false)}
+                isHighlighted={link.isHighlighted}
+              >
+                {link.label}
+              </MobileNavLink>
+            ))}
 
             <div className="pt-4">
               <DonateButton mobile />
@@ -179,60 +290,5 @@ const Navbar = () => {
     </>
   );
 };
-
-// Reusable components
-interface NavLinkProps {
-  href: string;
-  children: React.ReactNode;
-}
-
-const NavLink = ({ href, children }: NavLinkProps) => (
-  <Link 
-    href={href}
-    className="px-3 py-2 text-sm text-sky-800 font-medium hover:text-sky-500 hover:font-black transition-colors relative group"
-  >
-    {children}
-    <span className="absolute bottom-0 left-0 w-full h-0.5 bg-sky-600 transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
-  </Link>
-);
-
-interface MobileNavLinkProps {
-  href: string;
-  onClick?: () => void;
-  children: React.ReactNode;
-}
-
-const MobileNavLink = ({ href, onClick, children }: MobileNavLinkProps) => (
-  <Link 
-    href={href}
-    onClick={onClick}
-    className="text-lg font-medium text-gray-800 hover:text-sky-800 transition-colors"
-  >
-    {children}
-  </Link>
-);
-
-interface DonateButtonProps {
-  mobile?: boolean;
-}
-
-const DonateButton = ({ mobile }: DonateButtonProps) => (
-  <Link
-    href="https://donorchoice.ca/dia"
-    target="_blank"
-    rel="noopener noreferrer"
-    className={`
-      flex items-center justify-center gap-2 
-      bg-emerald-600 hover:bg-emerald-700 
-      text-white font-medium 
-      rounded-lg transition-colors 
-      ${mobile ? "w-full py-3 text-base" : "px-4 py-2 text-sm"}
-    `}
-    aria-label="Donate to Al-Faruq Islamic Centre"
-  >
-    <BadgeDollarSign className={mobile ? "h-5 w-5" : "h-4 w-4"} />
-    <span>Donate</span>
-  </Link>
-);
 
 export default Navbar;

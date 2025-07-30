@@ -1,7 +1,7 @@
 "use client"
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Calendar, Clock, Sun } from 'lucide-react';
-import prayerTimesData from '../data/prayerTimes.json';
+import { prayerTimesData } from '../data/prayerTimes';
 import CountdownTimer from './CountdownTimer';
 
 interface PrayerTime {
@@ -24,15 +24,72 @@ interface DayPrayerTimes {
 }
 
 const MonthlyPrayerTimes = () => {
-  const today = new Date();
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [monthData, setMonthData] = useState<DayPrayerTimes[]>([]);
+
+  const today = useMemo(() => new Date(), []);
   const currentDate = today.getDate().toString();
   const currentMonth = (today.getMonth() + 1).toString().replace(/^0/, '');
   const currentYear = today.getFullYear().toString();
 
-  // Filter data for the current month
-  const monthData: DayPrayerTimes[] = prayerTimesData.filter(
-    day => day.month === currentMonth && day.year === currentYear
-  );
+  useEffect(() => {
+    const fetchMonthData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        // Try to fetch from API first
+        try {
+          const response = await fetch('/api/prayerTimes');
+          if (response.ok) {
+            const data = await response.json();
+            if (Array.isArray(data) && data.length > 0) {
+              const filteredData = data.filter(
+                day => day.month === currentMonth && day.year === currentYear
+              );
+              if (filteredData.length > 0) {
+                setMonthData(filteredData);
+                return;
+              }
+            }
+          }
+        } catch (apiError) {
+          console.warn('Failed to fetch from API, falling back to static data:', apiError);
+        }
+
+        // Fall back to static data
+        const staticData = prayerTimesData.filter(
+          (day: DayPrayerTimes) => day.month === currentMonth && day.year === currentYear
+        );
+        
+        if (staticData.length === 0) {
+          throw new Error('No prayer times available for this month');
+        }
+        
+        // Validate data structure
+        if (!staticData.every(day => 
+          day.date && day.month && day.year && 
+          day.fajr?.azzan && day.fajr?.iqamah &&
+          day.zuhr?.azzan && day.zuhr?.iqamah &&
+          day.asr?.azzan && day.asr?.iqamah &&
+          day.maghrib?.azzan && day.maghrib?.iqamah &&
+          day.isha?.azzan && day.isha?.iqamah
+        )) {
+          throw new Error('Invalid prayer times data structure');
+        }
+
+        setMonthData(staticData);
+      } catch (error) {
+        console.error('Error loading prayer times:', error);
+        setError(error instanceof Error ? error.message : 'Failed to load prayer times');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMonthData();
+  }, [currentMonth, currentYear]);
 
   // Find today's prayer times
   const todayPrayerTimes = monthData.find(day => day.date === currentDate);
@@ -69,8 +126,22 @@ const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 rounded-2xl shadow-lg p-6 mb-8">
+          <p className="text-red-600 text-center font-medium">{error}</p>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {isLoading && (
+        <div className="bg-blue-50 rounded-2xl shadow-lg p-6 mb-8">
+          <p className="text-blue-600 text-center font-medium">Loading prayer times...</p>
+        </div>
+      )}
+
       {/* Today's Prayer Times Section */}
-      {todayPrayerTimes && (
+      {!isLoading && !error && todayPrayerTimes && (
         <div className="bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-2xl shadow-lg overflow-hidden">
             <div className='flex gap-4 items-center justify-center'>
                 <div className="bg-white/10 backdrop-blur-sm p-4 text-center">

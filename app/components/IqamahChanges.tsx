@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import prayerTimesData from '../data/prayerTimes.json';
 
 type DayPrayerTimes = {
   date: string;
@@ -12,41 +11,61 @@ type DayPrayerTimes = {
   isha: { iqamah: string };
 };
 
-const IqamahChanges = () => {
-  const prayerTimes: DayPrayerTimes[] = prayerTimesData;
-  const today = new Date();
-  const currentDay = today.getDate().toString();
-    const currentMonth = (today.getMonth() + 1).toString().replace(/^0/, '');
-    const currentYear = today.getFullYear().toString();
+interface IqamahChangesProps {
+  prayerTimes: DayPrayerTimes[];
+}
+
+const IqamahChanges = ({ prayerTimes }: IqamahChangesProps) => {
+  const today = useMemo(() => new Date(), []);
+  const currentDay = useMemo(() => today.getDate().toString(), [today]);
+  const currentMonth = useMemo(() => (today.getMonth() + 1).toString().replace(/^0/, ''), [today]);
+  const currentYear = useMemo(() => today.getFullYear().toString(), [today]);
   
-    const currentDayData: DayPrayerTimes = useMemo(() => 
-      prayerTimes.find((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear) || prayerTimes[0], 
+    const currentDayData = useMemo(() => 
+      prayerTimes.find((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear),
       [currentDay, currentMonth, currentYear, prayerTimes]
     );
   
     const nextDayData = useMemo(() => {
-      const currentIndex = prayerTimes.findIndex((day) => day.date === currentDay && day.month === currentMonth && day.year === currentYear);
-      return currentIndex >= 0 && currentIndex < prayerTimes.length - 1
-        ? prayerTimes[currentIndex + 1]
-        : prayerTimes[0];
-    }, [currentDay, currentMonth, currentYear, prayerTimes]);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
+      const tomorrowDay = tomorrow.getDate().toString();
+      const tomorrowMonth = (tomorrow.getMonth() + 1).toString().replace(/^0/, '');
+      const tomorrowYear = tomorrow.getFullYear().toString();
+
+      return prayerTimes.find((day) => 
+        day.date === tomorrowDay && 
+        day.month === tomorrowMonth && 
+        day.year === tomorrowYear
+      );
+    }, [today, prayerTimes]);
 
   const iqamahChanges = useMemo(() => {
     const changes: { prayer: string, oldTime: string, newTime: string }[] = [];
+    
+    // If we don't have current or next day's data, return empty changes
+    if (!currentDayData || !nextDayData) {
+      return changes;
+    }
     
     const prayerKeys: (keyof Pick<DayPrayerTimes, 'fajr' | 'zuhr' | 'asr' | 'maghrib' | 'isha'>)[] 
       = ['fajr', 'zuhr', 'asr', 'maghrib', 'isha'];
     
     prayerKeys.forEach(key => {
-      const currentTime = currentDayData[key].iqamah;
-      const nextTime = nextDayData[key].iqamah;
-      
-      if (currentTime !== nextTime) {
-        changes.push({
-          prayer: key.charAt(0).toUpperCase() + key.slice(1),
-          oldTime: currentTime,
-          newTime: nextTime
-        });
+      try {
+        const currentTime = currentDayData[key]?.iqamah;
+        const nextTime = nextDayData[key]?.iqamah;
+        
+        // Only add to changes if both times exist and are different
+        if (currentTime && nextTime && currentTime !== nextTime) {
+          changes.push({
+            prayer: key.charAt(0).toUpperCase() + key.slice(1),
+            oldTime: currentTime,
+            newTime: nextTime
+          });
+        }
+      } catch (error) {
+        console.warn(`Error processing prayer time changes for ${key}:`, error);
       }
     });
     
