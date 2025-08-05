@@ -52,42 +52,63 @@ const jobOpportunities: JobOpportunity[] = [
     applyLink: "https://ca.indeed.com/viewjob?jk=86676fea6f3348da"
   }
   ,
+  // {
+  //   id: 2,
+  //   title: "Quran and Islamic Studies Teacher",
+  //   company: "Al-Faruq Islamic School",
+  //   location: "4410 127 St SW, Edmonton, AB",
+  //   salary: "$20.00 per hour",
+  //   jobType: "Part-time (Expected hours: 20 per week)",
+  //   overview:
+  //     "The Al-Faruq Islamic Centre is seeking passionate and knowledgeable Part-Time Teachers to join our team, specializing in Quran, Hifz (memorization), and Islamic Studies. We are looking for educators who are committed to nurturing students’ spiritual and academic development through high-quality Islamic instruction.",
+  //   responsibilities: [ ... ],
+  //   qualifications: [ ... ],
+  //   additional: {
+  //     education: "Certification or formal education in Islamic or Quranic Studies (asset)",
+  //     workLocation: "In person"
+  //   },
+  //   applyLink: "https://ca.indeed.com/viewjob?from=appshareios&jk=fe90262726c28dc3"
+  // },
   {
     id: 2,
-    title: "Quran and Islamic Studies Teacher",
+    title: "Weekend Quran Teacher",
     company: "Al-Faruq Islamic School",
     location: "4410 127 St SW, Edmonton, AB",
-    salary: "$20.00 per hour",
-    jobType: "Part-time (Expected hours: 20 per week)",
+    salary: "$20 an hour",
+    jobType: "Temporary, Fixed term contract (6 hours/week, weekends only)",
     overview:
-      "The Al-Faruq Islamic Centre is seeking passionate and knowledgeable Part-Time Teachers to join our team, specializing in Quran, Hifz (memorization), and Islamic Studies. We are looking for educators who are committed to nurturing students’ spiritual and academic development through high-quality Islamic instruction.",
+      "Al-Furqan Islamic Centre is seeking a passionate, qualified, and experienced Quran Teacher to lead weekend classes for children aged 5–12 years. The teacher will deliver engaging lessons in Tajweed, Quran recitation, memorization, and teaching Qaidah An-Nouraniyah or any other similar book, with a focus on strong classroom management, individual student progress, and community values. This is a weekend-only position, ideal for teachers with a flexible schedule looking to serve the community and help young Muslims grow spiritually and academically.",
     responsibilities: [
-      "Instruct students of varying ages and skill levels in Quranic recitation and memorization (Hifz).",
-      "Deliver engaging, age-appropriate lessons in Islamic Studies, including Fiqh, Aqeedah, Seerah, and Islamic studies.",
-      "Teach proper Tajweed and equip students with effective memorization strategies.",
-      "Provide personalized support to enhance student comprehension and retention.",
-      "Develop and implement lesson plans that foster both spiritual development and academic achievement.",
-      "Monitor and assess student progress, offering constructive feedback to students and parents.",
-      "Cultivate a respectful, well-disciplined, and inclusive classroom atmosphere.",
-      "Arrive at least 10 minutes early to prepare for class and demonstrate a professional attitude.",
-      "Participate actively in staff meetings, school events, and professional development opportunities.",
-      "Maintain accurate records of attendance, assessments, and student performance.",
-      "Communicate clearly and consistently with students, parents, and administration regarding academic and behavioral matters."
+      "Conduct Quran classes on Saturday and Sunday (approx. 11:00 AM – 2:00 PM), subject to change due to daylight saving time.",
+      "Teach: How to read Quran from the book fluently and smoothly.",
+      "Correct Quranic recitation with full Tajweed.",
+      "Memorization (Hifdh) and revision.",
+      "Basic Islamic values, manners, and short Duas.",
+      "Develop and follow a lesson plan/curriculum.",
+      "Monitor and assess each student’s progress and update the system daily.",
+      "Maintain class discipline and create a nurturing Islamic environment.",
+      "Attend occasional staff meetings and training sessions if required.",
+      "Develop and implement lesson plans that align with curriculum standards.",
+      "Create a supportive classroom environment that encourages student participation and engagement.",
+      "Assess and evaluate student performance through various methods, including tests and observations.",
+      "Provide constructive feedback to students to support their learning journey.",
+      "Collaborate with colleagues to enhance instructional practices and share resources.",
+      "Communicate effectively with parents and guardians regarding student progress and classroom activities.",
+      "Maintain classroom discipline while promoting respect and inclusivity among students."
     ],
     qualifications: [
-      "Ijazah with sanad in Hafs an Asim (Preferred).",
-      "Strong understanding of the Quran, Tajweed, and fundamental Islamic teachings.",
-      "Prior teaching experience in Quran, Hifz, or Islamic Studies is preferred.",
-      "Ability to engage students and manage classroom dynamics positively.",
-      "Excellent communication, organizational, and interpersonal skills.",
-      "Certification or formal education in Islamic or Quranic Studies is an asset.",
-      "Fluency in English is preferred."
+      "Must be proficient in Quran recitation with strong Tajweed.",
+      "Ijazah in Quran, diploma in Islamic studies, or equivalent certification preferred.",
+      "Minimum 2 years of teaching experience, especially with children or teens.",
+      "Fluent in English (spoken and written); Arabic proficiency is an asset.",
+      "Excellent classroom management and interpersonal skills.",
+      "Must be punctual, reliable, and professional."
     ],
     additional: {
-      education: "Certification or formal education in Islamic or Quranic Studies (asset)",
+      education: "Ijazah in Quran, diploma in Islamic studies, or equivalent (preferred)",
       workLocation: "In person"
     },
-    applyLink: "https://ca.indeed.com/viewjob?from=appshareios&jk=fe90262726c28dc3"
+    applyLink: "https://ca.indeed.com/viewjob?from=appshareios&jk=4ec9730e15fe8e81"
   }
   // Additional opportunity example:
 //   {

@@ -2,7 +2,7 @@
 //import Head from 'next/head';
 import Image from 'next/image';
 import { FC, useState } from 'react';
-
+const weekendSchoolUrl = "/AlFaruqWeekendSchool.mp4";
 const WeekendSchool: FC = () => {
     const [activeSections, setActiveSections] = useState({
         arabic: true,
@@ -19,49 +19,76 @@ const WeekendSchool: FC = () => {
         });
       };
 
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">      
 
       {/* Hero Section */}
-<header className="pt-32 md:pt-28 pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
-  <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-    <div className="md:w-1/2 mb-8 md:mb-0">
-      <h1 className="text-4xl md:text-5xl font-bold mb-4">Al-Faruq Weekend Quran School</h1>
-      <p className="text-md md:text-xl mb-6 font-medium">Nurturing young minds with <span className='font-black text-sky-200 underline'>Quranic education</span> and <span className='font-black text-sky-200 underline'>Islamic values</span></p>
-      <a 
-        href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="bg-sky-950 text-sky-100 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-950 hover:text-sky-100 transition-colors inline-block"
-        aria-label="Register your child for Al-Faruq Weekend Quran School"
-      >
-        Register Your Child
-      </a>
-    </div>
-    <div className="w-full md:w-1/2 flex justify-center">
-      <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-lg">
-        {/* School poster image with proper dimensions */}
-        <div className="relative w-full" style={{ aspectRatio: '1600/837' }}>
-          <Image 
-            src="/AlFaruqWeekendQuranSchool.jpeg" 
-            alt="Al-Faruq Weekend Quran School Poster" 
-            layout="fill"
-            objectFit="cover"
-            priority
-          />
+      <header className="pt-32 md:pt-28 pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
+        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
+          <div className="md:w-1/2 mb-8 md:mb-0">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4">Al-Faruq Weekend Quran School</h1>
+            <p className="text-md md:text-xl mb-6 font-medium">Nurturing young minds with <span className='font-black text-sky-200 underline'>Quranic education</span> and <span className='font-black text-sky-200 underline'>Islamic values</span></p>
+            <a 
+              href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="bg-sky-950 text-sky-100 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-950 hover:text-sky-100 transition-colors inline-block"
+              aria-label="Register your child for Al-Faruq Weekend Quran School"
+            >
+              Register Your Child
+            </a>
+          </div>
+          <div className="w-full md:w-1/2 flex justify-center">
+            <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-lg">
+              {/* School video with proper dimensions */}
+              <div className="relative w-full" style={{ aspectRatio: '1600/837' }}>
+                <video
+                  src={weekendSchoolUrl}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  controls
+                  className="w-full h-full object-cover rounded-lg"
+                  style={{ display: 'block' }}
+                  poster="/AlFaruqWeekendQuranSchool.jpeg"
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</header>
+      </header>
 
       <main className="container mx-auto px-4 py-12">
+        {/* School Poster Images displayed together */}
+        <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12">
+          <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-md">
+            <Image 
+              src="/AlFaruqWeekendQuranSchool.jpeg" 
+              alt="Al-Faruq Weekend Quran School Poster" 
+              width={400}
+              height={209}
+              className="w-full h-auto object-cover rounded-lg"
+              priority
+            />
+          </div>
+          <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-md">
+            <Image 
+              src="/AlFaruq.Weekend.Quran.School.March2025.jpeg" 
+              alt="Al-Faruq Weekend Quran School March 2025 Poster" 
+              width={400}
+              height={209}
+              className="w-full h-auto object-cover rounded-lg"
+              priority
+            />
+          </div>
+        </div>
         {/* Mission Section */}
         <section id="mission" className="mb-16">
             <div className='flex flex-col lg:flex-row gap-4'>
-                <div>
-<Image src='/AlFaruq.Weekend.Quran.School.March2025.jpeg' alt='Al-Faruq Weekend Quran School Poster' width={400} height={200} className='mx-auto' />
-                </div>
+                {/* Image above now shown together with the other poster */}
+                <div className="flex-1" />
                 <div>
                     <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Mission</h2>
           <div className="bg-white rounded-lg shadow-md p-6">
