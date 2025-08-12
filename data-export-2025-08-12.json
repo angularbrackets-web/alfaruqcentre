@@ -1,0 +1,54 @@
+{
+  "programs": [
+    {
+      "id": "afis-summer-camp-2025",
+      "title": "Summer Camp 2025",
+      "description": "Al-Faruq Summer Camp – Registration Now Open! Get ready for a summer full of learning, fun, and unforgettable memories. Our program includes engaging courses in Qur'an, Arabic, Islamic Studies, Language Arts, and Math—alongside exciting activities like sports, games, and field trips.",
+      "imageUrl": "/AFIS.SummerCamp.2025.jpeg",
+      "linkUrl": "https://docs.google.com/forms/d/e/1FAIpQLSc6U1ur8QSSrfBBO-Ws7BxCBOCMh4RU_hwN7bvF9RfObB_xhg/viewform",
+      "linkText": "Register",
+      "status": "ACTIVE",
+      "order": 1,
+      "createdAt": "2025-08-11T00:00:00.000Z",
+      "updatedAt": "2025-08-11T00:00:00.000Z"
+    },
+    {
+      "id": "islamic-school-amana-academy",
+      "title": "Al-Faruq Islamic School & Amana Academy",
+      "description": "Safeguard Your Child's Future with Al-Faruq Islamic School & Amana Academy. Alberta Education Accredited school for KG to Grade 9. Limited-Time Tuition Offer for the first 100 students!",
+      "imageUrl": "/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.1.jpeg",
+      "linkUrl": "https://docs.google.com/forms/d/e/1FAIpQLScBGnya-MWf-d39tWtyDQNgEP_2Ft_86aslmSndZAY2BfRqwg/viewform",
+      "linkText": "Register",
+      "status": "ACTIVE",
+      "order": 2,
+      "createdAt": "2025-08-11T00:00:00.000Z",
+      "updatedAt": "2025-08-11T00:00:00.000Z"
+    },
+    {
+      "id": "weekend-quran-school",
+      "title": "Weekend Quran School",
+      "description": "Al-Faruq Weekend Quran School for ages 5 to 12 years. Saturday and Sunday, 11:00 AM - 02:00 PM. Invest in your Child's Here and Hereafter. Teaching how to read Arabic fluently, Quran Recitation and Memorization, Adhkar, Sheeran and Islamic Studies.",
+      "imageUrl": "/AlFaruq.Weekend.Quran.School.March2025.jpeg",
+      "linkUrl": "https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform",
+      "linkText": "Register",
+      "status": "ACTIVE",
+      "order": 3,
+      "createdAt": "2025-08-11T00:00:00.000Z",
+      "updatedAt": "2025-08-11T00:00:00.000Z"
+    },
+    {
+      "id": "classical-arabic-program",
+      "title": "Classical Arabic Program",
+      "description": "Learn Classical Arabic with our comprehensive program designed to help students master the Arabic language for better understanding of Islamic texts and Quran.",
+      "imageUrl": "/AlFaruq.ClassicalArabicProgram.jpeg",
+      "linkUrl": null,
+      "linkText": null,
+      "status": "ACTIVE",
+      "order": 4,
+      "createdAt": "2025-08-11T00:00:00.000Z",
+      "updatedAt": "2025-08-11T00:00:00.000Z"
+    }
+  ],
+  "exportDate": "2025-08-12T05:05:49.661Z",
+  "totalRecords": 4
+}

@@ -5,9 +5,10 @@
 ## 🚀 QUICK START FOR NEW AGENTS
 
 ### Step 1: Essential Reading (5 minutes)
-1. **CLAUDE.md** - Project overview and current status
-2. **ACTIVE_DEVELOPMENT.md** - What's currently being worked on
-3. **LESSONS_LEARNED.md** - Project insights and best practices
+1. **🚨 VERIFICATION_PROTOCOLS.md** - MANDATORY: Prevents misinformation incidents
+2. **CLAUDE.md** - Project overview and current status
+3. **ACTIVE_DEVELOPMENT.md** - What's currently being worked on
+4. **LESSONS_LEARNED.md** - Project insights and best practices
 
 ### Step 2: Understand Your Role
 - Follow the **7-step methodology** for all user requests

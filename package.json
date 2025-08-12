@@ -11,6 +11,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "db:setup": "node scripts/production-setup.js",
+    "db:import": "node scripts/import-to-supabase.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

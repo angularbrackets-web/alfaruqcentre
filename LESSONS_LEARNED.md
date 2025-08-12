@@ -2,6 +2,22 @@
 
 > **📚 PURPOSE**: This file preserves cross-feature knowledge, insights, and best practices that apply across the entire Al-Faruq Islamic Centre website project.
 
+## 🚨 CRITICAL INCIDENT: Railway Misinformation
+**Date**: 2025-08-12
+**Error**: Recommended Railway as having a "free tier" without verification
+**Reality**: Railway costs $5/month minimum (no free tier exists)
+**Root Cause**: Relied on outdated training data instead of real-time search verification
+**Impact**: Wasted user time creating false deployment setup instructions
+
+### ✅ Prevention Measures Implemented:
+- Created VERIFICATION_PROTOCOLS.md with mandatory search requirements
+- Updated all project memory files with verification warnings  
+- Established "WebSearch first" policy for all platform/service recommendations
+- Added MCP servers for enhanced real-time information access
+
+### 🎯 Key Lesson:
+**NEVER trust training data for platform pricing, features, or availability. Always verify with WebSearch/WebFetch before recommending.**
+
 ## 🏗️ TECHNICAL ARCHITECTURE INSIGHTS
 
 ### What Works Well

@@ -3,7 +3,14 @@
 ## 🎯 PROJECT OVERVIEW
 **Goal**: Transform the Al-Faruq Islamic Centre website into a modern, engaging, and highly functional community platform
 **Timeline**: Multi-session development with incremental improvements
-**Current Status**: Planning phase - awaiting user's prioritized feature list
+**Current Status**: Production-ready CMS complete, planning deployment with verified hosting options
+
+## 🚨 CRITICAL PROTOCOLS
+⚠️ **READ VERIFICATION_PROTOCOLS.md BEFORE ANY PLATFORM RECOMMENDATIONS**
+- Never trust training data for pricing/availability
+- Always WebSearch current information before recommending platforms
+- Verify free tiers, pricing, and features in real-time
+- Document verification dates for future agents
 
 ## 🔧 TECHNICAL FOUNDATION
 - **Framework**: Next.js 15.4.4 with React 19.1.1
