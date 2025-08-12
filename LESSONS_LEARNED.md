@@ -1,163 +1,149 @@
-# Project-Wide Lessons & Best Practices
+# Lessons Learned - Al-Faruq Islamic Centre Project
 
-> **📚 PURPOSE**: This file preserves cross-feature knowledge, insights, and best practices that apply across the entire Al-Faruq Islamic Centre website project.
+## 🎯 PURPOSE
+This file contains critical lessons learned to prevent repeating mistakes across different agents and sessions. **EVERY AGENT MUST READ THIS BEFORE STARTING WORK**.
 
-## 🚨 CRITICAL INCIDENT: Railway Misinformation
-**Date**: 2025-08-12
-**Error**: Recommended Railway as having a "free tier" without verification
-**Reality**: Railway costs $5/month minimum (no free tier exists)
-**Root Cause**: Relied on outdated training data instead of real-time search verification
-**Impact**: Wasted user time creating false deployment setup instructions
+## 🚨 CRITICAL LESSON #1: Framework Version Awareness
 
-### ✅ Prevention Measures Implemented:
-- Created VERIFICATION_PROTOCOLS.md with mandatory search requirements
-- Updated all project memory files with verification warnings  
-- Established "WebSearch first" policy for all platform/service recommendations
-- Added MCP servers for enhanced real-time information access
+### The Problem
+- **Date**: August 12, 2025
+- **Issue**: Implemented Next.js 14 patterns in a Next.js 15.4.4 project
+- **Impact**: Production deployment failed due to async params handling
+- **Root Cause**: Did not check framework versions before coding
 
-### 🎯 Key Lesson:
-**NEVER trust training data for platform pricing, features, or availability. Always verify with WebSearch/WebFetch before recommending.**
+### Next.js 15 Breaking Changes (MANDATORY KNOWLEDGE)
+```typescript
+// ❌ WRONG (Next.js 14 pattern)
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const slide = await prisma.heroSlide.findUnique({
+    where: { id: params.id }
+  });
+}
 
-## 🏗️ TECHNICAL ARCHITECTURE INSIGHTS
+// ✅ CORRECT (Next.js 15 pattern)
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const slide = await prisma.heroSlide.findUnique({
+    where: { id }
+  });
+}
 
-### What Works Well
-- **Next.js 15 + React 19**: Excellent performance with the new compiler
-- **Tailwind CSS**: Rapid styling with consistent design system
-- **Framer Motion**: Smooth animations that enhance user experience
-- **TypeScript**: Catches issues early, improves code quality
+// ❌ WRONG (Client components)
+export default function EditPage({ params }: { params: { id: string } }) {
+  useEffect(() => {
+    fetchData(params.id);
+  }, [params.id]);
+}
 
-### Performance Optimizations
-- **Image Optimization**: Next.js Image component with proper sizing attributes
-- **Component Patterns**: Client components only when needed, server components by default
-- **Bundle Optimization**: Turbopack for fast development builds
-
-### Common Pitfalls to Avoid
-- **Hydration Issues**: Always use `useEffect` for client-only operations
-- **Animation Performance**: Prefer `transform` and `opacity` for smooth animations
-- **Mobile Responsiveness**: Test on actual devices, not just browser dev tools
-
----
-
-## 🎨 DESIGN SYSTEM LEARNINGS
-
-### Color Palette Strategy
-- **Islamic Aesthetics**: Emerald greens, sky blues work well for the community
-- **Accessibility**: Ensure sufficient contrast ratios (WCAG 2.1 AA)
-- **Consistency**: Use Tailwind's semantic color system
-
-### Typography Hierarchy
-- **Headings**: Clear hierarchy helps with both design and accessibility
-- **Font Sizing**: Responsive text sizing using Tailwind's responsive prefixes
-- **Line Heights**: Adequate spacing improves readability
-
-### Component Design Patterns
-- **Card Components**: Consistent shadow, border-radius, and padding
-- **Buttons**: Clear states (hover, focus, active) for better UX
-- **Form Elements**: Proper labeling and error states
-
----
-
-## 🛠️ DEVELOPMENT WORKFLOW INSIGHTS
-
-### Effective Approaches
-- **Component Composition**: Small, reusable components are easier to maintain
-- **Props Interface Design**: Clear TypeScript interfaces prevent confusion
-- **Error Boundaries**: Graceful error handling improves user experience
-
-### Code Organization
-- **File Structure**: Keep related components together
-- **Import Organization**: Group imports logically (React, Next.js, components, utilities)
-- **Component Naming**: Descriptive names that indicate purpose
-
-### Testing Strategies
-- **Cross-Browser Testing**: Safari sometimes behaves differently
-- **Mobile-First**: Start with mobile design, then scale up
-- **Accessibility Testing**: Screen reader compatibility is crucial
-
----
-
-## 🎯 USER EXPERIENCE INSIGHTS
-
-### What Resonates with Users
-- **Islamic Visual Elements**: Geometric patterns and appropriate imagery
-- **Prayer Times**: Clear, prominent display is essential
-- **Community Focus**: Programs and events should be easily discoverable
-- **Donation Integration**: Simple, trusted donation flows
-
-### Navigation Patterns
-- **Mobile Menu**: Hamburger menu works well for mobile
-- **Breadcrumbs**: Help users understand their location
-- **Call-to-Actions**: Clear, action-oriented button text
-
-### Content Strategy
-- **Hierarchy**: Most important information should be prominent
-- **Readability**: Break up large text blocks with headings and lists
-- **Visual Balance**: Mix text, images, and white space effectively
-
----
-
-## 🔧 DEVELOPMENT TOOLS & COMMANDS
-
-### Essential Commands
-```bash
-# Development
-npm run dev --turbopack
-
-# Quality Checks
-npm run lint
-npm run build
-
-# Type Checking
-npx tsc --noEmit
+// ✅ CORRECT (Client components)
+export default function EditPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params);
+  useEffect(() => {
+    fetchData(resolvedParams.id);
+  }, [resolvedParams.id]);
+}
 ```
 
-### Useful Development Patterns
-- **Component Development**: Start with props interface, then implement
-- **Styling Approach**: Use Tailwind utilities, avoid custom CSS when possible
-- **State Management**: Local state first, lift up only when necessary
+### Prevention Protocol (MANDATORY FOR ALL AGENTS)
+1. **ALWAYS** check `package.json` first for framework versions
+2. **ALWAYS** look for existing working patterns in the codebase
+3. **ALWAYS** run `npm run build` after implementing core functionality
+4. **NEVER** assume framework patterns from training data
+
+## 🚨 CRITICAL LESSON #2: Copy Working Patterns
+
+### The Problem
+- **Issue**: Tried to implement fallback solutions instead of using existing Programs CMS pattern
+- **Impact**: Overcomplicated simple database migration issue
+- **Root Cause**: Did not leverage existing working foundation
+
+### Prevention Protocol
+1. **FIRST** examine existing working code for similar functionality
+2. **COPY** the working patterns exactly
+3. **ADAPT** only after understanding why it works
+4. **ASK** user before implementing fallback solutions
+
+## 🛠️ MANDATORY PRE-WORK CHECKLIST
+
+### Before Writing ANY Code:
+- [ ] Read CLAUDE.md for project overview
+- [ ] Read LESSONS_LEARNED.md (this file)
+- [ ] Check `package.json` for framework versions
+- [ ] Search codebase for similar existing patterns
+- [ ] Verify current status in ACTIVE_DEVELOPMENT.md
+
+### For Framework-Specific Code:
+- [ ] Check if framework version has breaking changes
+- [ ] WebSearch for recent migration guides if unsure
+- [ ] Test build immediately after core implementation
+- [ ] Document any new patterns discovered
+
+### For Database/API Work:
+- [ ] Check existing API routes for patterns
+- [ ] Verify database schema in prisma/schema.prisma
+- [ ] Test database connection before implementing
+- [ ] Use existing error handling patterns
+
+## 📚 FRAMEWORK-SPECIFIC KNOWLEDGE BASE
+
+### Next.js 15.4.4 (Current Project Version)
+- **Params**: Always Promise-based in API routes and pages
+- **SearchParams**: Now Promise-based
+- **Client Components**: Use `React.use()` to unwrap Promises
+- **API Routes**: Must await params before accessing properties
+- **Build Command**: `npm run build` includes Prisma generation
+
+### React 19.1.1 (Current Project Version)
+- **use() Hook**: Required for unwrapping Promises in client components
+- **Async Components**: Server components can be async, client cannot
+
+### Prisma 6.13.0 (Current Project Version)
+- **Generation**: Auto-runs on build via `prisma generate`
+- **Migration**: Use `prisma db push` for schema changes
+- **Client**: Singleton pattern used in this project
+
+## 🔄 CROSS-SESSION CONTINUITY
+
+### For Next Agent/Session:
+1. **START HERE**: Read CLAUDE.md → LESSONS_LEARNED.md → ACTIVE_DEVELOPMENT.md
+2. **UNDERSTAND**: Current framework versions and breaking changes
+3. **FOLLOW**: The working patterns already established
+4. **DOCUMENT**: Any new lessons learned in this file
+
+### When Things Go Wrong:
+1. **ANALYZE ROOT CAUSE**: Don't assume, investigate
+2. **CHECK VERSIONS**: Framework compatibility issues?
+3. **LEVERAGE EXISTING**: What working patterns can solve this?
+4. **DOCUMENT**: Add lesson to this file for future agents
+
+## 📊 SUCCESS METRICS
+
+### Indicators of Good Practice:
+- ✅ Build passes on first try
+- ✅ Code follows existing patterns
+- ✅ No version compatibility issues
+- ✅ Features work locally and in production
+
+### Red Flags:
+- ❌ Production deployment failures
+- ❌ Type errors during build
+- ❌ Implementing fallbacks without asking
+- ❌ Not checking existing codebase first
+
+## 🎯 GOLDEN RULES
+
+1. **"Check First, Code Second"** - Always examine existing patterns
+2. **"Version Matters"** - Framework versions determine API patterns
+3. **"Build Early, Build Often"** - Test compilation immediately
+4. **"Copy, Don't Assume"** - Use working patterns as templates
+5. **"Document Everything"** - Future agents depend on your notes
 
 ---
 
-## 📊 PERFORMANCE BENCHMARKS
-
-### Loading Speed Targets
-- **First Contentful Paint**: < 2 seconds
-- **Largest Contentful Paint**: < 4 seconds
-- **Cumulative Layout Shift**: < 0.1
-
-### Optimization Techniques That Work
-- **Image Optimization**: WebP format with fallbacks
-- **Code Splitting**: Dynamic imports for heavy components
-- **Caching Strategy**: Proper Next.js caching headers
-
----
-
-## 🚀 DEPLOYMENT & HOSTING INSIGHTS
-
-### Build Optimization
-- **Static Generation**: Pre-render pages when possible
-- **API Routes**: Keep them lightweight and focused
-- **Error Handling**: Proper 404 and error pages
-
-### SEO Considerations
-- **Meta Tags**: Proper title, description, and Open Graph tags
-- **Structured Data**: Schema.org markup for Islamic center information
-- **Sitemap**: Auto-generated sitemap for better indexing
-
----
-
-## 🔄 MAINTENANCE & UPDATES
-
-### Regular Tasks
-- **Dependency Updates**: Keep packages current for security
-- **Content Updates**: Prayer times and program information
-- **Performance Monitoring**: Regular checks on site speed
-
-### Future-Proofing
-- **Accessibility Standards**: Stay current with WCAG guidelines
-- **Browser Support**: Test with latest browser versions
-- **Mobile Compatibility**: New device sizes and capabilities
-
----
-
-**📝 UPDATE INSTRUCTIONS**: Add insights here as they're discovered during development. Focus on knowledge that will help future development sessions and other features.
+**REMEMBER**: This file is a living document. Add new lessons immediately when discovered. Every mistake here should never happen again.

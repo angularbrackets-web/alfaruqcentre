@@ -18,10 +18,17 @@
 - **Animations**: Framer Motion 12.5.0
 - **Icons**: Lucide React 0.475.0
 - **Language**: TypeScript 5
+- **Database**: Prisma 6.13.0 with PostgreSQL (Supabase)
 - **Build Commands**: 
   - Dev: `npm run dev --turbopack`
   - Build: `npm run build`
   - Lint: `npm run lint`
+
+### ⚠️ CRITICAL: Next.js 15 Breaking Changes
+- **API Routes**: `params` is now Promise - use `const { id } = await params`
+- **Page Components**: `params` must be unwrapped with `React.use()` in client components
+- **SearchParams**: Now Promise-based, requires await
+- **Always check existing working patterns before implementing new features**
 
 ## 📁 PROJECT STRUCTURE
 ```
@@ -119,16 +126,26 @@ app/
 
 **🔄 FOR NEXT AGENT/SESSION**: 
 1. **Start Here**: Read CLAUDE.md for project overview
-2. **Check Current Work**: Review ACTIVE_DEVELOPMENT.md for ongoing tasks  
-3. **Learn from Past**: Study LESSONS_LEARNED.md for project insights
-4. **Follow Process**: Use the 7-step methodology for all new requests
+2. **CRITICAL**: Read LESSONS_LEARNED.md to avoid repeating mistakes
+3. **Check Current Work**: Review ACTIVE_DEVELOPMENT.md for ongoing tasks  
+4. **Follow Process**: Use the MANDATORY pre-work methodology
 5. **Track Everything**: Document all changes and decisions in ACTIVE_DEVELOPMENT.md
 
-### 🎯 AGENT METHODOLOGY REMINDER
+### 🚨 MANDATORY PRE-WORK METHODOLOGY
+**BEFORE WRITING ANY CODE:**
+1. **Check Versions**: Read `package.json` for framework versions
+2. **Study Patterns**: Examine existing working code for similar functionality  
+3. **Verify Compatibility**: WebSearch for breaking changes if needed
+4. **Copy Working Solutions**: Use existing patterns as templates
+5. **Test Early**: Run `npm run build` after core implementation
+6. **Document Lessons**: Add discoveries to LESSONS_LEARNED.md
+
+### 🎯 AGENT METHODOLOGY STEPS
 1. Think deeply and create initial plan
-2. Leverage MCP servers for optimal results  
-3. Review MCP capabilities and refine plan
-4. Break down to step-by-step bullets
+2. **EXECUTE PRE-WORK CHECKLIST** (see LESSONS_LEARNED.md)
+3. Leverage MCP servers for optimal results  
+4. Review MCP capabilities and refine plan
+5. Break down to step-by-step bullets
 5. Share plan and get user approval
 6. Implement only after approval
 7. Break complex tasks into simple steps
