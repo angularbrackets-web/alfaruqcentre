@@ -4,64 +4,45 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Program } from '@/app/types/program';
+import { getPrograms } from '@/app/utils/programs';
 
-type Poster = {
-  id: string;
-  src: string;
-  alt: string;
-  url?: string;
-  linkText?: string;
-  linkUrl?: string;
-};
-
-type PosterWithDimensions = Poster & {
+type ProgramWithDimensions = Program & {
   width: number;
   height: number;
   aspectRatio: number;
   orientationType: 'portrait' | 'landscape' | 'square';
 };
 
-const posters: Poster[] = [
-  {
-    id: '1',
-    src: '/AFIS.SummerCamp.2025.jpeg',
-    alt: 'Summer Camp 2025',
-    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSc6U1ur8QSSrfBBO-Ws7BxCBOCMh4RU_hwN7bvF9RfObB_xhg/viewform',
-    linkText: 'Register',
-  },
-  {
-    id: '2',
-    src: '/AlFaruqIslamicSchoolAndAmanaAcademy.April2025.1.jpeg',
-    alt: 'Islamic School',
-    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScBGnya-MWf-d39tWtyDQNgEP_2Ft_86aslmSndZAY2BfRqwg/viewform',
-    linkText: 'Register',
-  },
-  {
-    id: '3',
-    src: '/AlFaruq.Weekend.Quran.School.March2025.jpeg',
-    alt: 'Weekend Quran School',
-    linkUrl: 'https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform',
-    linkText: 'Register',
-    url: '/weekendschool'
-  },
-  {
-    id: '4',
-    src: '/AlFaruq.ClassicalArabicProgram.jpeg',
-    alt: 'Classical Arabic Program',
-  }
-];
-
 export default function PosterGallery() {
-  const [processedPosters, setProcessedPosters] = useState<PosterWithDimensions[]>([]);
+  const [processedPrograms, setProcessedPrograms] = useState<ProgramWithDimensions[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadImageDimensions = async () => {
       setLoading(true);
       
-      const postersWithDimensions = await Promise.all(
-        posters.map(async (poster: Poster) => {
-          return new Promise<PosterWithDimensions>((resolve) => {
+      // Get programs from API
+      let programs;
+      try {
+        const response = await fetch('/api/programs');
+        const data = await response.json();
+        if (data.success) {
+          programs = data.data;
+        } else {
+          // Fallback to local data if API fails
+          console.warn('API failed, using local data:', data.message);
+          programs = getPrograms();
+        }
+      } catch (error) {
+        // Fallback to local data if fetch fails
+        console.warn('Fetch failed, using local data:', error);
+        programs = getPrograms();
+      }
+      
+      const programsWithDimensions = await Promise.all(
+        programs.map(async (program: Program) => {
+          return new Promise<ProgramWithDimensions>((resolve) => {
             const img = new window.Image();
             img.onload = () => {
               const width = img.width;
@@ -78,7 +59,7 @@ export default function PosterGallery() {
               }
               
               resolve({
-                ...poster,
+                ...program,
                 width,
                 height,
                 aspectRatio,
@@ -88,7 +69,7 @@ export default function PosterGallery() {
             
             img.onerror = () => {
               resolve({
-                ...poster,
+                ...program,
                 width: 800,
                 height: 1200,
                 aspectRatio: 0.67,
@@ -96,12 +77,12 @@ export default function PosterGallery() {
               });
             };
             
-            img.src = poster.src;
+            img.src = program.imageUrl;
           });
         })
       );
       
-      setProcessedPosters(postersWithDimensions);
+      setProcessedPrograms(programsWithDimensions);
       setLoading(false);
     };
     
@@ -124,7 +105,7 @@ export default function PosterGallery() {
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-32">
-        <div className="animate-pulse text-gray-500">Loading posters...</div>
+        <div className="animate-pulse text-gray-500">Loading programs...</div>
       </div>
     );
   }
@@ -133,49 +114,29 @@ export default function PosterGallery() {
     <>
       <h2 className="text-3xl font-bold text-sky-900 mb-6 px-5">Our Programs</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-        {processedPosters.map((poster) => (
-          <div key={poster.id} className='flex flex-col'>
-            {poster.url ? (
-              <a
-                href={poster.url}
-                rel="noopener noreferrer"
-                className={`${getPosterOrientationClass(poster.orientationType)} transform transition-all duration-300 hover:scale-105 max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}
-              >
-                <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={poster.src}
-                      alt={poster.alt}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-cover rounded-lg"
-                    />
-                  </div>
-                </div>
-              </a>
-            ) : (
-              <div className={`${getPosterOrientationClass(poster.orientationType)} max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}>
-                <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
-                  <div className="relative w-full h-full">
-                    <Image
-                      src={poster.src}
-                      alt={poster.alt}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                      className="object-cover rounded-lg"
-                    />
-                  </div>
+        {processedPrograms.map((program) => (
+          <div key={program.id} className='flex flex-col'>
+            <div className={`${getPosterOrientationClass(program.orientationType)} max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-gray-200`}>
+              <div className="h-full rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 bg-gray-200 p-1">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={program.imageUrl}
+                    alt={program.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover rounded-lg"
+                  />
                 </div>
               </div>
-            )}
-            {poster.linkUrl && (
+            </div>
+            {program.linkUrl && (
               <div>
                 <Link 
-                  href={poster.linkUrl} 
+                  href={program.linkUrl} 
                   target="_blank" 
                   className="inline-block rounded-lg bg-blue-500 text-sm lg:text-base font-semibold text-white shadow-sm hover:bg-blue-700 px-4 py-1 my-2"
                 >
-                  {poster.linkText!}
+                  {program.linkText || 'Learn More'}
                 </Link>
               </div>
             )}

@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'media4.giphy.com' },
       { protocol: 'https', hostname: 'media0.giphy.com' },
+      { protocol: 'https', hostname: 'res.cloudinary.com' },
     ],
   }
 };
