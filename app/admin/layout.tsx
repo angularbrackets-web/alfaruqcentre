@@ -10,12 +10,16 @@ import {
   Plus, 
   LogOut, 
   Menu, 
-  X 
+  X,
+  Image,
+  ImagePlus
 } from 'lucide-react';
 import { useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: Home },
+  { name: 'Hero Slides', href: '/admin/slides', icon: Image },
+  { name: 'Add Slide', href: '/admin/slides/add', icon: ImagePlus },
   { name: 'Programs', href: '/admin/programs', icon: FileText },
   { name: 'Add Program', href: '/admin/programs/add', icon: Plus },
 ];

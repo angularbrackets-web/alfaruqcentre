@@ -26,6 +26,23 @@ model Program {
   @@map("programs")
 }
 
+model HeroSlide {
+  id           String   @id
+  title        String
+  subtitle     String?
+  description  String?
+  imageUrl     String
+  linkUrl      String?
+  linkText     String?
+  status       Status   @default(ACTIVE)
+  displayOrder Int      @default(0)
+  duration     Int      @default(15000)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("hero_slides")
+}
+
 enum Status {
   ACTIVE
   INACTIVE

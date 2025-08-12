@@ -1,6 +1,6 @@
 "use client";
 import Donate3 from "./components/Donate3";
-import HeroSectionTable from "./components/HeroSectionTable2";
+import DynamicHeroSection from "./components/DynamicHeroSection";
 import IslamicSchool from "./components/IslamicSchool";
 import PosterGallery from "./components/PosterGallery";
 import TopBanner from "./components/TopBanner";
@@ -18,7 +18,7 @@ export default function Home() {
 
    <TopBanner iconSize={iconSize} iconCount={iconCount} />
       
-      <HeroSectionTable />
+      <DynamicHeroSection />
       <div className="my-8">
         <PosterGallery />
       </div>

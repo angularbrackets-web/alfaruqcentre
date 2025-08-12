@@ -1,14 +1,29 @@
 'use client';
 
 import Link from 'next/link';
-import { FileText, Plus, TrendingUp } from 'lucide-react';
+import { FileText, Plus, TrendingUp, Image, ImagePlus } from 'lucide-react';
 
 const stats = [
   { name: 'Total Programs', value: '4', icon: FileText },
   { name: 'Active Programs', value: '4', icon: TrendingUp },
+  { name: 'Hero Slides', value: '0', icon: Image },
 ];
 
 const quickActions = [
+  {
+    name: 'Add Hero Slide',
+    description: 'Create a new hero slideshow image',
+    href: '/admin/slides/add',
+    icon: ImagePlus,
+    color: 'bg-purple-500 hover:bg-purple-600'
+  },
+  {
+    name: 'Manage Hero Slides',
+    description: 'Edit homepage slideshow content',
+    href: '/admin/slides',
+    icon: Image,
+    color: 'bg-indigo-500 hover:bg-indigo-600'
+  },
   {
     name: 'Add New Program',
     description: 'Create a new program with image upload',
@@ -117,9 +132,10 @@ export default function AdminDashboard() {
             </h3>
             <div className="prose text-sm text-gray-500">
               <ul className="space-y-2">
-                <li>• Use the navigation menu to manage programs</li>
+                <li>• Use the navigation menu to manage hero slides and programs</li>
                 <li>• Upload high-quality images for better engagement</li>
-                <li>• Keep program descriptions clear and informative</li>
+                <li>• Keep descriptions clear and informative</li>
+                <li>• Set appropriate display durations for slideshow content</li>
                 <li>• Test changes on the public site after making updates</li>
               </ul>
             </div>
