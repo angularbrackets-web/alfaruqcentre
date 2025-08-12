@@ -6,11 +6,12 @@ const prisma = new PrismaClient()
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const slide = await prisma.heroSlide.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!slide) {
@@ -32,13 +33,14 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const body: UpdateHeroSlideRequest = await request.json()
     
     const slide = await prisma.heroSlide.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         ...(body.title !== undefined && { title: body.title }),
         ...(body.subtitle !== undefined && { subtitle: body.subtitle }),
@@ -64,11 +66,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     await prisma.heroSlide.delete({
-      where: { id: params.id }
+      where: { id }
     })
     
     return NextResponse.json({ message: 'Hero slide deleted successfully' })
