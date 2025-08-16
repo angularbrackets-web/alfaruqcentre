@@ -4811,7 +4811,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "3:56 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:14 AM"
     },
     "zuhr": {
@@ -4840,7 +4840,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "3:57 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:16 AM"
     },
     "zuhr": {
@@ -4869,7 +4869,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "3:58 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:17 AM"
     },
     "zuhr": {
@@ -4898,7 +4898,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "3:59 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:19 AM"
     },
     "zuhr": {
@@ -4927,7 +4927,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "3:59 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:21 AM"
     },
     "zuhr": {
@@ -4956,7 +4956,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:00 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:23 AM"
     },
     "zuhr": {
@@ -4985,7 +4985,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:01 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:24 AM"
     },
     "zuhr": {
@@ -5014,7 +5014,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:01 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:26 AM"
     },
     "zuhr": {
@@ -5043,7 +5043,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:04 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:28 AM"
     },
     "zuhr": {
@@ -5072,7 +5072,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:08 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:30 AM"
     },
     "zuhr": {
@@ -5101,7 +5101,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:11 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:31 AM"
     },
     "zuhr": {
@@ -5130,7 +5130,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:14 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:33 AM"
     },
     "zuhr": {
@@ -5159,7 +5159,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:16 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:35 AM"
     },
     "zuhr": {
@@ -5188,7 +5188,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:19 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:36 AM"
     },
     "zuhr": {
@@ -5217,7 +5217,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:22 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:38 AM"
     },
     "zuhr": {
@@ -5246,7 +5246,7 @@
     "year": "2025",
     "fajr": {
       "azzan": "4:25 AM",
-      "iqamah": "5:00 AM",
+      "iqamah": "5:15 AM",
       "sunrise": "6:40 AM"
     },
     "zuhr": {
@@ -5267,8 +5267,4 @@
     },
     "maghrib_isha_combined": true
   }
-        
-        
-      
-  ]
-  
+]
