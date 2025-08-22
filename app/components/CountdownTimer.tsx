@@ -105,21 +105,32 @@ const CountdownTimer = () => {
   }, [getNextIqamahTime]);
 
   return (
-    <div className="p-1 text-center">
+    <div className="mx-4 mb-4 p-4 bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200/60 rounded-2xl shadow-lg backdrop-blur-sm">
       {nextPrayer ? (
         <div>
-          <p className="text-lg text-purple-900">
-            <RefreshCw className="inline-block mr-2 w-4 h-4 animate-spin" />
-            Next: {nextPrayer} Iqamah
-          </p>
-          <p className="text-3xl font-bold text-blue-800">
-            {String(countdown.hours).padStart(2, '0')}:
-            {String(countdown.minutes).padStart(2, '0')}:
-            {String(countdown.seconds).padStart(2, '0')}
-          </p>
+          <div className="flex items-center justify-center mb-3">
+            <div className="flex items-center bg-emerald-100/80 px-3 py-1 rounded-full">
+              <RefreshCw className="mr-2 w-5 h-5 text-emerald-600 animate-spin" />
+              <span className="text-emerald-800 font-semibold text-sm sm:text-base">
+                Next: {nextPrayer} Iqamah
+              </span>
+            </div>
+          </div>
+          <div className="bg-white/40 backdrop-blur-sm rounded-xl p-3 border border-emerald-200/50">
+            <p className="text-3xl sm:text-4xl font-bold text-emerald-800 tracking-wider font-mono">
+              {String(countdown.hours).padStart(2, '0')}:
+              {String(countdown.minutes).padStart(2, '0')}:
+              <span className="text-emerald-600">{String(countdown.seconds).padStart(2, '0')}</span>
+            </p>
+            <p className="text-emerald-600 text-xs sm:text-sm font-medium mt-1 tracking-wide">
+              HOURS : MINUTES : SECONDS
+            </p>
+          </div>
         </div>
       ) : (
-        <p className="text-gray-600">All iqamah times have passed.</p>
+        <div className="bg-gray-100/80 backdrop-blur-sm rounded-xl p-3 border border-gray-200/50">
+          <p className="text-gray-600 font-medium">All iqamah times have passed.</p>
+        </div>
       )}
     </div>
   );
