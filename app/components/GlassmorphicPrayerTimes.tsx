@@ -5,6 +5,7 @@ import { prayerTimesData } from '../data/prayerTimes';
 import Countdown from './CountdownTimer';
 import IqamahChanges from './IqamahChanges';
 import Link from 'next/link';
+import HijriDate from 'hijri-date';
 
 interface PrayerTime {
   azzan: string;
@@ -171,28 +172,23 @@ const GlassmorphicPrayerTimes = () => {
       
       return formatted;
     } catch {
-      // Fallback: Calculate approximate Hijri date manually
-      const gregorianYear = today.getFullYear();
-      const gregorianMonth = today.getMonth() + 1;
-      const gregorianDay = today.getDate();
-      
-      // Simple approximation (not astronomically precise, but better than showing BC)
-      // Hijri year is approximately 33 years behind Gregorian in cycles
-      const hijriYear = Math.floor((gregorianYear - 622) * 1.030684) + 1;
-      
-      // Simplified month mapping (approximate)
-      const hijriMonths = [
-        'Muharram', 'Safar', 'Rabi\' al-Awwal', 'Rabi\' al-Thani',
-        'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', 'Sha\'ban',
-        'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'
-      ];
-      
-      // Rough approximation - adjust month and day based on lunar calendar offset
-      const dayOfYear = Math.floor((Date.UTC(gregorianYear, gregorianMonth - 1, gregorianDay) - Date.UTC(gregorianYear, 0, 0)) / (1000 * 60 * 60 * 24));
-      const hijriMonthIndex = Math.floor((dayOfYear / 29.5) % 12);
-      const hijriDay = Math.floor((dayOfYear % 29.5)) + 1;
-      
-      return `${hijriMonths[hijriMonthIndex]} ${hijriDay}, ${hijriYear} AH`;
+      // Fallback: Use hijri-date library for accurate calculation
+      try {
+        const hijriDate = new HijriDate(today);
+        const monthNames = [
+          'Muharram', 'Safar', 'Rabi\' al-Awwal', 'Rabi\' al-Thani',
+          'Jumada al-Awwal', 'Jumada al-Thani', 'Rajab', 'Sha\'ban',
+          'Ramadan', 'Shawwal', 'Dhu al-Qi\'dah', 'Dhu al-Hijjah'
+        ];
+        
+        const monthName = monthNames[hijriDate.getMonth() - 1] || 'Muharram';
+        return `${monthName} ${hijriDate.getDate()}, ${hijriDate.getFullYear()} AH`;
+      } catch {
+        // Ultimate fallback: just show year
+        const currentGregorianYear = today.getFullYear();
+        const approximateHijriYear = Math.floor((currentGregorianYear - 622) * 1.030684) + 1;
+        return `${approximateHijriYear} AH`;
+      }
     }
   }, [today]);
 
