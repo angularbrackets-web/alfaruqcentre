@@ -4,50 +4,17 @@ import Image from 'next/image';
 import Head from 'next/head';
 
 interface Event {
-  id: number;
+  id: string | number;
   title: string;
   poster?: string;
   video?: string;
   thumbnail?: string;
-  registrationLink: string;
-  startDate: string; // YYYY-MM-DD
-  endDate: string;   // YYYY-MM-DD
-  expiryDate: string; // YYYY-MM-DD (e.g., registration deadline, or when event details should be removed)
+  registrationLink?: string;
+  startDate: string; // YYYY-MM-DD or ISO string
+  endDate: string;   // YYYY-MM-DD or ISO string
+  expiryDate: string; // YYYY-MM-DD or ISO string
   summary?: string[];
 }
-
-const events: Event[] = [
-  {
-    id: 1,
-    title: 'Summer Camp 2025',
-    poster: '/AFIS.SummerCamp.2025.jpeg',
-    registrationLink: 'https://forms.gle/eaNc7Wi7L2LRiApL9',
-    startDate: '2025-07-07',
-    endDate: '2025-08-21',
-    expiryDate: '2025-12-31',
-    summary: [
-      'Get ready for a summer full of learning, fun, and unforgettable memories! Al-Faruq Summer Camp is now accepting registrations.',
-      'Our program includes engaging courses in Qur’an, Arabic, Islamic Studies, Language Arts, and Math—alongside exciting activities like sports, games, and field trips.',
-      'Spaces are limited, so don’t wait!'
-    ]
-  },
-  {
-    id: 2,
-    title: 'School Trip to Half Moon Farm',
-    video: '/AFIS.FieldTrip.May10.2025.mp4', // Example with YouTube video
-    thumbnail: '/AFIS.FieldTrip.May10.2025.Thumbnail.png', // Local thumbnail for the video
-    registrationLink: '#', // Placeholder link
-    startDate: '2025-05-10',
-    endDate: '2025-05-10',
-    expiryDate: '2025-06-30', // Still visible as past event
-    summary: [
-      'A Day of Learning and Reflection',
-      'Our students enjoyed a beautiful and enriching trip to Half Moon Farm, where we explored the wonders of nature and deepened our understanding of the world through the lens of our faith.',
-      'From the gentle animals to the vibrant plants and peaceful surroundings, every part of the farm reminded us of Allah’s magnificent creations. We took time to reflect on how everything in nature big or small points to His wisdom, mercy, and power.',
-      'May these moments plant seeds of love, curiosity, and appreciation for the world Allah has given us.'
-    ]
-  }
-];
 
 // Helper function for date formatting
 const formatDate = (dateString: string) => {
@@ -56,6 +23,9 @@ const formatDate = (dateString: string) => {
 };
 
 export default function Events() {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState('');
   const [isPopupOpen, setPopupOpen] = useState<boolean>(false);
   const [popupMedia, setPopupMedia] = useState<{ src: string; type: 'image' | 'video' } | null>(null);
 
@@ -68,6 +38,53 @@ export default function Events() {
     setPopupOpen(false);
     setPopupMedia(null);
   };
+
+  // Fetch events from database
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch('/api/events');
+        const data = await response.json();
+
+        if (data.success) {
+          // Convert API events to frontend format
+          const frontendEvents = data.data.map((event: {
+            id: string;
+            title: string;
+            poster?: string;
+            video?: string;
+            thumbnail?: string;
+            registrationLink?: string;
+            startDate: string;
+            endDate: string;
+            expiryDate: string;
+            summary: string[];
+          }) => ({
+            id: event.id,
+            title: event.title,
+            poster: event.poster,
+            video: event.video,
+            thumbnail: event.thumbnail,
+            registrationLink: event.registrationLink || '#',
+            startDate: event.startDate.split('T')[0], // Convert ISO to YYYY-MM-DD
+            endDate: event.endDate.split('T')[0],
+            expiryDate: event.expiryDate.split('T')[0],
+            summary: event.summary || []
+          }));
+          setEvents(frontendEvents);
+        } else {
+          setError('Failed to load events. Please try again later.');
+        }
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        setError('Failed to load events. Please try again later.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -108,17 +125,15 @@ export default function Events() {
               <Image
                 src={event.thumbnail}
                 alt={`Thumbnail for ${event.title} video`}
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0"
+                fill
+                className="absolute inset-0 object-cover"
               />
-            ) : (event.video.includes('youtube.com') || event.video.includes('youtu.be')) ? (
+            ) : (event.video && (event.video.includes('youtube.com') || event.video.includes('youtu.be'))) ? (
               <Image
                 src={`https://img.youtube.com/vi/${event.video.split('v=')[1]?.split('&')[0] || event.video.split('/').pop()}/hqdefault.jpg`}
                 alt={`Thumbnail for ${event.title} video`}
-                layout="fill"
-                objectFit="cover"
-                className="absolute inset-0"
+                fill
+                className="absolute inset-0 object-cover"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
@@ -132,15 +147,24 @@ export default function Events() {
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
             </svg>
           </div>
-        ) : (
+        ) : event.poster ? (
           <Image
-            src={event.poster!}
+            src={event.poster}
             alt={event.title}
             width={300}
             height={200}
             className="rounded-lg cursor-pointer object-cover w-full md:w-72 h-48 md:h-auto shadow-sm"
             onClick={() => openPopup(event.poster!, 'image')}
           />
+        ) : (
+          <div className="w-full md:w-72 h-48 bg-gray-200 rounded-lg flex items-center justify-center shadow-sm">
+            <div className="text-center text-gray-500">
+              <svg className="h-16 w-16 mx-auto mb-2 opacity-50" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clipRule="evenodd" />
+              </svg>
+              <p className="text-sm">No Image</p>
+            </div>
+          </div>
         )}
 
         <div className="flex-1">
@@ -159,7 +183,7 @@ export default function Events() {
               {message}
             </p>
           ))}
-          {!isPast && event.registrationLink && ( // Only show registration link for non-past events
+          {!isPast && event.registrationLink && event.registrationLink !== '#' && ( // Only show registration link for non-past events and valid links
             <a
               href={event.registrationLink}
               target="_blank"
@@ -186,6 +210,32 @@ export default function Events() {
 
       <div className="container mx-auto p-4 md:p-8">
         <h1 className="text-4xl font-extrabold mb-10 text-center text-gray-800">Community Events</h1>
+
+        {/* Loading State */}
+        {isLoading && (
+          <div className="flex items-center justify-center min-h-64">
+            <div className="text-lg text-gray-600">Loading events...</div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-6">
+            {error}
+          </div>
+        )}
+
+        {/* No Events State */}
+        {!isLoading && !error && events.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-lg text-gray-600 mb-4">No events available at this time.</p>
+            <p className="text-gray-500">Check back later for upcoming community events!</p>
+          </div>
+        )}
+
+        {/* Events Content - Only show if not loading, no error, and events exist */}
+        {!isLoading && !error && events.length > 0 && (
+          <>
 
         {/* Current Events Section */}
         {currentEvents.length > 0 && (
@@ -216,6 +266,9 @@ export default function Events() {
             {pastEvents.map((event) => (
               <EventCard key={event.id} event={event} isPast={true} />
             ))}
+          </>
+        )}
+
           </>
         )}
 

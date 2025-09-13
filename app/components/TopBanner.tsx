@@ -60,6 +60,7 @@ const TopBanner = ({ iconSize = 24, iconCount = 10 }) => {
           alt="Banner gif"
           width={40}
           height={40}
+          unoptimized
           className="w-10 h-10 mr-2 hidden md:block"
         />
 
@@ -75,6 +76,7 @@ const TopBanner = ({ iconSize = 24, iconCount = 10 }) => {
           alt="Banner gif"
           width={40}
           height={40}
+          unoptimized
           className="w-10 h-10 ml-2 hidden md:block"
         />
 

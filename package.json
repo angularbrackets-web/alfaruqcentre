@@ -12,7 +12,8 @@
     "db:studio": "prisma studio",
     "db:setup": "node scripts/production-setup.js",
     "db:import": "node scripts/import-to-supabase.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@playwright/test": "^1.55.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

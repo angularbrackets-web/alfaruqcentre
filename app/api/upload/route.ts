@@ -32,27 +32,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    // Validate file type - support both images and videos
+    const allowedImageTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    const allowedVideoTypes = ['video/mp4', 'video/mov', 'video/avi', 'video/quicktime'];
+    const allowedTypes = [...allowedImageTypes, ...allowedVideoTypes];
+
     if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Invalid file type', 
-          message: 'Only JPEG, PNG, and WebP images are allowed' 
+        {
+          success: false,
+          error: 'Invalid file type',
+          message: 'Only JPEG, PNG, WebP images and MP4, MOV, AVI videos are allowed'
         },
         { status: 400 }
       );
     }
 
-    // Validate file size (5MB limit)
-    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    // Validate file size - different limits for images and videos
+    const isVideo = allowedVideoTypes.includes(file.type);
+    const maxSize = isVideo ? 100 * 1024 * 1024 : 5 * 1024 * 1024; // 100MB for videos, 5MB for images
+
     if (file.size > maxSize) {
+      const maxSizeText = isVideo ? '100MB' : '5MB';
       return NextResponse.json(
-        { 
-          success: false, 
-          error: 'File too large', 
-          message: 'File size must be less than 5MB' 
+        {
+          success: false,
+          error: 'File too large',
+          message: `File size must be less than ${maxSizeText}`
         },
         { status: 400 }
       );
@@ -62,18 +68,42 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
+    // Get folder and upload config based on file type
+    const folder = isVideo ? 'alfaruq-events/videos' : 'alfaruq-events/images';
+    const uploadConfig: {
+      folder: string;
+      resource_type: 'auto' | 'video' | 'image' | 'raw';
+      transformation?: Record<string, unknown>[];
+      video_metadata?: boolean;
+      eager?: Record<string, unknown>[];
+    } = {
+      folder: folder,
+      resource_type: 'auto'
+    };
+
+    // Add transformations for images only
+    if (!isVideo) {
+      uploadConfig.transformation = [
+        { width: 800, height: 1000, crop: 'limit' }, // Optimize image size
+        { quality: 'auto:good' }, // Automatic quality optimization
+        { fetch_format: 'auto' } // Automatic format optimization
+      ];
+    } else {
+      // Video-specific settings
+      uploadConfig.video_metadata = true; // Extract video metadata
+      uploadConfig.eager = [
+        {
+          width: 800, height: 600, crop: 'limit',
+          resource_type: 'video',
+          format: 'jpg' // Generate thumbnail
+        }
+      ];
+    }
+
     // Upload to Cloudinary
     const uploadResponse = await new Promise((resolve, reject) => {
       cloudinary.uploader.upload_stream(
-        {
-          folder: 'alfaruq-programs', // Organize uploads in a folder
-          resource_type: 'auto',
-          transformation: [
-            { width: 800, height: 1000, crop: 'limit' }, // Optimize image size
-            { quality: 'auto:good' }, // Automatic quality optimization
-            { fetch_format: 'auto' } // Automatic format optimization
-          ]
-        },
+        uploadConfig,
         (error, result) => {
           if (error) {
             console.error('Cloudinary upload error:', error);
@@ -85,13 +115,20 @@ export async function POST(request: NextRequest) {
       ).end(buffer);
     });
 
-    const result = uploadResponse as { secure_url: string; public_id: string };
+    const result = uploadResponse as {
+      secure_url: string;
+      public_id: string;
+      eager?: Array<{ secure_url: string }>;
+      resource_type: string;
+    };
 
     return NextResponse.json({
       success: true,
       url: result.secure_url,
       publicId: result.public_id,
-      message: 'File uploaded successfully'
+      thumbnailUrl: result.eager?.[0]?.secure_url, // For video thumbnails
+      resourceType: result.resource_type,
+      message: `${isVideo ? 'Video' : 'Image'} uploaded successfully`
     });
 
   } catch (error) {

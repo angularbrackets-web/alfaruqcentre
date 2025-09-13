@@ -43,6 +43,27 @@ model HeroSlide {
   @@map("hero_slides")
 }
 
+model Event {
+  id               String   @id
+  title            String
+  description      String?
+  poster           String?  // Cloudinary URL for poster image
+  video            String?  // Video URL (Cloudinary/YouTube/local)
+  thumbnail        String?  // Cloudinary URL for video thumbnail
+  registrationLink String?
+  startDate        DateTime
+  endDate          DateTime
+  expiryDate       DateTime // When event details should be removed
+  summary          String[] // Array of summary points
+  tags             String[] // Simple tags array
+  status           Status   @default(ACTIVE)
+  order            Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("events")
+}
+
 enum Status {
   ACTIVE
   INACTIVE

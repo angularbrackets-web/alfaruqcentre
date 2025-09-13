@@ -4,15 +4,17 @@ import { useAuth } from '@/app/hooks/useAuth';
 import AdminAuth from '@/app/components/AdminAuth';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { 
-  Home, 
-  FileText, 
-  Plus, 
-  LogOut, 
-  Menu, 
+import {
+  Home,
+  FileText,
+  Plus,
+  LogOut,
+  Menu,
   X,
   Image,
-  ImagePlus
+  ImagePlus,
+  Calendar,
+  CalendarPlus
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -22,6 +24,8 @@ const navigation = [
   { name: 'Add Slide', href: '/admin/slides/add', icon: ImagePlus },
   { name: 'Programs', href: '/admin/programs', icon: FileText },
   { name: 'Add Program', href: '/admin/programs/add', icon: Plus },
+  { name: 'Events', href: '/admin/events', icon: Calendar },
+  { name: 'Add Event', href: '/admin/events/add', icon: CalendarPlus },
 ];
 
 interface AdminLayoutProps {
