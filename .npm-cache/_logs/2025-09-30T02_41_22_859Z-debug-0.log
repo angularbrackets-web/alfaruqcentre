@@ -1,0 +1,83 @@
+0 verbose cli /usr/local/bin/node /usr/local/lib/node_modules/npm/bin/npm-cli.js
+1 info using npm@10.9.2
+2 info using node@v22.17.1
+3 silly config load:file:/usr/local/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/mohammad/Projects/alfaruq-new-gm/.npmrc
+5 silly config load:file:/Users/mohammad/.npmrc
+6 silly config load:file:/usr/local/etc/npmrc
+7 verbose title npm exec @playwright/mcp@latest
+8 verbose argv "exec" "--" "@playwright/mcp@latest"
+9 verbose logfile logs-max:10 dir:/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_logs/2025-09-30T02_41_22_859Z-
+10 verbose logfile /Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_logs/2025-09-30T02_41_22_859Z-debug-0.log
+11 silly logfile start cleaning logs, removing 7 files
+12 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+13 silly logfile done cleaning log files
+14 http fetch GET 200 https://registry.npmjs.org/@playwright%2fmcp 291ms (cache updated)
+15 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+16 silly packumentCache heap:4345298944 maxSize:1086324736 maxEntrySize:543162368
+17 warn exec The following package was not found and will be installed: @playwright/mcp@0.0.40
+18 silly idealTree buildDeps
+19 silly fetch manifest @playwright/mcp@0.0.40
+20 silly packumentCache full:https://registry.npmjs.org/@playwright%2fmcp cache-miss
+21 http fetch GET 200 https://registry.npmjs.org/@playwright%2fmcp 451ms (cache updated)
+22 silly packumentCache full:https://registry.npmjs.org/@playwright%2fmcp set size:undefined disposed:false
+23 silly placeDep ROOT @playwright/mcp@0.0.40 REPLACE for:  want: 0.0.40
+24 silly fetch manifest playwright@1.56.0-alpha-1758750661000
+25 silly packumentCache full:https://registry.npmjs.org/playwright cache-miss
+26 silly fetch manifest playwright-core@1.56.0-alpha-1758750661000
+27 silly packumentCache full:https://registry.npmjs.org/playwright-core cache-miss
+28 http fetch GET 200 https://registry.npmjs.org/playwright 408ms (cache updated)
+29 silly packumentCache full:https://registry.npmjs.org/playwright set size:undefined disposed:false
+30 http fetch GET 200 https://registry.npmjs.org/playwright-core 756ms (cache updated)
+31 silly packumentCache full:https://registry.npmjs.org/playwright-core set size:undefined disposed:false
+32 silly placeDep ROOT playwright@1.56.0-alpha-1758750661000 OK for: @playwright/mcp@0.0.40 want: 1.56.0-alpha-1758750661000
+33 silly placeDep ROOT playwright-core@1.56.0-alpha-1758750661000 OK for: @playwright/mcp@0.0.40 want: 1.56.0-alpha-1758750661000
+34 silly fetch manifest fsevents@2.3.2
+35 silly packumentCache full:https://registry.npmjs.org/fsevents cache-miss
+36 http cache https://registry.npmjs.org/fsevents 5ms (cache hit)
+37 silly packumentCache full:https://registry.npmjs.org/fsevents set size:182472 disposed:false
+38 silly placeDep ROOT fsevents@2.3.2 OK for: playwright@1.56.0-alpha-1758750661000 want: 2.3.2
+39 silly reify mark retired [
+39 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/mcp',
+39 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/mcp-server-playwright'
+39 silly reify ]
+40 silly reify mark retired [
+40 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright',
+40 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/playwright'
+40 silly reify ]
+41 silly reify mark retired [
+41 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright-core',
+41 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/playwright-core'
+41 silly reify ]
+42 silly reify moves {
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/mcp': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/.mcp-i4giczoy',
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/mcp-server-playwright': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/.mcp-server-playwright-3omgho92',
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.playwright-g9qORCRO',
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/playwright': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/.playwright-iTYV1znz',
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/playwright-core': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.playwright-core-TPvJe7aY',
+42 silly reify   '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/playwright-core': '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/.bin/.playwright-core-aP9tIVNC'
+42 silly reify }
+43 verbose stack Error: ENOTEMPTY: directory not empty, rename '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/mcp' -> '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/.mcp-i4giczoy'
+43 verbose stack     at async Object.rename (node:internal/fs/promises:784:10)
+43 verbose stack     at async moveFile (/usr/local/lib/node_modules/npm/node_modules/@npmcli/fs/lib/move-file.js:30:5)
+43 verbose stack     at async Promise.allSettled (index 0)
+43 verbose stack     at async [reifyPackages] (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:325:11)
+43 verbose stack     at async Arborist.reify (/usr/local/lib/node_modules/npm/node_modules/@npmcli/arborist/lib/arborist/reify.js:142:5)
+43 verbose stack     at async exec (/usr/local/lib/node_modules/npm/node_modules/libnpmexec/lib/index.js:290:7)
+43 verbose stack     at async Npm.exec (/usr/local/lib/node_modules/npm/lib/npm.js:207:9)
+43 verbose stack     at async module.exports (/usr/local/lib/node_modules/npm/lib/cli/entry.js:74:5)
+44 error code ENOTEMPTY
+45 error syscall rename
+46 error path /Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/mcp
+47 error dest /Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/.mcp-i4giczoy
+48 error errno -66
+49 error ENOTEMPTY: directory not empty, rename '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/mcp' -> '/Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_npx/9833c18b2d85bc59/node_modules/@playwright/.mcp-i4giczoy'
+50 silly unfinished npm timer reify 1759200083728
+51 silly unfinished npm timer reify:retireShallow 1759200084986
+52 verbose cwd /Users/mohammad/Projects/alfaruq-new-gm
+53 verbose os Darwin 25.0.0
+54 verbose node v22.17.1
+55 verbose npm  v10.9.2
+56 verbose exit -66
+57 verbose code -66
+58 error A complete log of this run can be found in: /Users/mohammad/Projects/alfaruq-new-gm/.npm-cache/_logs/2025-09-30T02_41_22_859Z-debug-0.log
