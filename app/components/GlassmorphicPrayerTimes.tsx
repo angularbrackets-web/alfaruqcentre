@@ -33,7 +33,7 @@ interface DayPrayerTimes {
 
 const defaultJummahTimes: JummahTimes = {
   firstJummah: "12:30 PM",
-  secondJummah: "01:45 PM"
+  secondJummah: "01:30 PM"
 };
 
 const GlassmorphicPrayerTimes = () => {
