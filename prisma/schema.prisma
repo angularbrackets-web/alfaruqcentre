@@ -70,3 +70,27 @@ enum Status {
 
   @@map("status")
 }
+
+enum VolunteerStatus {
+  PENDING
+  CONTACTED
+  ENROLLED
+  DECLINED
+
+  @@map("volunteer_status")
+}
+
+model Volunteer {
+  id              String           @id
+  name            String
+  email           String
+  phone           String?
+  areasOfInterest String[]
+  availability    String[]
+  message         String?
+  status          VolunteerStatus  @default(PENDING)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@map("volunteers")
+}

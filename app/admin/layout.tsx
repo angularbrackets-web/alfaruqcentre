@@ -14,7 +14,8 @@ import {
   Image,
   ImagePlus,
   Calendar,
-  CalendarPlus
+  CalendarPlus,
+  Users
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -26,6 +27,7 @@ const navigation = [
   { name: 'Add Program', href: '/admin/programs/add', icon: Plus },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'Add Event', href: '/admin/events/add', icon: CalendarPlus },
+  { name: 'Volunteers', href: '/admin/volunteers', icon: Users },
 ];
 
 interface AdminLayoutProps {

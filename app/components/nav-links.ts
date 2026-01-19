@@ -10,8 +10,9 @@ export const NAV_LINKS: NavLink[] = [
   { href: '/programs', label: 'PROGRAMS' },
   { href: '/events', label: 'EVENTS' },
   { href: '/weekendschool', label: 'WEEKEND SCHOOL' },
-  { 
-    href: '/nowhiring', 
+  { href: '/volunteer', label: 'VOLUNTEER' },
+  {
+    href: '/nowhiring',
     label: 'NOW HIRING',
     isHighlighted: true
   }
