@@ -62,14 +62,14 @@ const MonthlyPrayerTimes = () => {
         const staticData = prayerTimesData.filter(
           (day: DayPrayerTimes) => day.month === currentMonth && day.year === currentYear
         );
-        
+
         if (staticData.length === 0) {
           throw new Error('No prayer times available for this month');
         }
-        
+
         // Validate data structure
-        if (!staticData.every(day => 
-          day.date && day.month && day.year && 
+        if (!staticData.every(day =>
+          day.date && day.month && day.year &&
           day.fajr?.azzan && day.fajr?.iqamah &&
           day.zuhr?.azzan && day.zuhr?.iqamah &&
           day.asr?.azzan && day.asr?.iqamah &&
@@ -106,7 +106,7 @@ const MonthlyPrayerTimes = () => {
   // Format date with month name
   const formatDate = (date: string, month: string, year: string) => {
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June', 
+      'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
     return `${monthNames[parseInt(month) - 1]} ${date}, ${year}`;
@@ -115,14 +115,14 @@ const MonthlyPrayerTimes = () => {
   // Format full month name
   const fullMonthName = useMemo(() => {
     const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June', 
+      'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
     return monthNames[parseInt(currentMonth) - 1];
   }, [currentMonth]);
 
   const options = { year: "numeric" as const, month: "long" as const, day: "numeric" as const, calendar: "islamic" };
-const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(new Date());
+  const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(new Date());
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
@@ -143,27 +143,27 @@ const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(
       {/* Today's Prayer Times Section */}
       {!isLoading && !error && todayPrayerTimes && (
         <div className="bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-2xl shadow-lg overflow-hidden">
-            <div className='flex gap-4 items-center justify-center'>
-                <div className="bg-white/10 backdrop-blur-sm p-4 text-center">
-            <h2 className="text-xl font-bold text-gray-800">
-              Today&apos;s Prayer Times
-            </h2>
-            <p className="text-blue-800 text-sm">
-              {formatDate(currentDate, currentMonth, currentYear)}
-            </p>
-            <p className="text-blue-800 text-sm">
-              {hijriDate}
-            </p>
-          </div>
-          <CountdownTimer   />
+          <div className='flex gap-4 items-center justify-center'>
+            <div className="bg-white/10 backdrop-blur-sm p-4 text-center">
+              <h2 className="text-xl font-bold text-gray-800">
+                Today&apos;s Prayer Times
+              </h2>
+              <p className="text-blue-800 text-sm">
+                {formatDate(currentDate, currentMonth, currentYear)}
+              </p>
+              <p className="text-blue-800 text-sm">
+                {hijriDate}
+              </p>
             </div>
-          
-          
+            <CountdownTimer />
+          </div>
+
+
           {/* Horizontally Compact Prayer Times */}
           <div className="grid grid-cols-3 md:grid-cols-6 gap-2 p-4">
             {(['fajr', 'sunrise', 'zuhr', 'asr', 'maghrib', 'isha'] as const).map((prayer) => (
-              <div 
-                key={prayer} 
+              <div
+                key={prayer}
                 className="flex flex-col items-center p-2 bg-white/20 rounded-lg"
               >
                 {prayer === 'sunrise' ? (
@@ -202,13 +202,26 @@ const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(
           </h1>
         </div>
 
+        {/* DST Alert Banner */}
+        {currentMonth === '3' && currentYear === '2026' && (
+          <div className="bg-amber-100 border-l-4 border-amber-500 p-4 mx-4 my-2 rounded-md shadow-sm">
+            <div className="flex items-center">
+              <Sun className="w-5 h-5 text-amber-600 mr-2" />
+              <p className="text-amber-800 font-semibold text-sm">
+                Daylight Saving Time starts on <span className="underline">March 8th</span>.
+                Clocks move forward by one hour.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Responsive Mobile Layout */}
         <div className="lg:hidden overflow-x-auto">
           <div className="min-w-[700px] w-full">
             <div className="grid grid-cols-7 border-b border-purple-300">
               {['Date', 'Fajr', 'Sunrise', 'Zuhr', 'Asr', 'Maghrib', 'Isha'].map((header) => (
-                <div 
-                  key={header} 
+                <div
+                  key={header}
                   className="p-2 text-center font-semibold text-blue-800 bg-white/10"
                 >
                   {header}
@@ -216,11 +229,11 @@ const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(
               ))}
             </div>
             {monthData.map((dayData) => (
-              <div 
-                key={`${dayData.date}-${dayData.month}`} 
+              <div
+                key={`${dayData.date}-${dayData.month}`}
                 className={`grid grid-cols-7 border-b border-purple-300 last:border-b-0 transition-colors 
-                  ${dayData.date === currentDate 
-                    ? 'bg-blue-100 hover:bg-blue-200' 
+                  ${dayData.date === currentDate
+                    ? 'bg-blue-100 hover:bg-blue-200'
                     : 'hover:bg-blue-50'}`}
               >
                 {/* Date Column */}
@@ -275,11 +288,11 @@ const hijriDate = new Intl.DateTimeFormat('en-TN-u-ca-islamic', options).format(
             </thead>
             <tbody>
               {monthData.map((dayData) => (
-                <tr 
-                  key={`${dayData.date}-${dayData.month}`} 
+                <tr
+                  key={`${dayData.date}-${dayData.month}`}
                   className={`border-b border-purple-300 last:border-b-0 transition-colors 
-                    ${dayData.date === currentDate 
-                      ? 'bg-blue-100 hover:bg-blue-200' 
+                    ${dayData.date === currentDate
+                      ? 'bg-blue-100 hover:bg-blue-200'
                       : 'hover:bg-blue-50'}`}
                 >
                   <td className="p-3 font-medium text-gray-800 flex items-center">
