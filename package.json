@@ -13,7 +13,8 @@
     "db:setup": "node scripts/production-setup.js",
     "db:import": "node scripts/import-to-supabase.js",
     "postinstall": "prisma generate",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "sync:campaign": "node scripts/sync-campaign-stats.js"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",

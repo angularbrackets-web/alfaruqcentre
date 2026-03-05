@@ -14,6 +14,18 @@ export async function GET() {
 
 export async function PUT(req: Request) {
   try {
+    // Allow requests from the admin UI (cookie session) or from the cron sync script (CRON_SECRET header).
+    const cronSecret = process.env.CRON_SECRET;
+    const sessionCookie = req.headers.get('cookie') ?? '';
+    const authHeader = req.headers.get('x-cron-secret') ?? '';
+
+    const hasSession = sessionCookie.includes('admin-session=');
+    const hasCronSecret = cronSecret && authHeader === cronSecret;
+
+    if (!hasSession && !hasCronSecret) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const { key, value } = await req.json();
     if (!key || typeof value !== 'string') {
       return NextResponse.json({ error: 'key and value required' }, { status: 400 });
