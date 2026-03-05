@@ -69,7 +69,7 @@ export default function QuoteTickerStrip() {
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                <p className="text-[#0F2347] text-[15px] sm:text-[16px] font-semibold leading-snug flex-1 min-w-0">
+                <p className="text-[#1E5BB4] text-[15px] sm:text-[16px] font-semibold leading-snug flex-1 min-w-0">
                   &ldquo;{current.translation}&rdquo;
                 </p>
                 <span className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0">

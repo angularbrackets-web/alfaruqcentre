@@ -1,48 +1,112 @@
-"use client"
-//import Head from 'next/head';
-import Image from 'next/image';
-import { FC, useState } from 'react';
-const weekendSchoolUrl = "/AlFaruqWeekendSchool.mp4";
-const WeekendSchool: FC = () => {
-    const [activeSections, setActiveSections] = useState({
-        arabic: true,
-        quran: true,
-        islamic: true,
-        seerah: true
-      });
-      
-      // Update the toggleSection function to handle multiple expanded sections
-      const toggleSection = (section: keyof typeof activeSections) => {
-        setActiveSections({
-          ...activeSections,
-          [section]: !activeSections[section]
-        });
-      };
+"use client";
 
+import Image from "next/image";
+import { FC, useState } from "react";
+
+const weekendSchoolUrl = "/AlFaruqWeekendSchool.mp4";
+
+const programs = [
+  {
+    key: "arabic",
+    title: "Arabic Reading Skills",
+    body: [
+      "To effectively learn the Quran, students must be able to read fluently from the Mushaf with Tajweed. We assess each student's reading ability and provide targeted instruction to strengthen their skills. Our Arabic reading program consists of 12 progressive levels.",
+      "While students are in the reading program, they collectively memorize Surah An-Nas to Surah Al-Asr, along with Surah Al-Fatiha, through repetition. Once they complete the reading course, they begin individual Quran lessons.",
+    ],
+  },
+  {
+    key: "quran",
+    title: "Quran Studies",
+    body: [
+      "Our Quran Studies program emphasizes fluency in recitation with Tajweed, ensuring proper pronunciation and application of recitation rules. To support learning, we use an online Quran platform, enabling students to practice and memorize easily at home with parental guidance.",
+    ],
+    bullets: [
+      { label: "Recitation Session", detail: "Students practice reading from the Mushaf with proper Tajweed and without mistakes." },
+      { label: "Memorization Session", detail: "Once students can recite fluently, they begin memorizing the Quran." },
+    ],
+  },
+  {
+    key: "islamic",
+    title: "Islamic Studies",
+    intro: "Al-Faruq Weekend School provides essential Islamic education, including:",
+    bullets: [
+      { label: "", detail: "Performing acts of worship (prayer, zakat, fasting, Hajj, etc.)." },
+      { label: "", detail: "Strengthening faith and understanding core Islamic beliefs." },
+      { label: "", detail: "Developing good character and manners through interactive lessons." },
+    ],
+  },
+  {
+    key: "seerah",
+    title: "Seerah of the Prophet (S.A.W)",
+    body: [
+      "Children naturally learn through imitation. Our Seerah sessions introduce students to the life of Prophet Muhammad (peace be upon him) and his companions, offering them strong role models to follow in their daily lives.",
+    ],
+  },
+];
+
+const faqs = [
+  {
+    q: "What age groups do you accept?",
+    a: "We accept students from ages 5 to 16 years old. If your child is older than 12 years, we have Al-Tarteel Quran Institute available. Please feel free to reach out for more information.",
+  },
+  {
+    q: "Do you provide textbooks?",
+    a: "Yes, textbooks are available for purchase at the school. The cost is not included in the monthly fee.",
+  },
+  {
+    q: "What if my child misses a class?",
+    a: "We understand that absences sometimes happen. Please notify the school administration in advance. Teachers can provide materials to help catch up on missed lessons.",
+  },
+  {
+    q: "Is there homework assigned?",
+    a: "Yes, students receive homework to practice their reading and memorization skills. Parental support at home is crucial for students' progress.",
+  },
+];
+
+const WeekendSchool: FC = () => {
+  const [open, setOpen] = useState<Record<string, boolean>>({
+    arabic: true,
+    quran: false,
+    islamic: false,
+    seerah: false,
+  });
+
+  const toggle = (key: string) => setOpen((prev) => ({ ...prev, [key]: !prev[key] }));
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900">      
+    <div className="min-h-screen">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-20 bg-[#0A0A0A] text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-6">
+                Al-Faruq Islamic Centre
+              </p>
+              <h1 className="font-black tracking-tight leading-none mb-6"
+                  style={{ fontSize: "clamp(2.5rem, 6vw, 5.5rem)" }}>
+                WEEKEND{" "}
+                <span className="inline-block bg-white text-[#0A0A0A] px-3 py-1.5 rounded-sm uppercase tracking-[0.08em] align-middle"
+                      style={{ fontSize: "clamp(1.75rem, 4.5vw, 4rem)" }}>
+                  QURAN SCHOOL
+                </span>
+              </h1>
+              <p className="text-white/50 text-lg leading-relaxed max-w-md mb-8">
+                Nurturing young minds with Quranic education and Islamic values.
+              </p>
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-white text-[#0A0A0A] text-xs uppercase tracking-widest font-semibold px-7 py-3 rounded-full hover:bg-white/90 transition-colors"
+              >
+                Register Your Child
+              </a>
+            </div>
 
-      {/* Hero Section */}
-      <header className="pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
-        <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
-          <div className="md:w-1/2 mb-8 md:mb-0">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">Al-Faruq Weekend Quran School</h1>
-            <p className="text-md md:text-xl mb-6 font-medium">Nurturing young minds with <span className='font-black text-sky-200 underline'>Quranic education</span> and <span className='font-black text-sky-200 underline'>Islamic values</span></p>
-            <a 
-              href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-sky-950 text-sky-100 font-semibold px-6 py-3 rounded-lg shadow-md hover:bg-gray-950 hover:text-sky-100 transition-colors inline-block"
-              aria-label="Register your child for Al-Faruq Weekend Quran School"
-            >
-              Register Your Child
-            </a>
-          </div>
-          <div className="w-full md:w-1/2 flex justify-center">
-            <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-lg">
-              {/* School video with proper dimensions */}
-              <div className="relative w-full" style={{ aspectRatio: '1600/837' }}>
+            {/* Video */}
+            <div className="rounded-lg overflow-hidden border border-white/10 shadow-2xl">
+              <div className="relative w-full" style={{ aspectRatio: "1600/837" }}>
                 <video
                   src={weekendSchoolUrl}
                   autoPlay
@@ -50,319 +114,216 @@ const WeekendSchool: FC = () => {
                   muted
                   playsInline
                   controls
-                  className="w-full h-full object-cover rounded-lg"
-                  style={{ display: 'block' }}
+                  className="w-full h-full object-cover"
                   poster="/AlFaruqWeekendQuranSchool.jpeg"
                 />
               </div>
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
-      <main className="container mx-auto px-4 py-12">
-        {/* School Poster Images displayed together */}
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12">
-          <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-md">
-            <Image 
-              src="/AlFaruqWeekendQuranSchool.jpeg" 
-              alt="Al-Faruq Weekend Quran School Poster" 
-              width={400}
-              height={209}
-              className="w-full h-auto object-cover rounded-lg"
-              priority
-            />
-          </div>
-          <div className="rounded-lg overflow-hidden shadow-xl w-full max-w-md">
-            <Image 
-              src="/AlFaruq.Weekend.Quran.School.March2025.jpeg" 
-              alt="Al-Faruq Weekend Quran School March 2025 Poster" 
-              width={400}
-              height={209}
-              className="w-full h-auto object-cover rounded-lg"
-              priority
-            />
+      {/* ── Posters ──────────────────────────────────────────── */}
+      <section className="bg-[#F5F3EE] py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row justify-center items-center gap-8">
+            <div className="rounded-lg overflow-hidden shadow-lg w-full max-w-md">
+              <Image
+                src="/AlFaruqWeekendQuranSchool.jpeg"
+                alt="Al-Faruq Weekend Quran School Poster"
+                width={400}
+                height={209}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </div>
+            <div className="rounded-lg overflow-hidden shadow-lg w-full max-w-md">
+              <Image
+                src="/AlFaruq.Weekend.Quran.School.March2025.jpeg"
+                alt="Al-Faruq Weekend Quran School March 2025"
+                width={400}
+                height={209}
+                className="w-full h-auto object-cover"
+                priority
+              />
+            </div>
           </div>
         </div>
-        {/* Mission Section */}
-        <section id="mission" className="mb-16">
-            <div className='flex flex-col lg:flex-row gap-4'>
-                {/* Image above now shown together with the other poster */}
-                <div className="flex-1" />
-                <div>
-                    <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Mission</h2>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <p className="mb-6">
-              Al-Faruq Weekend Quran School is dedicated to providing students with Quranic education and fundamental Islamic values. 
-              Due to limited teaching time, our curriculum focuses on four key areas:
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 text-sky-800">
-              {[
-                { number: "1", text: "Arabic Reading Skills" },
-                { number: "2", text: "Quran Studies" },
-                { number: "3", text: "Islamic Studies" },
-                { number: "4", text: "Seerah of the Prophet S.A.W" }
-              ].map((item, index) => (
-                <div key={index} className="bg-sky-50 p-6 rounded-lg border-l-4 border-sky-600">
-                  <div className="flex items-center">
-                    {/* <div className="bg-sky-600 text-white w-8 h-8 rounded-full flex items-center justify-center mr-3 font-bold">
-                      {item.number}
-                    </div> */}
-                    <h3 className="font-semibold text-md">{item.text}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
+      </section>
+
+      {/* ── Mission ──────────────────────────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-black/35 mb-4">Our Mission</p>
+          <h2 className="font-black text-4xl md:text-5xl tracking-tight text-[#0A0A0A] mb-8 leading-tight">
+            A focused curriculum<br />
+            <span className="text-[#C9A84C]">four pillars</span> of education
+          </h2>
+          <p className="text-black/60 text-lg leading-relaxed mb-10">
+            Al-Faruq Weekend Quran School is dedicated to providing students with Quranic education
+            and fundamental Islamic values. Due to limited teaching time, our curriculum focuses on
+            four key areas:
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {["Arabic Reading Skills", "Quran Studies", "Islamic Studies", "Seerah of the Prophet"].map((item, i) => (
+              <div key={i} className="bg-[#F5F3EE] p-5 border-t-2 border-[#0A0A0A]">
+                <span className="block text-[10px] uppercase tracking-[0.3em] font-medium text-black/35 mb-2">
+                  0{i + 1}
+                </span>
+                <p className="font-semibold text-[#0A0A0A] text-sm leading-snug">{item}</p>
+              </div>
+            ))}
           </div>
-                </div>
-            </div>
-          
-        </section>
+        </div>
+      </section>
 
-        {/* Programs Section */}
-        <section id="programs" className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Our Programs</h2>
-          
-          {/* Program Cards */}
-          <div className="space-y-6">
-            {/* Arabic Reading Skills */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <button 
-                onClick={() => toggleSection('arabic')}
-                className="w-full flex items-center justify-between p-6 focus:outline-none"
-                aria-expanded={activeSections.arabic}
-                aria-controls="arabic-content"
-              >
-                <div className="flex items-center text-sky-800">
-                  <div className="bg-sky-100 p-4 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
+      {/* ── Programs Accordion ───────────────────────────────── */}
+      <section className="bg-[#F5F3EE] py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-black/35 mb-4">Curriculum</p>
+          <h2 className="font-black text-4xl md:text-5xl tracking-tight text-[#0A0A0A] mb-10 leading-tight">
+            Our Programs
+          </h2>
+          <div className="space-y-2">
+            {programs.map((prog) => (
+              <div key={prog.key} className="bg-white border border-black/8">
+                <button
+                  onClick={() => toggle(prog.key)}
+                  className="w-full flex items-center justify-between px-6 py-5 focus:outline-none"
+                  aria-expanded={open[prog.key]}
+                >
+                  <h3 className="font-black text-lg tracking-tight text-[#0A0A0A] text-left">{prog.title}</h3>
+                  <svg
+                    className={`w-5 h-5 text-black/40 flex-shrink-0 ml-4 transition-transform duration-200 ${open[prog.key] ? "rotate-180" : ""}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {open[prog.key] && (
+                  <div className="px-6 pb-6 text-black/60 space-y-3 text-sm leading-relaxed border-t border-black/5 pt-4">
+                    {"intro" in prog && prog.intro && <p>{prog.intro}</p>}
+                    {"body" in prog && prog.body?.map((text, i) => <p key={i}>{text}</p>)}
+                    {"bullets" in prog && prog.bullets && (
+                      <ul className="space-y-2 mt-3">
+                        {prog.bullets.map((b, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <span className="w-1.5 h-1.5 bg-[#C9A84C] rounded-full mt-2 flex-shrink-0" />
+                            <span>{b.label ? <><strong className="text-[#0A0A0A]">{b.label}:</strong> {b.detail}</> : b.detail}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  <h3 className="text-xl font-semibold">Arabic Reading Skills</h3>
-                </div>
-                <svg className={`w-6 h-6 transform transition-transform ${activeSections.arabic ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div 
-                id="arabic-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.arabic ? 'block' : 'hidden'}`}
-              >
-                <p className="mb-4">
-                  To effectively learn the Quran, students must be able to read fluently from the Mushaf with Tajweed. We assess each student&apos;s reading ability and provide targeted instruction to strengthen their skills. Our Arabic reading program consists of 12 progressive levels.
-                </p>
-                <p>
-                  While students are in the reading program, they collectively memorize Surah An-Nas to Surah Al-Asr, along with Surah Al-Fatiha, through repetition. Once they complete the reading course, they begin individual Quran lessons.
-                </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Location + Timing ────────────────────────────────── */}
+      <section className="bg-[#0A0A0A] text-white py-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-white/40 mb-4">Where & When</p>
+          <h2 className="font-black text-4xl md:text-5xl tracking-tight mb-12 leading-tight">
+            Location &{" "}
+            <span className="text-[#C9A84C]">Schedule</span>
+          </h2>
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Map */}
+            <div>
+              <p className="text-white/40 text-sm uppercase tracking-widest font-medium mb-4">Address</p>
+              <address className="not-italic text-white/70 text-sm mb-6 leading-relaxed">
+                Al-Faruq Islamic Centre<br />
+                4410 127 St SW<br />
+                Edmonton, AB T6W 1A2
+              </address>
+              <div className="rounded-lg overflow-hidden w-full h-72 border border-white/10">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2379.2586477432274!2d-113.54445322326558!3d53.39231297230264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a01d10fe5dfb53%3A0xc7f45b21bddbfb4a!2sAl%20Faruq%20Mosque%20and%20Islamic%20School%20(Southside)!5e0!3m2!1sen!2sca!4v1742368108390!5m2!1sen!2sca"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Al-Faruq Islamic Centre Location"
+                />
               </div>
             </div>
 
-            {/* Quran Studies */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <button 
-                onClick={() => toggleSection('quran')}
-                className="w-full flex items-center justify-between p-6 focus:outline-none"
-                aria-expanded={activeSections.quran}
-                aria-controls="quran-content"
-              >
-                <div className="flex items-center text-sky-800">
-                  <div className="bg-sky-100 p-4 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold">Quran Studies</h3>
+            {/* Timing & Fees */}
+            <div className="space-y-8">
+              <div>
+                <p className="text-white/40 text-sm uppercase tracking-widest font-medium mb-4">Class Schedule</p>
+                <div className="space-y-3">
+                  {[
+                    { day: "Saturday", time: "11:00 AM – 2:00 PM" },
+                    { day: "Sunday", time: "11:00 AM – 2:00 PM" },
+                  ].map(({ day, time }) => (
+                    <div key={day} className="flex items-center justify-between border-b border-white/8 pb-3">
+                      <span className="font-semibold text-white text-sm">{day}</span>
+                      <span className="text-white/60 text-sm">{time}</span>
+                    </div>
+                  ))}
                 </div>
-                <svg className={`w-6 h-6 transform transition-transform ${activeSections.quran ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div 
-                id="quran-content" 
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.quran ? 'block' : 'hidden'}`}
-              >
-                <p className="mb-4">
-                  Our Quran Studies program emphasizes fluency in recitation with Tajweed, ensuring proper pronunciation and application of recitation rules. To support learning, we use an online Quran platform, enabling students to practice and memorize easily at home with parental guidance.
-                </p>
-                <p className="mb-2">Due to the challenges some students face, we have divided Quran learning into two sessions:</p>
-                <ul className="list-disc pl-6 mb-4 space-y-2">
-                  <li><span className="font-semibold">Recitation Session:</span> Students practice reading from the Mushaf with proper Tajweed and without mistakes.</li>
-                  <li><span className="font-semibold">Memorization Session:</span> Once students can recite fluently, they begin memorizing the Quran.</li>
-                </ul>
+                <p className="text-white/30 text-xs mt-3 italic">Schedule subject to change due to daylight saving time.</p>
               </div>
-            </div>
-
-            {/* Islamic Studies */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <button 
-                onClick={() => toggleSection('islamic')}
-                className="w-full flex items-center justify-between p-6 focus:outline-none"
-                aria-expanded={activeSections.islamic}
-                aria-controls="islamic-content"
-              >
-                <div className="flex items-center text-sky-800">
-                  <div className="bg-sky-100 p-4 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold">Islamic Studies</h3>
+              <div>
+                <p className="text-white/40 text-sm uppercase tracking-widest font-medium mb-4">Fees</p>
+                <div className="bg-white/5 border border-white/10 p-5 rounded-sm">
+                  <p className="text-white font-black text-3xl tracking-tight">$65</p>
+                  <p className="text-white/50 text-sm mt-1">per month, per child</p>
+                  <p className="text-white/35 text-xs mt-2">+ cost of books (purchased at school)</p>
                 </div>
-                <svg className={`w-6 h-6 transform transition-transform ${activeSections.islamic ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div 
-                id="islamic-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.islamic ? 'block' : 'hidden'}`}
-              >
-                <p className="mb-4">Al-Faruq Weekend School provides essential Islamic education, including:</p>
-                <ul className="list-disc pl-6 space-y-2">
-                  <li>Performing acts of worship (prayer, zakat, fasting, Hajj, etc.).</li>
-                  <li>Strengthening faith and understanding core Islamic beliefs.</li>
-                  <li>Developing good character and manners through interactive lessons.</li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Seerah */}
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <button 
-                onClick={() => toggleSection('seerah')}
-                className="w-full flex items-center justify-between p-6 focus:outline-none"
-                aria-expanded={activeSections.seerah}
-                aria-controls="seerah-content"
-              >
-                <div className="flex items-center text-sky-800">
-                  <div className="bg-sky-100 p-4 rounded-full mr-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold">Seerah of the Prophet S.A.W</h3>
-                </div>
-                <svg className={`w-6 h-6 transform transition-transform ${activeSections.seerah ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div 
-                id="seerah-content"
-                className={`px-6 pb-6 transition-all duration-300 ease-in-out text-gray-600 ${activeSections.seerah ? 'block' : 'hidden'}`}
-              >
-                <p>
-                  Children naturally learn through imitation. Our Seerah sessions introduce students to the life of Prophet Muhammad (peace be upon him) and his companions, offering them strong role models to follow in their daily lives.
-                </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Location and Timing Section */}
-        <section id="location" className="mb-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Location */}
-<div className="bg-white rounded-lg shadow-md p-6">
-  <h2 className="text-2xl font-bold mb-4 text-sky-800">Location</h2>
-  <p className="mb-4">All classes are held at Al-Faruq Islamic Centre.</p>
-  <address className="not-italic mb-6">
-    4410 127 St SW<br />
-    Edmonton, AB T6W1A2
-  </address>
-  <div className="rounded-lg overflow-hidden w-full h-80">
-    <iframe 
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2379.2586477432274!2d-113.54445322326558!3d53.39231297230264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x53a01d10fe5dfb53%3A0xc7f45b21bddbfb4a!2sAl%20Faruq%20Mosque%20and%20Islamic%20School%20(Southside)!5e0!3m2!1sen!2sca!4v1742368108390!5m2!1sen!2sca" 
-      width="100%" 
-      height="100%" 
-      style={{ border: 0 }} 
-      allowFullScreen={true} 
-      loading="lazy" 
-      referrerPolicy="no-referrer-when-downgrade"
-      title="Al-Faruq Islamic Centre Location"
-      className="w-full h-full"
-    />
-  </div>
-</div>
-
-          {/* Timing and Fees */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-2xl font-bold mb-4 text-sky-800">School Timing</h2>
-            <ul className="mb-6 space-y-2">
-              <li className="flex items-start">
-                <svg className="w-5 h-5 text-sky-600 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span><strong>Saturday:</strong> 11:00 AM – 2:00 PM (3 hours)</span>
-              </li>
-              <li className="flex items-start">
-                <svg className="w-5 h-5 text-sky-600 mr-2 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span><strong>Sunday:</strong> 11:00 AM – 2:00 PM (3 hours)</span>
-              </li>
-            </ul>
-            <p className="text-sm italic mb-8">Note: The schedule is subject to change due to daylight saving time.</p>
-
-            <h2 className="text-2xl font-bold mb-4 text-sky-800">Fees</h2>
-            <div className="bg-sky-50 p-4 rounded-lg border-l-4 border-sky-600">
-              <p className="flex items-center">
-                <svg className="w-5 h-5 text-sky-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span><strong>$65</strong> per month per child, plus the cost of books.</span>
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Registration CTA */}
-        <section id="register" className="text-center py-12 bg-sky-50 rounded-lg shadow-inner mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-sky-800">Ready to Enroll Your Child?</h2>
-          <p className="max-w-lg mx-auto mb-8">Join our weekend school to provide your child with quality education in Quranic studies, Arabic reading, Islamic knowledge, and character development.</p>
-          <a 
-            href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform" 
-            target="_blank" 
+      {/* ── Registration CTA ─────────────────────────────────── */}
+      <section className="bg-[#F5F3EE] py-20 text-center">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-black/35 mb-4">Enroll Today</p>
+          <h2 className="font-black text-4xl md:text-5xl tracking-tight text-[#0A0A0A] mb-6 leading-tight">
+            Ready to enroll<br />your child?
+          </h2>
+          <p className="text-black/55 text-lg leading-relaxed mb-10">
+            Provide your child with quality education in Quranic studies, Arabic reading,
+            Islamic knowledge, and character development.
+          </p>
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLScV2xkunYsiua7s9srJdhPGaMFQDN4JN_nRWwK8nYGEnDd5kw/viewform"
+            target="_blank"
             rel="noopener noreferrer"
-            className="bg-sky-600 text-white font-semibold px-8 py-4 rounded-lg shadow-md hover:bg-sky-700 transition-colors inline-block"
-            aria-label="Register your child for Al-Faruq Weekend Quran School"
+            className="inline-block bg-[#0A0A0A] text-white text-xs uppercase tracking-widest font-semibold px-8 py-4 rounded-full hover:bg-black/80 transition-colors"
           >
             Register Now
           </a>
-        </section>
+        </div>
+      </section>
 
-        {/* FAQ Section */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold mb-6 text-sky-800 text-center">Frequently Asked Questions</h2>
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="space-y-4">
-              {[
-                {
-                  q: "What age groups do you accept?",
-                  a: "We accept students from ages 5 to 16 years old. If your child is older than 12 years, we have Al-Tarteel Quran Institute available. Please feel free to reach out for more information."
-                },
-                {
-                  q: "Do you provide textbooks?",
-                  a: "Yes, textbooks are available for purchase at the school. The cost is not included in the monthly fee."
-                },
-                {
-                  q: "What if my child misses a class?",
-                  a: "We understand that absences sometimes happen. Please notify the school administration in advance. Teachers can provide materials to help catch up on missed lessons."
-                },
-                {
-                  q: "Is there homework assigned?",
-                  a: "Yes, students receive homework to practice their reading and memorization skills. Parental support at home is crucial for students&apos; progress."
-                }
-              ].map((faq, index) => (
-                <div key={index} className="border-b border-gray-200 pb-4 last:border-b-0 last:pb-0">
-                  <h3 className="text-lg font-semibold mb-2 text-sky-500">{faq.q}</h3>
-                  <p>{faq.a}</p>
-                </div>
-              ))}
-            </div>
+      {/* ── FAQ ──────────────────────────────────────────────── */}
+      <section className="bg-white py-16">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-[10px] uppercase tracking-[0.3em] font-medium text-black/35 mb-4">FAQ</p>
+          <h2 className="font-black text-4xl tracking-tight text-[#0A0A0A] mb-10 leading-tight">
+            Frequently Asked Questions
+          </h2>
+          <div className="space-y-0">
+            {faqs.map((faq, i) => (
+              <div key={i} className="border-t border-black/8 py-6 last:border-b">
+                <h3 className="font-bold text-[#0A0A0A] mb-3">{faq.q}</h3>
+                <p className="text-black/55 text-sm leading-relaxed">{faq.a}</p>
+              </div>
+            ))}
           </div>
-        </section>
-      </main>
-
-      
+        </div>
+      </section>
     </div>
   );
 };
