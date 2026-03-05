@@ -140,7 +140,7 @@ const jobOpportunities: JobOpportunity[] = [
 
 const NowHiring: React.FC = () => {
   return (
-    <div className="container mx-auto p-6 space-y-12">
+    <div className="container mx-auto px-6 pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-12 space-y-12">
       <header className="mb-8">
         <h1 className="text-3xl font-bold text-sky-800">Now Hiring</h1>
       </header>

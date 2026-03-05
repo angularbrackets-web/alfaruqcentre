@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -47,21 +44,44 @@ model Event {
   id               String   @id
   title            String
   description      String?
-  poster           String?  // Cloudinary URL for poster image
-  video            String?  // Video URL (Cloudinary/YouTube/local)
-  thumbnail        String?  // Cloudinary URL for video thumbnail
+  poster           String?
+  video            String?
+  thumbnail        String?
   registrationLink String?
   startDate        DateTime
   endDate          DateTime
-  expiryDate       DateTime // When event details should be removed
-  summary          String[] // Array of summary points
-  tags             String[] // Simple tags array
+  expiryDate       DateTime
+  summary          String[]
+  tags             String[]
   status           Status   @default(ACTIVE)
   order            Int      @default(0)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 
   @@map("events")
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+model Volunteer {
+  id              String          @id
+  name            String
+  email           String
+  phone           String?
+  areasOfInterest String[]
+  availability    String[]
+  message         String?
+  status          VolunteerStatus @default(PENDING)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("volunteers")
 }
 
 enum Status {
@@ -78,19 +98,4 @@ enum VolunteerStatus {
   DECLINED
 
   @@map("volunteer_status")
-}
-
-model Volunteer {
-  id              String           @id
-  name            String
-  email           String
-  phone           String?
-  areasOfInterest String[]
-  availability    String[]
-  message         String?
-  status          VolunteerStatus  @default(PENDING)
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-
-  @@map("volunteers")
 }

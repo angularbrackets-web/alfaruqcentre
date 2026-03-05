@@ -24,7 +24,7 @@ const WeekendSchool: FC = () => {
     <div className="min-h-screen bg-gray-50 text-gray-900">      
 
       {/* Hero Section */}
-      <header className="pt-32 md:pt-28 pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
+      <header className="pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-12 bg-gradient-to-b from-gray-900 to-sky-400 md:from-gray-950 md:to-sky-500 text-white">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-8 md:mb-0">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Al-Faruq Weekend Quran School</h1>

@@ -1,9 +1,8 @@
 // app/layout.tsx
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css'; // Assuming you have global styles
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
+import './globals.css';
+import LayoutShell from './components/LayoutShell';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,11 +26,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} flex flex-col min-h-screen`}>
-        <Navbar /> {/* Include the Navbar component here */}
-        <main className="flex-1 flex flex-col min-h-0 pt-24">
-        {children} {/*  This is where page.tsx content will be rendered */}
-        </main>
-        <Footer /> {/* Include the Footer component here */}
+        <LayoutShell bodyClassName={inter.className}>
+          {children}
+        </LayoutShell>
       </body>
     </html>
   );

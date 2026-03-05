@@ -208,7 +208,7 @@ export default function Events() {
         <meta property="og:image" content="/images/alfaruq-event.jpg" />
       </Head>
 
-      <div className="container mx-auto p-4 md:p-8">
+      <div className="container mx-auto px-4 md:px-8 pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-8">
         <h1 className="text-4xl font-extrabold mb-10 text-center text-gray-800">Community Events</h1>
 
         {/* Loading State */}

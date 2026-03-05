@@ -82,7 +82,7 @@ const VolunteerPage: React.FC = () => {
 
   if (isSubmitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white">
+      <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-white pt-[260px] sm:pt-[220px] lg:pt-[160px]">
         <div className="container mx-auto px-4 py-16">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}

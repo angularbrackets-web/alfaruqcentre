@@ -3,121 +3,79 @@
 > **⚠️ IMPORTANT**: This file tracks only the CURRENT feature being developed. Once complete, move content to feature-specific archive.
 
 ## 🎯 CURRENT FEATURE
-**Feature Name**: Hero Slideshow CMS
-**Started**: 2025-08-12
-**Status**: Planning Phase
+**Feature Name**: home-v3 Vous Church Editorial Redesign
+**Started**: 2026-03-03
+**Status**: ✅ COMPLETE — ready for visual QA
 **Priority**: High
-**Estimated Complexity**: Medium
-**Assigned Session**: Current session
 
 ---
 
-## 📋 DEVELOPMENT PROCESS CHECKLIST
-- [ ] **Planning Phase**
-  - [ ] Deep analysis and initial planning completed
-  - [ ] MCP server integration opportunities identified
-  - [ ] Plan refined based on MCP capabilities
-  - [ ] Step-by-step breakdown created
-  - [ ] Plan approved by user
-- [ ] **Implementation Phase**
-  - [ ] Implementation started
-  - [ ] Complex tasks broken into simple steps
-  - [ ] All changes documented
-  - [ ] User feedback incorporated
-- [ ] **Completion Phase**
-  - [ ] Feature tested and verified
-  - [ ] Documentation updated
-  - [ ] Lessons learned extracted
-  - [ ] Content archived to feature-specific log
+## 📋 WHAT WAS DONE THIS SESSION
+
+### Goal
+Redesign `home-v3` (NavbarV3 + HeroV3) to match the editorial layout of vouschurch.com:
+white background, black announcement bar, white sub-brands bar, white navbar, contained video box.
+
+### Files Modified
+- `app/home-v3/NavbarV3.tsx` — **full rewrite**
+- `app/home-v3/HeroV3.tsx` — **full rewrite**
+
+### NavbarV3 — New structure
+Three stacked bars, all `fixed top-0`, entire header always white (no transparent/scroll behavior):
+
+1. **Black utility bar** (`bg-[#0A0A0A]`)
+   - Desktop: 8 prayer columns (Fajr | Sunrise | Dhuhr | Asr | Maghrib | Isha | Jummah I | Jummah II)
+   - Each column: name (gold, 9px), adhan time, iqamah time (or —)
+   - Far right: address + phone
+   - Mobile: horizontally scrollable `.hide-scrollbar` row
+
+2. **White sub-brands bar**
+   - Left: "Al-Faruq Islamic School" · "Weekend Quran School" links
+   - Right: "Prayer Request" (outlined pill) + "Member Portal" (dark filled pill)
+
+3. **White main navbar**
+   - Logo in `bg-[#0A0A0A] rounded` pill (logo is white-on-transparent, needs dark bg)
+   - Nav links: dark text, hover underline
+   - Right: Donate (dark pill) + Menu (with text label on desktop)
+   - `shadow-md` added on scroll
+
+### HeroV3 — New structure
+- White background (`bg-white`)
+- `pt-[160px]` to clear fixed 3-bar header
+- **Content zone**: label row `LABEL ——— SUBLABEL` + large black title (clamp 60–128px)
+- **Media zone** (desktop): `grid-cols-[48px_1fr_60px]`
+  - Left 48px: social icons + "Connect" rotated text
+  - Center: `aspect-video` image/video box, play button, next prayer badge
+  - Right 60px: ChevronUp/Down arrows + slide dots + "Discover" rotated text
+- **Mobile**: full-width video box + controls row below
+- AnimatePresence transitions preserved, auto-advance every 6s preserved
 
 ---
 
-## 📝 DETAILED CHANGE LOG
+## 🔄 NEXT STEPS / OPEN ITEMS
 
-### Session 1 - 2025-08-12
-**Agent**: Current Agent
-**Duration**: Active session
-**Focus**: Building Hero Slideshow CMS
+1. **Visual QA** — navigate to `http://localhost:3001/home-v3` and verify:
+   - 3-bar header renders correctly on desktop + mobile
+   - Prayer columns fit in utility bar without overflow
+   - Hero content zone clears the header (no overlap)
+   - 3-col media grid aligns properly
+   - Logo is visible inside dark pill
 
-#### User Request:
-"I want to work on the hero section. currently we are showing a slideshow of images. we want to give the ability to administrators to add/edit/remove slides."
+2. **Prayer times** — currently hardcoded in NavbarV3. Update monthly or wire to the same
+   `/api/prayerTimes` API used by the page for live data.
 
-#### Implementation Completed:
-- ✅ **Database Schema**: Added HeroSlide model to Prisma schema
-- ✅ **TypeScript Interfaces**: Created comprehensive type definitions in `app/types/heroSlide.ts`
-- ✅ **API Endpoints**: Built complete CRUD API in `app/api/slides/` and `app/api/slides/[id]/`
-- ✅ **Admin Interface**: Created slides management pages with full CRUD operations
-- ✅ **Dynamic Frontend**: Updated hero component to fetch from API instead of hardcoded data
-- ✅ **Admin Navigation**: Updated admin layout to include hero slides management
-- ✅ **Admin Dashboard**: Added hero slides quick actions and statistics
+3. **Header height calibration** — if content overlaps or has too much gap, adjust `pt-[160px]`
+   in HeroV3.tsx (currently estimated: utility ~58px + sub-brands ~34px + navbar ~68px = ~160px).
 
-#### Files Created/Modified:
-- `prisma/schema.prisma` - Added HeroSlide model
-- `app/types/heroSlide.ts` - TypeScript interfaces for hero slides
-- `app/api/slides/route.ts` - Main slides API endpoints
-- `app/api/slides/[id]/route.ts` - Individual slide CRUD operations
-- `app/admin/slides/page.tsx` - Hero slides management page
-- `app/admin/slides/add/page.tsx` - Add new slide form
-- `app/admin/slides/[id]/edit/page.tsx` - Edit slide form
-- `app/components/DynamicHeroSection.tsx` - New dynamic hero component
-- `app/page.tsx` - Updated to use dynamic hero section
-- `app/admin/layout.tsx` - Added slides navigation
-- `app/admin/page.tsx` - Updated dashboard with slides actions
+4. **Logo dark variant** — consider adding `/public/AlFaruqLogoDark.png` (dark text version)
+   to avoid the dark-pill workaround on the white navbar.
 
-#### Technical Implementation Details:
-- **Database Integration**: Uses existing Prisma PostgreSQL setup
-- **Image Upload**: Leverages existing Cloudinary integration
-- **Authentication**: Uses existing admin auth system
-- **API Design**: RESTful endpoints with proper error handling
-- **UI Components**: Consistent with existing admin interface design
-- **Type Safety**: Full TypeScript implementation throughout
-
-#### Key Features Delivered:
-- **Admin Authentication**: Secure access to slides management
-- **Complete CRUD Operations**: Create, Read, Update, Delete hero slides
-- **Image Upload**: Professional Cloudinary integration with validation
-- **Display Order Management**: Drag-and-drop style ordering with up/down controls
-- **Status Management**: Toggle slides active/inactive
-- **Duration Control**: Configurable slide display duration (5-60 seconds)
-- **Link Integration**: Optional call-to-action links on slides
-- **Responsive Design**: Mobile-friendly admin interface
-- **Loading States**: Professional UX with loading indicators
-- **Error Handling**: Comprehensive validation and user feedback
-
-#### FEATURE COMPLETE ✅
-Hero Slideshow CMS is fully functional and ready for use.
+5. **Deploy to main** — once home-v3 is approved, integrate into `app/page.tsx`.
 
 ---
 
 ## 🔄 SESSION HANDOFF SUMMARY
-**Last Updated**: 2025-08-12 (Session 1)
-**Current Status**: HERO SLIDESHOW CMS - PLANNING PHASE
-**Blocking Issues**: None
-**Immediate Priority**: Analyze current hero implementation
-
----
-
-## 📊 FEATURE METRICS (When Active)
-- **Files Modified**: [To be documented]
-- **Components Added/Updated**: [To be documented]
-- **Performance Impact**: [To be documented]
-- **Accessibility Improvements**: [To be documented]
-- **User Experience Enhancements**: [To be documented]
-
----
-
-## 🎯 COMPLETION CRITERIA
-*Will be defined during planning phase*
-
-### Definition of Done:
-- [ ] All planned functionality implemented
-- [ ] Code passes linting and type checking
-- [ ] Responsive design verified on multiple screen sizes
-- [ ] Accessibility standards maintained
-- [ ] User feedback incorporated
-- [ ] Documentation updated
-- [ ] Changes tested in development environment
-
----
-
-**📋 ARCHIVE INSTRUCTIONS**: When feature is complete, move this content to `[FEATURE_NAME]_DEVELOPMENT_LOG.md` and reset this file for the next feature.
+**Last Updated**: 2026-03-03
+**Current Status**: home-v3 header + hero redesign complete, needs visual QA
+**Blocking Issues**: None — lint and tsc both pass
+**Immediate Next Step**: Open browser at `/home-v3` and verify layout

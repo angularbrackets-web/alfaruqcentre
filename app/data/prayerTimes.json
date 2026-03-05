@@ -10536,25 +10536,25 @@
     "month": "3",
     "year": "2026",
     "fajr": {
-      "azzan": "5:09 AM",
-      "iqamah": "5:24 AM",
+      "azzan": "6:09 AM",
+      "iqamah": "6:24 AM",
       "sunrise": "7:05 AM"
     },
     "zuhr": {
-      "azzan": "12:47 PM",
+      "azzan": "1:47 PM",
       "iqamah": "2:00 PM"
     },
     "asr": {
-      "azzan": "3:44 PM",
+      "azzan": "4:44 PM",
       "iqamah": "5:30 PM"
     },
     "maghrib": {
-      "azzan": "6:26 PM",
-      "iqamah": "6:31 PM"
+      "azzan": "7:26 PM",
+      "iqamah": "7:31 PM"
     },
     "isha": {
-      "azzan": "8:16 PM",
-      "iqamah": "8:26 PM"
+      "azzan": "9:16 PM",
+      "iqamah": "9:26 PM"
     }
   },
   {
