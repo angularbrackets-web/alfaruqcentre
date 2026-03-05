@@ -1,7 +1,200 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link2, TrendingUp, Clock, QrCode, ExternalLink } from 'lucide-react';
+import { Link2, TrendingUp, Clock, QrCode, ExternalLink, BookOpen, Plus, Trash2, Eye, LayoutList } from 'lucide-react';
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+
+interface DonationQuote {
+  type: 'quran' | 'hadith';
+  arabic: string;
+  translation: string;
+  reference: string;
+}
+
+// ─── Next Prayer Bar Toggle ───────────────────────────────────────────────────
+
+function NextPrayerBarSection() {
+  const [show, setShow] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.showNextPrayerBar === 'false') setShow(false);
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave(value: boolean) {
+    setSaving(true);
+    setMessage(null);
+    setShow(value);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'showNextPrayerBar', value: String(value) }),
+      });
+      setMessage(res.ok
+        ? { type: 'success', text: 'Saved. Changes are live on the site.' }
+        : { type: 'error', text: 'Failed to save. Please try again.' }
+      );
+    } catch {
+      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white shadow rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-1 flex items-center gap-2">
+          <Eye className="h-5 w-5 text-gray-400" />
+          Next Prayer Countdown Bar
+        </h3>
+        <p className="text-sm text-gray-500 mb-1">
+          Show or hide the &ldquo;Next Prayer&rdquo; countdown strip in the navbar (the bar showing the prayer name, live timer, and Hijri date).
+        </p>
+        <p className="text-xs text-blue-500 font-medium mb-6">Saves automatically when you select an option.</p>
+
+        {loading ? (
+          <div className="h-10 bg-gray-100 rounded animate-pulse w-48" />
+        ) : (
+          <div className="space-y-3">
+            <div className="flex gap-6">
+              {[{ label: 'Show', value: true }, { label: 'Hide', value: false }].map(({ label, value }) => (
+                <label key={label} className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="showNextPrayerBar"
+                    checked={show === value}
+                    onChange={() => handleSave(value)}
+                    disabled={saving}
+                    className="text-blue-600"
+                  />
+                  <span className="text-sm text-gray-700">{label}</span>
+                </label>
+              ))}
+            </div>
+            {message && (
+              <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {message.text}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Campaign Display Mode ────────────────────────────────────────────────────
+
+function CampaignDisplaySection() {
+  const [mode, setMode] = useState<'default' | 'medium' | 'compact'>('default');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.campaignDisplayMode === 'compact') setMode('compact');
+        else if (data.campaignDisplayMode === 'medium') setMode('medium');
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave(value: 'default' | 'medium' | 'compact') {
+    setSaving(true);
+    setMessage(null);
+    setMode(value);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'campaignDisplayMode', value }),
+      });
+      setMessage(res.ok
+        ? { type: 'success', text: 'Saved. Changes are live on the site.' }
+        : { type: 'error', text: 'Failed to save. Please try again.' }
+      );
+    } catch {
+      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white shadow rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-1 flex items-center gap-2">
+          <LayoutList className="h-5 w-5 text-gray-400" />
+          Campaign Section Display
+        </h3>
+        <p className="text-sm text-gray-500 mb-1">
+          Choose how the Ramadan matching campaign appears on the home page.
+        </p>
+        <p className="text-xs text-blue-500 font-medium mb-6">Saves automatically when you select an option.</p>
+
+        {loading ? (
+          <div className="h-10 bg-gray-100 rounded animate-pulse w-64" />
+        ) : (
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl">
+              {([
+                {
+                  value: 'default',
+                  label: 'Default',
+                  desc: 'Full two-column layout with headline, description, progress card, and all stat tiles.',
+                },
+                {
+                  value: 'medium',
+                  label: 'Medium',
+                  desc: 'Two-column compact layout: logo + headline left, progress + stats right. No description.',
+                },
+                {
+                  value: 'compact',
+                  label: 'Compact',
+                  desc: 'Single-row banner: raised amount, inline progress bar, and Donate button only.',
+                },
+              ] as const).map(({ value, label, desc }: { value: 'default' | 'medium' | 'compact'; label: string; desc: string }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => handleSave(value)}
+                  disabled={saving}
+                  className={`text-left p-3 rounded-lg border-2 transition-colors duration-150 ${
+                    mode === value
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <p className="text-sm font-semibold text-gray-900 mb-0.5">{label}</p>
+                  <p className="text-xs text-gray-500 leading-snug">{desc}</p>
+                </button>
+              ))}
+            </div>
+            {message && (
+              <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {message.text}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // ─── Donate URL ───────────────────────────────────────────────────────────────
 
@@ -367,6 +560,218 @@ function CampaignStatsSection() {
   );
 }
 
+// ─── Donation Quotes ──────────────────────────────────────────────────────────
+
+const EMPTY_QUOTE: DonationQuote = { type: 'quran', arabic: '', translation: '', reference: '' };
+
+const DEFAULT_QUOTES: DonationQuote[] = [
+  {
+    type: 'quran',
+    arabic: 'وَأَنفِقُوا فِي سَبِيلِ اللَّهِ وَلَا تُلْقُوا بِأَيْدِيكُمْ إِلَى التَّهْلُكَةِ',
+    translation: 'And spend in the way of Allah and do not throw yourselves into destruction…',
+    reference: 'Al-Quran 2:195',
+  },
+  {
+    type: 'hadith',
+    arabic: '',
+    translation: 'Whoever builds a mosque for the sake of Allah — even if it is as small as a bird\'s nest — Allah will build for him a house in Paradise.',
+    reference: 'Sahih al-Bukhari & Muslim',
+  },
+];
+
+function DonationQuotesSection() {
+  const [quotes, setQuotes] = useState<DonationQuote[]>(DEFAULT_QUOTES);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.donationQuotes) {
+          const parsed = JSON.parse(data.donationQuotes);
+          if (Array.isArray(parsed) && parsed.length > 0) setQuotes(parsed);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  function updateQuote(index: number, field: keyof DonationQuote, value: string) {
+    setQuotes((prev) => prev.map((q, i) => (i === index ? { ...q, [field]: value } : q)));
+  }
+
+  function addQuote() {
+    setQuotes((prev) => [...prev, { ...EMPTY_QUOTE }]);
+  }
+
+  function removeQuote(index: number) {
+    setQuotes((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  async function handleSave(e: React.FormEvent) {
+    e.preventDefault();
+    setSaving(true);
+    setMessage(null);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'donationQuotes', value: JSON.stringify(quotes) }),
+      });
+      setMessage(res.ok
+        ? { type: 'success', text: 'Quotes saved. Changes are live on the site.' }
+        : { type: 'error', text: 'Failed to save. Please try again.' }
+      );
+    } catch {
+      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white shadow rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-1 flex items-center gap-2">
+          <BookOpen className="h-5 w-5 text-gray-400" />
+          Donation Section — Quran &amp; Hadith Quotes
+        </h3>
+        <p className="text-sm text-gray-500 mb-6">
+          These quotes rotate every 8 seconds in the donation section on the home page.
+          Each entry can be a Quranic verse (with optional Arabic text) or a Hadith.
+        </p>
+
+        {loading ? (
+          <div className="space-y-4">
+            {[1, 2].map((i) => <div key={i} className="h-28 bg-gray-100 rounded animate-pulse" />)}
+          </div>
+        ) : (
+          <form onSubmit={handleSave} className="space-y-4">
+            {quotes.map((quote, index) => (
+              <div key={index} className="border border-gray-200 rounded-lg p-4 space-y-3 relative">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Quote {index + 1}</span>
+                  <button
+                    type="button"
+                    onClick={() => removeQuote(index)}
+                    className="text-red-400 hover:text-red-600 transition-colors"
+                    aria-label="Remove quote"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+
+                {/* Type */}
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="quran"
+                      checked={quote.type === 'quran'}
+                      onChange={() => updateQuote(index, 'type', 'quran')}
+                      className="text-blue-600"
+                    />
+                    Quranic Verse
+                  </label>
+                  <label className="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+                    <input
+                      type="radio"
+                      name={`type-${index}`}
+                      value="hadith"
+                      checked={quote.type === 'hadith'}
+                      onChange={() => updateQuote(index, 'type', 'hadith')}
+                      className="text-blue-600"
+                    />
+                    Hadith
+                  </label>
+                </div>
+
+                {/* Arabic (optional) */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Arabic Text <span className="text-gray-400 font-normal">(optional)</span>
+                  </label>
+                  <textarea
+                    value={quote.arabic}
+                    onChange={(e) => updateQuote(index, 'arabic', e.target.value)}
+                    rows={2}
+                    dir="rtl"
+                    placeholder="اكتب النص العربي هنا..."
+                    className="block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                  />
+                </div>
+
+                {/* Translation */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    English Translation <span className="text-red-400">*</span>
+                  </label>
+                  <textarea
+                    value={quote.translation}
+                    onChange={(e) => updateQuote(index, 'translation', e.target.value)}
+                    rows={2}
+                    required
+                    placeholder="Enter English translation..."
+                    className="block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+
+                {/* Reference */}
+                <div>
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Reference <span className="text-red-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={quote.reference}
+                    onChange={(e) => updateQuote(index, 'reference', e.target.value)}
+                    required
+                    placeholder="e.g. Al-Quran 2:195 or Sahih al-Bukhari"
+                    className="block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm
+                      focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={addQuote}
+              className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+            >
+              <Plus className="h-4 w-4" />
+              Add Another Quote
+            </button>
+
+            {message && (
+              <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {message.text}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={saving}
+              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm
+                text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
+                focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {saving ? 'Saving…' : 'Save Quotes'}
+            </button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── QR Card ──────────────────────────────────────────────────────────────────
 
 function QRCardSection() {
@@ -446,8 +851,11 @@ export default function AdminSettings() {
       </div>
 
       <div className="space-y-6">
+        <NextPrayerBarSection />
+        <CampaignDisplaySection />
         <JummahTimesSection />
         <DonateUrlSection />
+        <DonationQuotesSection />
         <CampaignStatsSection />
         <QRCardSection />
       </div>

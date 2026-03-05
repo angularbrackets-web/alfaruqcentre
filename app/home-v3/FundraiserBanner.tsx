@@ -130,7 +130,7 @@ export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBan
           </button>
 
           <div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
               <div className="grid grid-cols-1 lg:grid-cols-[1fr_416px] gap-10 lg:gap-16 items-start">
 
                 {/* ── RIGHT — poster fully visible, video overlaps its right edge ── */}

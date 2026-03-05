@@ -56,14 +56,16 @@ async function scrapeCampaignStats() {
   const page = await context.newPage();
 
   try {
-    await page.goto(CAMPAIGN_URL, { waitUntil: 'networkidle', timeout: 45_000 });
+    // Use 'load' instead of 'networkidle' — fundraising pages have perpetual
+    // background requests (live counters, analytics) that never fully settle.
+    await page.goto(CAMPAIGN_URL, { waitUntil: 'load', timeout: 45_000 });
 
-    // Wait for the progress section to be visible
+    // Wait up to 15 s for the JS-rendered donation amount to appear.
     await page.waitForFunction(
       () => document.body.innerText.includes('raised'),
-      { timeout: 20_000 }
+      { timeout: 15_000 }
     ).catch(() => {
-      // Continue even if the wait times out — we'll try to parse what we have
+      // Continue anyway — we'll extract whatever is on the page.
     });
 
     const stats = await page.evaluate(() => {

@@ -7,6 +7,7 @@ import { MapPin, Phone, Menu, X, Facebook, Instagram, Youtube } from "lucide-rea
 import { AnimatePresence, motion } from "framer-motion";
 import { useDonateUrl } from "@/app/hooks/useDonateUrl";
 import { useJummahTimes } from "@/app/hooks/useJummahTimes";
+import QuoteTickerStrip from "./QuoteTickerStrip";
 
 interface PrayerSlot {
   name: string;
@@ -177,7 +178,7 @@ const UtilityBar = memo(function UtilityBar({
         </div>
 
         {/* ── Desktop: prayer columns + contact + social ── */}
-        <div className="hidden lg:flex items-center justify-between gap-2 py-3">
+        <div className="hidden lg:flex items-center justify-between gap-2 py-2">
           <div className="flex items-stretch">
             {/* Regular prayers */}
             <div className="flex items-stretch divide-x divide-[#0A0A0A]/10">
@@ -287,7 +288,7 @@ const CountdownBar = memo(function CountdownBar({
 
   return (
     <div className="bg-white border-t border-b border-black/10 w-full">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-1.5">
         <div className="flex items-center justify-between gap-4">
 
           {/* Left — next prayer countdown */}
@@ -429,6 +430,16 @@ export default function NavbarV3() {
   const [dailySlots, setDailySlots] = useState<PrayerSlot[]>([]);
   const [nextPrayer, setNextPrayer] = useState<{ name: string; secsLeft: number }>({ name: "", secsLeft: 0 });
   const [tomorrowSummary, setTomorrowSummary] = useState("");
+  const [showCountdown, setShowCountdown] = useState(true);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.showNextPrayerBar === "false") setShowCountdown(false);
+      })
+      .catch(() => {});
+  }, []);
 
   // Combine daily prayer slots with Jummah (each Jummah has a single time, like Sunrise)
   const prayerSlots = useMemo<PrayerSlot[]>(() => [
@@ -518,16 +529,18 @@ export default function NavbarV3() {
         {/* 1. Utility bar — prayer times */}
         <UtilityBar prayerSlots={prayerSlots} tomorrowSummary={tomorrowSummary} />
 
-        {/* 2. Countdown bar */}
-        <CountdownBar
-          nextName={nextPrayer.name}
-          secsLeft={nextPrayer.secsLeft}
-          tomorrowSummary={tomorrowSummary}
-        />
+        {/* 2. Countdown bar (admin-toggleable) */}
+        {showCountdown && (
+          <CountdownBar
+            nextName={nextPrayer.name}
+            secsLeft={nextPrayer.secsLeft}
+            tomorrowSummary={tomorrowSummary}
+          />
+        )}
 
         {/* 3. Main navbar */}
         <div className="bg-white border-b border-black/10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center py-2.5 gap-6">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center py-2 gap-6">
 
             {/* Logo */}
             <Link href="/" className="flex-shrink-0">
@@ -577,6 +590,10 @@ export default function NavbarV3() {
 
           </div>
         </div>
+
+        {/* 4. Quote ticker strip — below main navbar */}
+        <QuoteTickerStrip />
+
       </header>
 
       {/* Mobile backdrop */}

@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import NavbarV3 from "../home-v3/NavbarV3";
 import FooterV3 from "../home-v3/FooterV3";
 
-const BARE_ROUTES = ["/qr-card"];
+const BARE_ROUTES = ["/qr-card", "/admin"];
 
 export default function LayoutShell({
   children,

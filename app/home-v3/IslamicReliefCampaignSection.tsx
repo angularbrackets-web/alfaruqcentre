@@ -84,9 +84,185 @@ function StatTile({
   );
 }
 
+// ─── Compact Campaign Bar ─────────────────────────────────────────────────────
+
+function CompactCampaignBar({
+  navHeight,
+  raised,
+  donations,
+}: {
+  navHeight: number;
+  raised: number;
+  donations: number;
+}) {
+  const pct = Math.min((raised / CAMPAIGN_GOAL) * 100, 100);
+  return (
+    <section
+      className="bg-white border-b border-black/8 relative overflow-hidden"
+      style={{ paddingTop: navHeight || 0 }}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-3 sm:gap-5">
+        {/* IRC logo */}
+        <Image
+          src="/IslamicReliefCanadaLogo.png"
+          alt="Islamic Relief Canada"
+          width={90}
+          height={30}
+          className="object-contain flex-shrink-0 hidden sm:block"
+          priority
+        />
+        {/* Badge */}
+        <span className="inline-block bg-[#C9A84C] text-[#0A0A0A] font-black uppercase px-2 py-0.5 rounded-sm text-[8px] tracking-[0.15em] whitespace-nowrap flex-shrink-0">
+          2:1 Match
+        </span>
+        {/* Progress info */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-black text-[#0A0A0A] text-sm whitespace-nowrap">{fmt(raised)}</span>
+            <span className="text-[#0A0A0A]/40 text-[11px] whitespace-nowrap hidden sm:inline">
+              of {fmt(CAMPAIGN_GOAL)} · {donations} donations
+            </span>
+            <span className="text-[#C9A84C] text-[10px] font-bold whitespace-nowrap">{pct.toFixed(0)}%</span>
+          </div>
+          <div className="h-1 bg-[#0A0A0A]/10 rounded-full overflow-hidden">
+            <motion.div
+              className="h-full bg-[#0A0A0A] rounded-full"
+              initial={{ width: 0 }}
+              animate={{ width: `${pct}%` }}
+              transition={{ duration: 1.1, ease: "easeOut", delay: 0.3 }}
+            />
+          </div>
+        </div>
+        {/* CTA */}
+        <a
+          href={CAMPAIGN_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 inline-flex items-center gap-1 bg-[#0A0A0A] text-white
+            font-bold text-[10px] uppercase tracking-[0.12em] px-4 py-2 rounded-full
+            hover:bg-[#0A0A0A]/75 transition-colors duration-200"
+        >
+          Donate →
+        </a>
+      </div>
+    </section>
+  );
+}
+
+// ─── Medium Campaign Section ──────────────────────────────────────────────────
+
+function MediumCampaignSection({
+  navHeight,
+  raised,
+  donations,
+  donationsLastHour,
+}: {
+  navHeight: number;
+  raised: number;
+  donations: number;
+  donationsLastHour: number;
+}) {
+  const pct = ((raised / CAMPAIGN_GOAL) * 100).toFixed(1);
+  return (
+    <section
+      className="bg-white relative overflow-hidden"
+      style={{ paddingTop: navHeight || 0 }}
+    >
+      {/* Mobile */}
+      <motion.div
+        className="lg:hidden px-4 py-3 relative z-10"
+        initial={{ opacity: 0, y: -6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+      >
+        <div className="flex items-center justify-between gap-3 mb-2.5">
+          <div className="flex items-center gap-2">
+            <Image src="/IslamicReliefCanadaLogo.png" alt="Islamic Relief Canada" width={100} height={32} className="object-contain" priority />
+            <span className="inline-block bg-[#C9A84C] text-[#0A0A0A] font-black uppercase px-2 py-0.5 rounded-sm text-[8px] tracking-[0.15em] whitespace-nowrap">
+              2:1 Match
+            </span>
+          </div>
+          <a href={CAMPAIGN_URL} target="_blank" rel="noopener noreferrer"
+            className="flex-shrink-0 inline-flex items-center gap-1 bg-[#0A0A0A] text-white font-bold text-[10px] uppercase tracking-[0.12em] px-4 py-1.5 rounded-full hover:bg-[#0A0A0A]/75 transition-colors duration-200">
+            Donate →
+          </a>
+        </div>
+        <div className="bg-[#F5F3EE] rounded-lg px-3 py-2.5">
+          <div className="flex items-baseline gap-2 mb-1.5">
+            <span className="font-black text-[#0A0A0A] text-xl leading-none">{fmt(raised)}</span>
+            <span className="text-[#0A0A0A]/45 text-[11px] font-medium">of {fmt(CAMPAIGN_GOAL)}</span>
+            <span className="text-[#C9A84C] text-[10px] font-bold ml-auto">{pct}%</span>
+          </div>
+          <div className="h-1 bg-[#0A0A0A]/10 rounded-full overflow-hidden mb-2">
+            <motion.div className="h-full bg-[#0A0A0A] rounded-full" initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }} />
+          </div>
+          <div className="grid grid-cols-3 gap-1.5">
+            <StatTile icon={Heart} label="Donations" value={donations} index={0} size="sm" />
+            <StatTile icon={Target} label="Of Goal" value={`${pct}%`} index={1} size="sm" />
+            <StatTile icon={TrendingUp} label="Last Hour" value={donationsLastHour} index={2} size="sm" />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Desktop */}
+      <div className="hidden lg:block max-w-7xl mx-auto px-6 lg:px-8 py-3 relative z-10">
+        <div className="grid grid-cols-2 gap-10 items-center">
+          <motion.div className="flex items-center gap-5" initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, ease: "easeOut" }}>
+            <Image src="/IslamicReliefCanadaLogo.png" alt="Islamic Relief Canada" width={120} height={40} className="object-contain flex-shrink-0" priority />
+            <div className="flex flex-col gap-1.5">
+              <div className="flex items-center gap-2">
+                <h2 className="font-black text-[#0A0A0A] leading-none" style={{ fontSize: "clamp(16px, 1.8vw, 22px)", letterSpacing: "-0.02em" }}>
+                  Your donation, multiplied.
+                </h2>
+                <span className="inline-block bg-[#C9A84C] text-[#0A0A0A] font-black uppercase px-2 py-0.5 rounded-sm text-[8px] tracking-[0.15em] whitespace-nowrap">
+                  2:1 Match
+                </span>
+              </div>
+              <p className="text-[#0A0A0A]/45 text-[11px]">For every $2 donated, IRC matches an additional $1.</p>
+              <a href={CAMPAIGN_URL} target="_blank" rel="noopener noreferrer"
+                className="self-start inline-flex items-center gap-1 bg-[#0A0A0A] text-white font-bold text-[10px] uppercase tracking-[0.12em] px-4 py-1.5 rounded-full hover:bg-[#0A0A0A]/75 transition-colors duration-200 mt-0.5">
+                Donate Now →
+              </a>
+            </div>
+          </motion.div>
+          <motion.div className="bg-[#F5F3EE] rounded-xl px-4 py-3" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, ease: "easeOut", delay: 0.12 }}>
+            <div className="flex items-baseline gap-2 mb-1.5">
+              <span className="font-black text-[#0A0A0A]" style={{ fontSize: "clamp(18px, 2vw, 24px)", letterSpacing: "-0.02em" }}>{fmt(raised)}</span>
+              <span className="text-[#0A0A0A]/40 text-[11px]">raised of <span className="text-[#0A0A0A]/60 font-semibold">{fmt(CAMPAIGN_GOAL)}</span></span>
+              <span className="text-[#C9A84C] text-[10px] font-bold ml-auto">{pct}%</span>
+            </div>
+            <div className="h-1 bg-[#0A0A0A]/10 rounded-full mb-2.5 overflow-hidden">
+              <motion.div className="h-full bg-[#0A0A0A] rounded-full" initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.3, ease: "easeOut", delay: 0.4 }} />
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <StatTile icon={Heart} label="Donations" value={donations} index={0} size="sm" />
+              <StatTile icon={Target} label="Of Goal" value={`${pct}%`} index={1} size="sm" />
+              <StatTile icon={TrendingUp} label="Last Hour" value={donationsLastHour} index={2} size="sm" />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+      <div className="h-px bg-gradient-to-r from-transparent via-[#0A0A0A]/8 to-transparent" />
+    </section>
+  );
+}
+
+// ─── Full Campaign Section ─────────────────────────────────────────────────────
+
 export default function IslamicReliefCampaignSection() {
   const [navHeight, setNavHeight] = useState(0);
   const { raised, donations, donationsLastHour } = useCampaignStats();
+  const [displayMode, setDisplayMode] = useState<"default" | "compact" | "medium">("default");
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.campaignDisplayMode === "compact") setDisplayMode("compact");
+        else if (data.campaignDisplayMode === "medium") setDisplayMode("medium");
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     const header = document.querySelector("header");
@@ -97,6 +273,13 @@ export default function IslamicReliefCampaignSection() {
     ro.observe(header);
     return () => ro.disconnect();
   }, []);
+
+  if (displayMode === "compact") {
+    return <CompactCampaignBar navHeight={navHeight} raised={raised} donations={donations} />;
+  }
+  if (displayMode === "medium") {
+    return <MediumCampaignSection navHeight={navHeight} raised={raised} donations={donations} donationsLastHour={donationsLastHour} />;
+  }
 
   const pct = ((raised / CAMPAIGN_GOAL) * 100).toFixed(1);
 

@@ -1,7 +1,50 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { useDonateUrl } from "@/app/hooks/useDonateUrl";
+
+// ── Types ──────────────────────────────────────────────────────────────────────
+interface DonationQuote {
+  type: "quran" | "hadith";
+  arabic?: string;
+  translation: string;
+  reference: string;
+}
+
+const FALLBACK_QUOTES: DonationQuote[] = [
+  {
+    type: "quran",
+    arabic: "وَأَنفِقُوا فِي سَبِيلِ اللَّهِ وَلَا تُلْقُوا بِأَيْدِيكُمْ إِلَى التَّهْلُكَةِ",
+    translation: "And spend in the way of Allah and do not throw yourselves into destruction\u2026",
+    reference: "Al-Quran 2:195",
+  },
+  {
+    type: "hadith",
+    translation:
+      "Whoever builds a mosque for the sake of Allah \u2014 even if it is as small as a bird\u2019s nest \u2014 Allah will build for him a house in Paradise.",
+    reference: "Sahih al-Bukhari & Muslim",
+  },
+];
+
+// ── Hook ───────────────────────────────────────────────────────────────────────
+function useDonationQuotes(): DonationQuote[] {
+  const [quotes, setQuotes] = useState<DonationQuote[]>(FALLBACK_QUOTES);
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.donationQuotes) {
+          const parsed: DonationQuote[] = JSON.parse(data.donationQuotes);
+          if (Array.isArray(parsed) && parsed.length > 0) setQuotes(parsed);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  return quotes;
+}
 
 // Mosque silhouette — dome, minarets, arched entrance
 function MosqueIllustration() {
@@ -79,6 +122,20 @@ function MosqueIllustration() {
 
 export default function DonationCTAV3() {
   const donateUrl = useDonateUrl();
+  const quotes = useDonationQuotes();
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Auto-rotate every 8 seconds
+  useEffect(() => {
+    if (quotes.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveIndex((i) => (i + 1) % quotes.length);
+    }, 8000);
+    return () => clearInterval(timer);
+  }, [quotes.length]);
+
+  const current = quotes[activeIndex];
+
   return (
     <section className="relative bg-[#E8E4DC] overflow-hidden">
 
@@ -89,30 +146,50 @@ export default function DonationCTAV3() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 md:py-32">
 
-        {/* Quranic verse */}
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.75, ease: [0.25, 0.1, 0.25, 1] }}
-        >
-          <p
-            className="text-[#0A0A0A]/80 text-3xl md:text-4xl leading-loose font-light mb-4"
-            style={{
-              fontFamily: "Georgia, 'Times New Roman', serif",
-              direction: "rtl",
-            }}
-          >
-            وَأَنفِقُوا فِي سَبِيلِ اللَّهِ وَلَا تُلْقُوا بِأَيْدِيكُمْ إِلَى التَّهْلُكَةِ
-          </p>
-          <p className="text-[#0A0A0A]/50 text-base italic">
-            &ldquo;And spend in the way of Allah and do not throw yourselves into destruction&hellip;&rdquo;
-          </p>
-          <p className="text-[#C9A84C] text-xs font-medium uppercase tracking-[0.3em] mt-2">
-            Al-Quran 2:195
-          </p>
-        </motion.div>
+        {/* Rotating quote */}
+        <div className="mb-16 min-h-[200px] flex flex-col items-center justify-center">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              className="text-center w-full"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }}
+            >
+              {current.arabic && (
+                <p
+                  className="text-[#0A0A0A]/80 text-3xl md:text-4xl leading-loose font-light mb-4"
+                  style={{ fontFamily: "Georgia, 'Times New Roman', serif", direction: "rtl" }}
+                >
+                  {current.arabic}
+                </p>
+              )}
+              <p className="text-[#0A0A0A]/60 text-base md:text-lg italic font-light leading-relaxed max-w-2xl mx-auto">
+                &ldquo;{current.translation}&rdquo;
+              </p>
+              <p className="text-[#C9A84C] text-xs font-medium uppercase tracking-[0.3em] mt-3">
+                {current.reference}
+              </p>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Dot indicators */}
+          {quotes.length > 1 && (
+            <div className="flex gap-2 mt-8">
+              {quotes.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveIndex(i)}
+                  aria-label={`Quote ${i + 1}`}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    i === activeIndex ? "bg-[#C9A84C] w-4" : "bg-[#0A0A0A]/20"
+                  }`}
+                />
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Divider */}
         <motion.div
@@ -122,23 +199,6 @@ export default function DonationCTAV3() {
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: "easeOut" }}
         />
-
-        {/* Hadith quote */}
-        <motion.blockquote
-          className="pl-6 border-l-2 border-[#C9A84C]/40 mb-16"
-          initial={{ opacity: 0, x: -16 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.65, ease: "easeOut", delay: 0.15 }}
-        >
-          <p className="text-[#0A0A0A]/70 text-lg md:text-xl font-light italic leading-relaxed">
-            &ldquo;Whoever builds a mosque for the sake of Allah — even if it is as small as a
-            bird&apos;s nest — Allah will build for him a house in Paradise.&rdquo;
-          </p>
-          <p className="text-[#C9A84C] text-xs font-medium uppercase tracking-[0.25em] mt-3">
-            Sahih al-Bukhari &amp; Muslim
-          </p>
-        </motion.blockquote>
 
         {/* CTA */}
         <motion.div

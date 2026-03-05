@@ -6,7 +6,9 @@ export async function GET() {
     const settings = await prisma.setting.findMany();
     const obj: Record<string, string> = {};
     for (const s of settings) obj[s.key] = s.value;
-    return NextResponse.json(obj);
+    return NextResponse.json(obj, {
+      headers: { 'Cache-Control': 'no-store' },
+    });
   } catch {
     return NextResponse.json({}, { status: 500 });
   }
