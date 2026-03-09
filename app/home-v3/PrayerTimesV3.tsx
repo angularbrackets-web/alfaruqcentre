@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useJummahTimes } from "@/app/hooks/useJummahTimes";
@@ -25,6 +25,7 @@ interface DayPrayerTimes {
 
 export interface PrayerTimesV3Props {
   prayerTimes: DayPrayerTimes | null;
+  tomorrowPrayerTimes?: DayPrayerTimes | null;
 }
 
 function parseTimeToday(timeStr: string): Date {
@@ -48,7 +49,6 @@ const PRAYERS = [
   { key: "isha"    as const, label: "Isha"    },
 ];
 
-// Returns the index of the next upcoming prayer, or -1 if all prayers are done for today.
 function getCurrentIndex(p: DayPrayerTimes): number {
   const now = new Date();
   for (let i = 0; i < PRAYERS.length; i++) {
@@ -62,11 +62,7 @@ function getNextInfo(p: DayPrayerTimes): { name: string; time: string; minutes: 
   for (const { key, label } of PRAYERS) {
     const t = parseTimeToday(p[key].iqamah);
     if (now < t) {
-      return {
-        name: label,
-        time: p[key].iqamah,
-        minutes: Math.floor((t.getTime() - now.getTime()) / 60000),
-      };
+      return { name: label, time: p[key].iqamah, minutes: Math.floor((t.getTime() - now.getTime()) / 60000) };
     }
   }
   return { name: "Fajr", time: p.fajr.iqamah, minutes: 0 };
@@ -74,30 +70,9 @@ function getNextInfo(p: DayPrayerTimes): { name: string; time: string; minutes: 
 
 function CrescentIllustration() {
   return (
-    <svg
-      viewBox="0 0 500 500"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      aria-hidden="true"
-      className="w-full h-full"
-    >
-      {/* Crescent moon — outer arc minus inner arc */}
-      <path
-        d="M 375,120 A 180,180 0 1,0 375,380 A 155,155 0 0,1 375,120 Z"
-        stroke="white"
-        strokeOpacity="0.12"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      {/* Outer glow ring */}
-      <path
-        d="M 390,105 A 200,200 0 1,0 390,395 A 172,172 0 0,1 390,105 Z"
-        stroke="white"
-        strokeOpacity="0.04"
-        strokeWidth="1"
-        fill="none"
-      />
-      {/* Stars */}
+    <svg viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" className="w-full h-full">
+      <path d="M 375,120 A 180,180 0 1,0 375,380 A 155,155 0 0,1 375,120 Z" stroke="white" strokeOpacity="0.12" strokeWidth="1.5" fill="none" />
+      <path d="M 390,105 A 200,200 0 1,0 390,395 A 172,172 0 0,1 390,105 Z" stroke="white" strokeOpacity="0.04" strokeWidth="1" fill="none" />
       <circle cx="148" cy="95"  r="2.5" fill="white" fillOpacity="0.18" />
       <circle cx="200" cy="72"  r="1.5" fill="white" fillOpacity="0.12" />
       <circle cx="112" cy="165" r="1.5" fill="white" fillOpacity="0.14" />
@@ -112,7 +87,92 @@ function CrescentIllustration() {
   );
 }
 
-export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
+// ─── Iqamah display: inline today (struck) → tomorrow (gold) ──────────────────
+
+function IqamahDisplay({
+  todayIqamah,
+  tomorrowIqamah,
+  isActive,
+  colIndex,
+}: {
+  todayIqamah: string;
+  tomorrowIqamah?: string;
+  isActive: boolean;
+  colIndex: number;
+}) {
+  const changed = !!tomorrowIqamah && tomorrowIqamah !== todayIqamah;
+  const [strikeDrawn, setStrikeDrawn] = useState(false);
+  const prevTomorrowRef = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    const wasChanged = !!prevTomorrowRef.current && prevTomorrowRef.current !== todayIqamah;
+    prevTomorrowRef.current = tomorrowIqamah;
+    if (!changed) { setStrikeDrawn(false); return; }
+    if (wasChanged) return;
+    const t = setTimeout(() => setStrikeDrawn(true), 400 + colIndex * 160);
+    return () => clearTimeout(t);
+  }, [changed, colIndex, tomorrowIqamah, todayIqamah]);
+
+  // Slightly smaller when showing two values side-by-side
+  const normalSize: React.CSSProperties = { fontSize: "clamp(13px, 1.6vw, 22px)", letterSpacing: "-0.02em" };
+  const compactSize: React.CSSProperties = { fontSize: "clamp(10px, 1.05vw, 15px)", letterSpacing: "-0.01em" };
+
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <span className={`text-[8px] uppercase tracking-[0.2em] font-medium ${isActive ? "text-white/25" : "text-white/15"}`}>
+        Iqāmah
+      </span>
+
+      {changed ? (
+        /* Inline: ~~today~~ → tomorrow — no extra height */
+        <div className="flex items-center justify-center gap-[3px] flex-wrap">
+          {/* Today — dimmed, strikethrough */}
+          <div className="relative inline-block leading-none" style={compactSize}>
+            <span className={`font-black ${isActive ? "text-white/25" : "text-white/20"}`}>
+              {todayIqamah}
+            </span>
+            <motion.span
+              className={`absolute inset-x-0 top-[50%] ${isActive ? "bg-white/25" : "bg-white/20"}`}
+              style={{ height: "1.5px", transformOrigin: "left" }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: strikeDrawn ? 1 : 0 }}
+              transition={{ duration: 0.38, ease: "easeOut" }}
+            />
+          </div>
+          {/* Arrow */}
+          <motion.span
+            className="text-white/20 select-none leading-none"
+            style={{ fontSize: "8px" }}
+            animate={{ opacity: strikeDrawn ? 1 : 0 }}
+            transition={{ duration: 0.15, delay: strikeDrawn ? 0.25 : 0 }}
+          >
+            →
+          </motion.span>
+          {/* Tomorrow — gold */}
+          <motion.span
+            className="font-black leading-none text-[#C9A84C]"
+            style={compactSize}
+            animate={{ opacity: strikeDrawn ? 1 : 0 }}
+            transition={{ duration: 0.25, delay: strikeDrawn ? 0.42 : 0 }}
+          >
+            {tomorrowIqamah}
+          </motion.span>
+        </div>
+      ) : (
+        <p
+          className={`font-black leading-none text-center ${isActive ? "text-white" : "text-white/60"}`}
+          style={normalSize}
+        >
+          {todayIqamah}
+        </p>
+      )}
+    </div>
+  );
+}
+
+// ─── PrayerTimesV3 ─────────────────────────────────────────────────────────────
+
+export default function PrayerTimesV3({ prayerTimes, tomorrowPrayerTimes }: PrayerTimesV3Props) {
   const jummahTimes = useJummahTimes();
   const [activeIndex, setActiveIndex] = useState(-1);
   const [next, setNext] = useState<{ name: string; time: string; minutes: number }>({
@@ -133,9 +193,9 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
   const isFriday = new Date().getDay() === 5;
 
   return (
-    <section className="bg-[#0A0A0A] py-14 md:py-20 overflow-hidden relative">
+    <section className="bg-[#0A0A0A] py-8 md:py-10 overflow-hidden relative">
 
-      {/* Crescent illustration — top right, partially cropped */}
+      {/* Crescent illustration */}
       <div className="absolute -right-20 -top-20 w-[420px] h-[420px] pointer-events-none select-none">
         <CrescentIllustration />
       </div>
@@ -144,7 +204,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
 
         {/* Header */}
         <motion.div
-          className="mb-10"
+          className="mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
@@ -155,7 +215,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
           </p>
           <h2
             className="text-white font-black leading-none"
-            style={{ fontSize: "clamp(36px, 4.5vw, 60px)", letterSpacing: "-0.02em" }}
+            style={{ fontSize: "clamp(32px, 4vw, 54px)", letterSpacing: "-0.02em" }}
           >
             Prayer Times
           </h2>
@@ -164,7 +224,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
         {/* Next prayer callout */}
         {prayerTimes && next.minutes > 0 && (
           <motion.div
-            className="flex items-end justify-between mb-10 pb-8 border-b border-white/8"
+            className="flex items-end justify-between mb-5 pb-5 border-b border-white/8"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -176,7 +236,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
               </p>
               <p
                 className="text-white font-black leading-none"
-                style={{ fontSize: "clamp(40px, 6vw, 80px)", letterSpacing: "-0.03em" }}
+                style={{ fontSize: "clamp(28px, 4vw, 56px)", letterSpacing: "-0.03em" }}
               >
                 {next.name}
               </p>
@@ -184,7 +244,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
             <div className="text-right pb-1">
               <p
                 className="text-[#C9A84C] font-black leading-none"
-                style={{ fontSize: "clamp(32px, 5vw, 64px)", letterSpacing: "-0.03em" }}
+                style={{ fontSize: "clamp(22px, 3.5vw, 44px)", letterSpacing: "-0.03em" }}
               >
                 {next.minutes >= 60
                   ? `${Math.floor(next.minutes / 60)}h ${next.minutes % 60 > 0 ? `${next.minutes % 60}m` : ""}`
@@ -200,7 +260,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
         {/* Friday Jummah banner */}
         {isFriday && (
           <motion.div
-            className="mb-8 flex items-center gap-3 border border-[#C9A84C]/30 bg-[#C9A84C]/8 rounded-xl px-4 py-3"
+            className="mb-5 flex items-center gap-3 border border-[#C9A84C]/30 bg-[#C9A84C]/8 rounded-xl px-4 py-2.5"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
@@ -227,12 +287,14 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
           >
             {PRAYERS.map(({ key, label }, index) => {
               const pt = prayerTimes[key];
+              const tomorrowPt = tomorrowPrayerTimes?.[key];
               const isActive = activeIndex === index;
+              const adhanSize = { fontSize: "clamp(12px, 1.5vw, 20px)", letterSpacing: "-0.02em" };
 
               return (
                 <div
                   key={key}
-                  className={`relative flex flex-col items-center gap-2 py-7 px-2 transition-colors duration-300 ${
+                  className={`relative flex flex-col items-center gap-1.5 py-4 sm:py-5 px-2 transition-colors duration-300 ${
                     isActive ? "bg-white/10" : "bg-[#111111]"
                   }`}
                 >
@@ -243,7 +305,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
 
                   {/* Pulsing dot */}
                   {isActive && (
-                    <span className="absolute top-3 right-3 flex h-1.5 w-1.5">
+                    <span className="absolute top-2.5 right-2.5 flex h-1.5 w-1.5">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#C9A84C] opacity-75" />
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#C9A84C]" />
                     </span>
@@ -263,22 +325,18 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
                     }`}>Adhān</span>
                     <p className={`font-light leading-none text-center ${
                       isActive ? "text-white/55" : "text-white/30"
-                    }`} style={{ fontSize: "clamp(14px, 1.8vw, 24px)", letterSpacing: "-0.02em" }}>
+                    }`} style={adhanSize}>
                       {pt.azzan}
                     </p>
                   </div>
 
-                  {/* Iqamah — dominant, heavy */}
-                  <div className="flex flex-col items-center gap-0.5">
-                    <span className={`text-[8px] uppercase tracking-[0.2em] font-medium ${
-                      isActive ? "text-white/25" : "text-white/15"
-                    }`}>Iqāmah</span>
-                    <p className={`font-black leading-none text-center ${
-                      isActive ? "text-white" : "text-white/60"
-                    }`} style={{ fontSize: "clamp(14px, 1.8vw, 24px)", letterSpacing: "-0.02em" }}>
-                      {pt.iqamah}
-                    </p>
-                  </div>
+                  {/* Iqamah — animated today→tomorrow */}
+                  <IqamahDisplay
+                    todayIqamah={pt.iqamah}
+                    tomorrowIqamah={tomorrowPt?.iqamah}
+                    isActive={isActive}
+                    colIndex={index}
+                  />
                 </div>
               );
             })}
@@ -286,9 +344,9 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
         ) : (
           <div className="grid grid-cols-5 gap-px bg-white/6 rounded-2xl overflow-hidden">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="bg-[#111111] py-7 px-2 animate-pulse">
+              <div key={i} className="bg-[#111111] py-5 px-2 animate-pulse">
                 <div className="h-2 w-10 bg-white/10 rounded mx-auto mb-3" />
-                <div className="h-6 w-14 bg-white/10 rounded mx-auto mb-2" />
+                <div className="h-5 w-14 bg-white/10 rounded mx-auto mb-2" />
                 <div className="h-2 w-12 bg-white/10 rounded mx-auto" />
               </div>
             ))}
@@ -297,7 +355,7 @@ export default function PrayerTimesV3({ prayerTimes }: PrayerTimesV3Props) {
 
         {/* View full schedule */}
         <motion.div
-          className="mt-6 flex justify-end"
+          className="mt-4 flex justify-end"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}

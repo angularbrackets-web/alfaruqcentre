@@ -16,7 +16,9 @@ import {
   Calendar,
   CalendarPlus,
   Users,
-  Settings
+  Settings,
+  Play,
+  PlayCircle
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -28,6 +30,8 @@ const navigation = [
   { name: 'Add Program', href: '/admin/programs/add', icon: Plus },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'Add Event', href: '/admin/events/add', icon: CalendarPlus },
+  { name: 'Videos', href: '/admin/videos', icon: Play },
+  { name: 'Add Video', href: '/admin/videos/add', icon: PlayCircle },
   { name: 'Volunteers', href: '/admin/volunteers', icon: Users },
   { name: 'Settings', href: '/admin/settings', icon: Settings },
 ];

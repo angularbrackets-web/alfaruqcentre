@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, memo, useMemo } from "react";
+import React, { useState, useEffect, useCallback, memo, useMemo, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { MapPin, Phone, Menu, X, Facebook, Instagram, Youtube } from "lucide-react";
@@ -100,14 +100,93 @@ function computeNextPrayer(slots: PrayerSlot[]): { name: string; secsLeft: numbe
   return { name: MAIN[0].name, secsLeft: Math.floor((fajrTomorrow.getTime() - now.getTime()) / 1000) };
 }
 
+// ─── Animated iqamah (strikethrough old → slide in new) ───────────────────────
+// Self-contained: tracks previous value internally so it animates automatically
+// whenever the iqamah string changes (today→tomorrow switch, or any API update).
+
+type IqamahPhase = "idle" | "striking" | "entering";
+
+const AnimatedIqamah = memo(function AnimatedIqamah({
+  current,
+  className,
+}: {
+  current: string | null;
+  className: string;
+}) {
+  const prevRef = React.useRef<string | null>(null);
+  const [phase, setPhase] = useState<IqamahPhase>("idle");
+  const [prevValue, setPrevValue] = useState<string | null>(null);
+
+  // useLayoutEffect so the phase change fires before the browser paints,
+  // preventing a single-frame flash of the new value before animation starts.
+  React.useLayoutEffect(() => {
+    if (!current) { prevRef.current = null; return; }
+    if (prevRef.current !== null && prevRef.current !== current) {
+      const old = prevRef.current;
+      prevRef.current = current;
+      setPrevValue(old);
+      setPhase("striking");
+      const t1 = setTimeout(() => setPhase("entering"), 800);
+      const t2 = setTimeout(() => setPhase("idle"), 1200);
+      return () => { clearTimeout(t1); clearTimeout(t2); };
+    }
+    prevRef.current = current;
+  }, [current]);
+
+  if (!current) return <p className="text-[#0A0A0A]/20 text-[14px] leading-tight">—</p>;
+
+  if (phase === "striking") {
+    return (
+      <div className="relative overflow-hidden" style={{ height: "1.4em" }}>
+        <motion.span
+          className={`${className} relative inline-flex items-center justify-center w-full`}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 0 }}
+          transition={{ delay: 0.48, duration: 0.28 }}
+        >
+          {prevValue ?? current}
+          <motion.span
+            className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-px bg-current"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.38, ease: "easeInOut" }}
+            style={{ transformOrigin: "left" }}
+          />
+        </motion.span>
+      </div>
+    );
+  }
+
+  if (phase === "entering") {
+    return (
+      <div className="relative overflow-hidden" style={{ height: "1.4em" }}>
+        <motion.p
+          className={`${className} absolute inset-x-0 text-center m-0`}
+          initial={{ y: "100%", opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          {current}
+        </motion.p>
+      </div>
+    );
+  }
+
+  return <p className={className}>{current}</p>;
+});
+
 // ─── Utility Bar ────────────────────────────────────────────────────────────────
 
 const UtilityBar = memo(function UtilityBar({
   prayerSlots,
   tomorrowSummary,
+  nextPrayerName,
+  showingTomorrow,
 }: {
   prayerSlots: PrayerSlot[];
   tomorrowSummary: string;
+  nextPrayerName: string;
+  showingTomorrow: boolean;
 }) {
   const MAIN_PRAYERS = prayerSlots.filter(
     (pt) => pt.name !== "Sunrise" && !pt.name.startsWith("Jummah")
@@ -122,59 +201,79 @@ const UtilityBar = memo(function UtilityBar({
 
         {/* ── Mobile layout ── */}
         <div className="lg:hidden">
+          {showingTomorrow && (
+            <div className="flex items-center gap-1.5 pt-1.5 pb-0.5">
+              <span className="text-[#C9A84C] text-[8px] font-black uppercase tracking-[0.2em] border border-[#C9A84C]/50 px-1.5 py-0.5 rounded-sm">
+                Tomorrow
+              </span>
+            </div>
+          )}
           <div className="py-2.5 overflow-x-auto hide-scrollbar -mx-1 px-1">
             <div className="flex divide-x divide-[#0A0A0A]/10 min-w-max">
-              {MAIN_PRAYERS.map((pt) => (
-                <div key={pt.name} className="px-3 first:pl-0 text-center">
-                  <p className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.15em] mb-0.5 whitespace-nowrap">
-                    {pt.name}
-                  </p>
-                  <p className="text-[#0A0A0A]/50 text-[12px] font-normal leading-tight whitespace-nowrap">
-                    {pt.adhan}
-                  </p>
-                  {pt.iqamah ? (
-                    <p className="text-[#0A0A0A] text-[12px] font-bold leading-tight whitespace-nowrap">
-                      {pt.iqamah}
-                    </p>
-                  ) : (
-                    <p className="text-[#0A0A0A]/20 text-[12px] leading-tight">—</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-[#0A0A0A]/[0.05] -mx-4 sm:-mx-6 px-4 sm:px-6 py-2.5">
-            <div className="overflow-x-auto hide-scrollbar -mx-1 px-1">
-              <div className="flex divide-x divide-[#0A0A0A]/10 min-w-max">
-                {SECONDARY.map((pt) => (
-                  <div key={pt.name} className="px-3 first:pl-0 text-center">
+              {MAIN_PRAYERS.map((pt) => {
+                const isNext = !showingTomorrow
+                  ? pt.name === nextPrayerName
+                  : pt.name === "Fajr";
+                return (
+                  <div
+                    key={pt.name}
+                    className={`px-3 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A] rounded-md py-0.5" : ""}`}
+                  >
+                    {isNext && (
+                      <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                      </span>
+                    )}
                     <p className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.15em] mb-0.5 whitespace-nowrap">
                       {pt.name}
                     </p>
-                    <p className="text-[#0A0A0A]/50 text-[12px] font-normal leading-tight whitespace-nowrap">
+                    <p className={`text-[12px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-white/50" : "text-[#0A0A0A]/50"}`}>
                       {pt.adhan}
                     </p>
-                    {pt.iqamah && (
-                      <p className="text-[#0A0A0A] text-[12px] font-bold leading-tight whitespace-nowrap">
-                        {pt.iqamah}
-                      </p>
-                    )}
+                    <AnimatedIqamah
+                      current={pt.iqamah}
+                      className={`text-[12px] font-bold leading-tight whitespace-nowrap ${isNext ? "text-white" : "text-[#0A0A0A]"}`}
+                    />
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
-            {tomorrowSummary && (
-              <div className="mt-2 pt-2 border-t border-[#0A0A0A]/10 flex items-center gap-2 flex-wrap">
-                <span className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0">
-                  Tomorrow
-                </span>
-                <span className="text-[#0A0A0A]/65 text-[11px] whitespace-nowrap">
-                  {tomorrowSummary}
-                </span>
-              </div>
-            )}
           </div>
+
+          {!showingTomorrow && (
+            <div className="bg-[#0A0A0A]/[0.05] -mx-4 sm:-mx-6 px-4 sm:px-6 py-2.5">
+              <div className="overflow-x-auto hide-scrollbar -mx-1 px-1">
+                <div className="flex divide-x divide-[#0A0A0A]/10 min-w-max">
+                  {SECONDARY.map((pt) => (
+                    <div key={pt.name} className="px-3 first:pl-0 text-center">
+                      <p className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.15em] mb-0.5 whitespace-nowrap">
+                        {pt.name}
+                      </p>
+                      <p className="text-[#0A0A0A]/50 text-[12px] font-normal leading-tight whitespace-nowrap">
+                        {pt.adhan}
+                      </p>
+                      {pt.iqamah && (
+                        <p className="text-[#0A0A0A] text-[12px] font-bold leading-tight whitespace-nowrap">
+                          {pt.iqamah}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {tomorrowSummary && (
+                <div className="mt-2 pt-2 border-t border-[#0A0A0A]/10 flex items-center gap-2 flex-wrap">
+                  <span className="text-[#C9A84C] text-[9px] font-black uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0 border border-[#C9A84C]/40 px-1.5 py-0.5 rounded-sm">
+                    Tomorrow
+                  </span>
+                  <span className="text-[#0A0A0A] text-[11px] font-semibold whitespace-nowrap">
+                    {tomorrowSummary}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* ── Desktop: prayer columns + contact + social ── */}
@@ -182,40 +281,62 @@ const UtilityBar = memo(function UtilityBar({
           <div className="flex items-stretch">
             {/* Regular prayers */}
             <div className="flex items-stretch divide-x divide-[#0A0A0A]/10">
-              {prayerSlots.filter((pt) => !pt.name.startsWith("Jummah")).map((pt) => (
-                <div key={pt.name} className="px-3.5 first:pl-0 text-center">
-                  <p className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] mb-1 whitespace-nowrap">
-                    {pt.name}
-                  </p>
-                  <p className="text-[#0A0A0A]/50 text-[14px] font-normal leading-tight whitespace-nowrap">
-                    {pt.adhan}
-                  </p>
-                  {pt.iqamah ? (
-                    <p className="text-[#0A0A0A] text-[14px] font-bold leading-tight whitespace-nowrap">
-                      {pt.iqamah}
-                    </p>
-                  ) : (
-                    <p className="text-[#0A0A0A]/20 text-[14px] leading-tight">—</p>
-                  )}
-                </div>
-              ))}
-            </div>
-
-            {/* Jummah separator + columns */}
-            <div className="flex items-stretch ml-1 pl-1 border-l-2 border-[#C9A84C]/40">
-              <div className="flex items-stretch divide-x divide-[#C9A84C]/20 bg-[#C9A84C]/[0.06] rounded-md overflow-hidden">
-                {prayerSlots.filter((pt) => pt.name.startsWith("Jummah")).map((pt) => (
-                  <div key={pt.name} className="px-3.5 text-center py-0.5">
+              {prayerSlots.filter((pt) => !pt.name.startsWith("Jummah")).map((pt) => {
+                const isNext = !showingTomorrow
+                  ? pt.name === nextPrayerName
+                  : pt.name === "Fajr";
+                return (
+                  <div
+                    key={pt.name}
+                    className={`px-3.5 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A] rounded-md py-0.5" : ""}`}
+                  >
+                    {isNext && (
+                      <span className="absolute top-1.5 right-1.5 flex h-1.5 w-1.5">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                      </span>
+                    )}
                     <p className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] mb-1 whitespace-nowrap">
                       {pt.name}
                     </p>
-                    <p className="text-[#C9A84C] text-[14px] font-bold leading-tight whitespace-nowrap">
+                    <p className={`text-[14px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-white/50" : "text-[#0A0A0A]/50"}`}>
                       {pt.adhan}
                     </p>
+                    <AnimatedIqamah
+                      current={pt.iqamah}
+                      className={`text-[14px] font-bold leading-tight whitespace-nowrap ${isNext ? "text-white" : "text-[#0A0A0A]"}`}
+                    />
                   </div>
-                ))}
-              </div>
+                );
+              })}
             </div>
+
+            {/* Jummah separator + columns — only shown when displaying today's times */}
+            {!showingTomorrow && prayerSlots.some((pt) => pt.name.startsWith("Jummah")) && (
+              <div className="flex items-stretch ml-1 pl-1 border-l-2 border-[#C9A84C]/40">
+                <div className="flex items-stretch divide-x divide-[#C9A84C]/20 bg-[#C9A84C]/[0.06] rounded-md overflow-hidden">
+                  {prayerSlots.filter((pt) => pt.name.startsWith("Jummah")).map((pt) => (
+                    <div key={pt.name} className="px-3.5 text-center py-0.5">
+                      <p className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] mb-1 whitespace-nowrap">
+                        {pt.name}
+                      </p>
+                      <p className="text-[#C9A84C] text-[14px] font-bold leading-tight whitespace-nowrap">
+                        {pt.adhan}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* "Tomorrow" badge — shown when displaying tomorrow's prayer times */}
+            {showingTomorrow && (
+              <div className="flex items-center ml-3">
+                <span className="text-[#C9A84C] text-[9px] font-black uppercase tracking-[0.2em] border border-[#C9A84C]/60 px-2 py-1 rounded-sm">
+                  Tomorrow
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Right: contact + social */}
@@ -261,16 +382,165 @@ const UtilityBar = memo(function UtilityBar({
   );
 });
 
+// ─── Flip Clock ────────────────────────────────────────────────────────────────
+
+const FlipDigit = memo(function FlipDigit({ digit }: { digit: string }) {
+  return (
+    <div
+      className="relative inline-flex items-center justify-center overflow-hidden rounded-[2px]"
+      style={{
+        width: "0.72em",
+        height: "1.3em",
+        backgroundColor: "#6B7280",
+        perspective: "300px",
+      }}
+    >
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={digit}
+          className="absolute inset-0 flex items-center justify-center font-[inherit] text-white"
+          initial={{ rotateX: -90, opacity: 0 }}
+          animate={{ rotateX: 0, opacity: 1 }}
+          exit={{ rotateX: 90, opacity: 0 }}
+          transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          {digit}
+        </motion.span>
+      </AnimatePresence>
+      {/* Center seam — mimics split-flap card joint */}
+      <div className="absolute inset-x-0 top-1/2 h-px bg-white/[0.12] z-10 pointer-events-none" />
+    </div>
+  );
+});
+
+function FlipClock({ timeStr, className }: { timeStr: string; className?: string }) {
+  return (
+    <span className={`inline-flex items-center gap-[1px] ${className ?? ""}`}>
+      {timeStr.split("").map((char, i) =>
+        char === ":" ? (
+          <span key={i} className="mx-[2px] font-bold opacity-40 select-none" style={{ lineHeight: 1 }}>
+            :
+          </span>
+        ) : (
+          <FlipDigit key={i} digit={char} />
+        )
+      )}
+    </span>
+  );
+}
+
+// ─── Tomorrow Change Ticker (cycles one change at a time, 5 s each) ─────────────
+
+type ChangeItem = { label: string; todayTime: string; tomorrowTime: string };
+
+function TomorrowChangeTicker({ changes }: { changes: ChangeItem[] }) {
+  const items = changes.filter((c) => c.todayTime !== c.tomorrowTime);
+  const [idx, setIdx] = useState(0);
+  const [strikeDrawn, setStrikeDrawn] = useState(false);
+
+  // Advance every 5 s when there are multiple changes
+  useEffect(() => {
+    if (items.length <= 1) return;
+    const t = setInterval(() => setIdx((prev) => (prev + 1) % items.length), 5000);
+    return () => clearInterval(t);
+  }, [items.length]);
+
+  // Re-play strike animation fresh on each new item
+  useEffect(() => {
+    setStrikeDrawn(false);
+    const t = setTimeout(() => setStrikeDrawn(true), 600);
+    return () => clearTimeout(t);
+  }, [idx]);
+
+  if (items.length === 0) return null;
+  const current = items[idx % items.length];
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <span className="text-[#C9A84C] text-[9px] font-black uppercase tracking-[0.2em] border border-[#C9A84C]/50 px-2 py-0.5 rounded-sm">
+        Tomorrow
+      </span>
+
+      {/* Single row — cycles through items with crossfade */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={idx}
+          className="flex items-center gap-1.5"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {/* Prayer label */}
+          <span className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.12em] flex-shrink-0">
+            {current.label}
+          </span>
+          {/* Today — dimmed, struck */}
+          <div className="relative inline-block">
+            <span className="text-[11px] font-semibold whitespace-nowrap text-[#0A0A0A]/35">
+              {current.todayTime}
+            </span>
+            <motion.span
+              className="absolute inset-x-0 top-[50%] h-px bg-[#0A0A0A]/35"
+              style={{ transformOrigin: "left" }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: strikeDrawn ? 1 : 0 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+            />
+          </div>
+          {/* Arrow */}
+          <motion.span
+            className="text-[#0A0A0A]/25 text-[8px] select-none"
+            animate={{ opacity: strikeDrawn ? 1 : 0 }}
+            transition={{ duration: 0.15, delay: strikeDrawn ? 0.22 : 0 }}
+          >
+            →
+          </motion.span>
+          {/* Tomorrow — bold */}
+          <motion.span
+            className="text-[12px] font-bold whitespace-nowrap text-[#0A0A0A]"
+            animate={{ opacity: strikeDrawn ? 1 : 0 }}
+            transition={{ duration: 0.22, delay: strikeDrawn ? 0.4 : 0 }}
+          >
+            {current.tomorrowTime}
+          </motion.span>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Progress dots — only when >1 change */}
+      {items.length > 1 && (
+        <div className="flex gap-1">
+          {items.map((_, i) => (
+            <div
+              key={i}
+              className={`w-1 h-1 rounded-full transition-colors duration-500 ${
+                i === idx % items.length ? "bg-[#C9A84C]" : "bg-[#0A0A0A]/15"
+              }`}
+            />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── Countdown Bar ─────────────────────────────────────────────────────────────
 
 const CountdownBar = memo(function CountdownBar({
   nextName,
   secsLeft,
-  tomorrowSummary,
+  todayFajr,
+  todayMaghrib,
+  tomorrowFajr,
+  tomorrowMaghrib,
 }: {
   nextName: string;
   secsLeft: number;
-  tomorrowSummary: string;
+  todayFajr?: string;
+  todayMaghrib?: string;
+  tomorrowFajr?: string;
+  tomorrowMaghrib?: string;
 }) {
   const [dateInfo, setDateInfo] = useState<{ gregorian: string; hijri: string } | null>(null);
 
@@ -282,9 +552,10 @@ const CountdownBar = memo(function CountdownBar({
   const hours = Math.floor(secsLeft / 3600);
   const mins = Math.floor((secsLeft % 3600) / 60);
   const secs = secsLeft % 60;
-  const timeStr = hours > 0
-    ? `${hours}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`
-    : `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+  // Always HH:MM:SS so digit positions stay stable as time changes
+  const timeStr = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+
+  const hasTomorrow = !!(tomorrowFajr || tomorrowMaghrib);
 
   return (
     <div className="bg-white border-t border-b border-black/10 w-full">
@@ -320,12 +591,10 @@ const CountdownBar = memo(function CountdownBar({
             {secsLeft > 0 && (
               <>
                 <span className="text-black/20 select-none leading-none">·</span>
-                <span
-                  className="text-[#0A0A0A] text-[15px] lg:text-[17px] font-bold whitespace-nowrap"
-                  style={{ fontVariantNumeric: "tabular-nums" }}
-                >
-                  {timeStr}
-                </span>
+                <FlipClock
+                  timeStr={timeStr}
+                  className="text-[#0A0A0A] text-[15px] lg:text-[17px] font-bold"
+                />
               </>
             )}
           </div>
@@ -342,21 +611,15 @@ const CountdownBar = memo(function CountdownBar({
             </div>
           )}
 
-          {/* Right — tomorrow's key times */}
-          {tomorrowSummary && (
-            <div className="hidden md:flex items-center gap-2 flex-shrink-0">
-              <motion.span
-                className="text-[#0A0A0A]/65 text-[13px] font-extrabold uppercase tracking-[0.2em] whitespace-nowrap"
-                animate={{ rotateY: [0, 360] }}
-                transition={{ duration: 0.6, repeat: Infinity, repeatDelay: 1.4, ease: "easeInOut" }}
-                style={{ display: "inline-block" }}
-              >
-                Tomorrow
-              </motion.span>
-              <span className="text-black/20 select-none">·</span>
-              <span className="text-black/55 text-[12px] whitespace-nowrap">
-                {tomorrowSummary}
-              </span>
+          {/* Right — tomorrow changes ticker */}
+          {hasTomorrow && (
+            <div className="hidden md:block flex-shrink-0">
+              <TomorrowChangeTicker
+                changes={[
+                  { label: "Fajr",    todayTime: todayFajr    ?? "", tomorrowTime: tomorrowFajr    ?? "" },
+                  { label: "Maghrib", todayTime: todayMaghrib ?? "", tomorrowTime: tomorrowMaghrib ?? "" },
+                ].filter((c) => c.todayTime && c.tomorrowTime)}
+              />
             </div>
           )}
 
@@ -428,9 +691,11 @@ export default function NavbarV3() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [dailySlots, setDailySlots] = useState<PrayerSlot[]>([]);
+  const [tomorrowSlots, setTomorrowSlots] = useState<PrayerSlot[]>([]);
   const [nextPrayer, setNextPrayer] = useState<{ name: string; secsLeft: number }>({ name: "", secsLeft: 0 });
   const [tomorrowSummary, setTomorrowSummary] = useState("");
   const [showCountdown, setShowCountdown] = useState(true);
+  const lastFetchDateRef = React.useRef<string>("");
 
   useEffect(() => {
     fetch("/api/settings")
@@ -446,6 +711,17 @@ export default function NavbarV3() {
     ...dailySlots,
     ...jummahTimes.map((j) => ({ name: j.name, adhan: j.time, iqamah: null })),
   ], [dailySlots, jummahTimes]);
+
+  // True once all of today's iqamah times have passed — updated in real time via the 1s ticker
+  const [isAfterIshaToday, setIsAfterIshaToday] = useState(false);
+
+  // Which slots to show in the utility bar — tomorrow's if we're past today's Isha
+  const utilitySlots = useMemo<PrayerSlot[]>(() =>
+    isAfterIshaToday && tomorrowSlots.length > 0
+      ? tomorrowSlots
+      : prayerSlots,
+    [isAfterIshaToday, tomorrowSlots, prayerSlots]
+  );
 
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 40);
@@ -463,7 +739,7 @@ export default function NavbarV3() {
   }, [mobileOpen]);
 
   // Fetch today's + tomorrow's prayer times from the API
-  useEffect(() => {
+  const fetchPrayerTimes = useCallback(() => {
     fetch("/api/prayerTimes")
       .then((r) => r.json())
       .then(
@@ -476,6 +752,8 @@ export default function NavbarV3() {
           isha: { azzan: string; iqamah: string };
         }>) => {
           const now = new Date();
+          lastFetchDateRef.current = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+
           const today = data.find(
             (t) =>
               t.date  === String(now.getDate()) &&
@@ -493,29 +771,60 @@ export default function NavbarV3() {
             ]);
           }
 
-          const tomorrow = new Date();
-          tomorrow.setDate(tomorrow.getDate() + 1);
+          const tomorrowDate = new Date(now);
+          tomorrowDate.setDate(tomorrowDate.getDate() + 1);
           const tom = data.find(
             (t) =>
-              t.date  === String(tomorrow.getDate()) &&
-              t.month === String(tomorrow.getMonth() + 1) &&
-              t.year  === String(tomorrow.getFullYear())
+              t.date  === String(tomorrowDate.getDate()) &&
+              t.month === String(tomorrowDate.getMonth() + 1) &&
+              t.year  === String(tomorrowDate.getFullYear())
           );
           if (tom) {
             setTomorrowSummary(`Fajr ${tom.fajr.azzan} · Maghrib ${tom.maghrib.azzan}`);
+            setTomorrowSlots([
+              { name: "Fajr",    adhan: tom.fajr.azzan,    iqamah: tom.fajr.iqamah    },
+              { name: "Sunrise", adhan: tom.fajr.sunrise ?? "—", iqamah: null          },
+              { name: "Dhuhr",   adhan: tom.zuhr.azzan,    iqamah: tom.zuhr.iqamah    },
+              { name: "Asr",     adhan: tom.asr.azzan,     iqamah: tom.asr.iqamah     },
+              { name: "Maghrib", adhan: tom.maghrib.azzan, iqamah: tom.maghrib.iqamah },
+              { name: "Isha",    adhan: tom.isha.azzan,    iqamah: tom.isha.iqamah    },
+            ]);
           }
         }
       )
       .catch(() => {});
   }, []);
 
-  // Countdown ticker — re-runs whenever prayerSlots changes
+  useEffect(() => {
+    fetchPrayerTimes();
+  }, [fetchPrayerTimes]);
+
+  // Auto-refresh at midnight: check every minute if the date has changed
+  useEffect(() => {
+    const id = setInterval(() => {
+      const now = new Date();
+      const todayKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+      if (lastFetchDateRef.current && lastFetchDateRef.current !== todayKey) {
+        fetchPrayerTimes();
+      }
+    }, 60_000);
+    return () => clearInterval(id);
+  }, [fetchPrayerTimes]);
+
+  // Countdown ticker — re-runs whenever prayerSlots / dailySlots change
   useEffect(() => {
     if (prayerSlots.length === 0) return;
-    setNextPrayer(computeNextPrayer(prayerSlots));
-    const id = setInterval(() => setNextPrayer(computeNextPrayer(prayerSlots)), 1000);
+    const tick = () => {
+      setNextPrayer(computeNextPrayer(prayerSlots));
+      // Recompute isAfterIshaToday in real time (useMemo alone won't re-run on time changes)
+      const MAIN = dailySlots.filter((s) => s.iqamah && s.name !== "Sunrise");
+      const now = new Date();
+      setIsAfterIshaToday(MAIN.length > 0 && MAIN.every((s) => now >= parseTime(s.iqamah!)));
+    };
+    tick();
+    const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [prayerSlots]);
+  }, [prayerSlots, dailySlots]);
 
   const closeMobile = useCallback(() => setMobileOpen(false), []);
 
@@ -527,14 +836,22 @@ export default function NavbarV3() {
         }`}
       >
         {/* 1. Utility bar — prayer times */}
-        <UtilityBar prayerSlots={prayerSlots} tomorrowSummary={tomorrowSummary} />
+        <UtilityBar
+          prayerSlots={utilitySlots}
+          tomorrowSummary={tomorrowSummary}
+          nextPrayerName={nextPrayer.name}
+          showingTomorrow={isAfterIshaToday && tomorrowSlots.length > 0}
+        />
 
         {/* 2. Countdown bar (admin-toggleable) */}
         {showCountdown && (
           <CountdownBar
             nextName={nextPrayer.name}
             secsLeft={nextPrayer.secsLeft}
-            tomorrowSummary={tomorrowSummary}
+            todayFajr={dailySlots.find((s) => s.name === "Fajr")?.adhan}
+            todayMaghrib={dailySlots.find((s) => s.name === "Maghrib")?.adhan}
+            tomorrowFajr={tomorrowSlots.find((s) => s.name === "Fajr")?.adhan}
+            tomorrowMaghrib={tomorrowSlots.find((s) => s.name === "Maghrib")?.adhan}
           />
         )}
 

@@ -24,6 +24,15 @@ const FALLBACK_QUOTES: DonationQuote[] = [
   },
 ];
 
+/** Scale font size so longer quotes don't overflow the bar height */
+function getQuoteFontSize(text: string): number {
+  const len = text.length;
+  if (len < 100) return 15;
+  if (len < 180) return 13;
+  if (len < 270) return 12;
+  return 11;
+}
+
 export default function QuoteTickerStrip() {
   const [quotes, setQuotes] = useState<DonationQuote[]>(FALLBACK_QUOTES);
   const [index, setIndex] = useState(0);
@@ -47,32 +56,44 @@ export default function QuoteTickerStrip() {
   }, [quotes.length]);
 
   const current = quotes[index];
+  const fontSize = getQuoteFontSize(current.translation);
 
   return (
-    <div className="hidden md:block bg-white overflow-hidden">
+    /**
+     * layout="size" animates the height smoothly when a longer/shorter quote
+     * causes the container to expand or shrink — no jarring height jump.
+     */
+    <motion.div
+      layout="size"
+      className="hidden md:block bg-white overflow-hidden"
+      transition={{ duration: 0.32, ease: "easeInOut" }}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center gap-3 sm:gap-4 py-2 min-h-[44px]">
+        <div className="flex items-start gap-3 sm:gap-4 py-2.5 min-h-[44px]">
 
-          {/* Label pill */}
-          <span className="flex-shrink-0 text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.2em] whitespace-nowrap border border-[#C9A84C]/50 px-2 py-1 rounded-sm">
+          {/* Label pill — top-aligned so it doesn't shift when text wraps */}
+          <span className="flex-shrink-0 text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.2em] whitespace-nowrap border border-[#C9A84C]/50 px-2 py-1 rounded-sm mt-0.5">
             {current.type === "quran" ? "Quran" : "Hadith"}
           </span>
 
-          {/* Rotating quote */}
-          <div className="flex-1 min-w-0 overflow-hidden">
+          {/* Rotating quote — full text, no truncation */}
+          <div className="flex-1 min-w-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={index}
-                className="flex items-baseline gap-2 sm:gap-3 flex-wrap sm:flex-nowrap"
+                className="flex items-baseline gap-2 sm:gap-3 flex-wrap"
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                transition={{ duration: 0.38, ease: "easeOut" }}
               >
-                <p className="text-[#1E5BB4] text-[15px] sm:text-[16px] font-semibold leading-snug flex-1 min-w-0">
+                <p
+                  className="text-[#1E5BB4] font-semibold leading-snug flex-1 min-w-0"
+                  style={{ fontSize }}
+                >
                   &ldquo;{current.translation}&rdquo;
                 </p>
-                <span className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0">
+                <span className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0 self-end">
                   {current.reference}
                 </span>
               </motion.div>
@@ -81,7 +102,7 @@ export default function QuoteTickerStrip() {
 
           {/* Dot indicators */}
           {quotes.length > 1 && (
-            <div className="flex items-center gap-1.5 flex-shrink-0">
+            <div className="flex items-center gap-1.5 flex-shrink-0 mt-1.5">
               {quotes.map((_, i) => (
                 <button
                   key={i}
@@ -99,6 +120,6 @@ export default function QuoteTickerStrip() {
 
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

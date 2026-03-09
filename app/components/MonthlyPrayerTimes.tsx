@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Sun } from "lucide-react";
 import { prayerTimesData } from "../data/prayerTimes";
 import { useJummahTimes } from "../hooks/useJummahTimes";
+import { useHeaderHeight } from "../hooks/useHeaderHeight";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -110,6 +111,7 @@ function CrescentIllustration() {
 
 export default function MonthlyPrayerTimes() {
   const jummahTimes = useJummahTimes();
+  const headerHeight = useHeaderHeight();
   const [monthData, setMonthData]     = useState<DayPrayerTimes[]>([]);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [next, setNext]               = useState<{ name: string; time: string; secsLeft: number }>({ name: "—", time: "", secsLeft: 0 });
@@ -171,7 +173,7 @@ export default function MonthlyPrayerTimes() {
   return (
     <>
       {/* ── Hero: dark ─────────────────────────────────────────────────────── */}
-      <section className="bg-[#0A0A0A] pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-16 md:pb-24 overflow-hidden relative">
+      <section className="bg-[#0A0A0A] pb-16 md:pb-24 overflow-hidden relative" style={{ paddingTop: headerHeight || 160 }}>
         <div className="absolute -right-24 -top-10 w-[500px] h-[500px] pointer-events-none select-none">
           <CrescentIllustration />
         </div>

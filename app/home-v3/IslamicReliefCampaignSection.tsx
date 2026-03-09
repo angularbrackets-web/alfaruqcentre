@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Heart, TrendingUp, Target } from "lucide-react";
-import { useCampaignStats } from "@/app/hooks/useCampaignStats";
 
 // ─── Static campaign config ───────────────────────────────────────────────────
 const CAMPAIGN_URL = "https://fundraise.islamicreliefcanada.org/en_US/campaign/support-sahaba-and-al-faruq-mosque-3952#attr=";
@@ -45,6 +44,9 @@ const fmt = (n: number) =>
     maximumFractionDigits: 0,
   }).format(n);
 
+// Per-index accent colours: 0=green (donations), 1=dark-gold (% of goal), 2=green (last hour)
+const TILE_COLORS = ["#155E3E", "#9E7A0E", "#155E3E"] as const;
+
 // Tile that pulses every 2s, staggered by index
 function StatTile({
   icon: Icon,
@@ -59,9 +61,10 @@ function StatTile({
   index: number;
   size?: "base" | "sm";
 }) {
+  const color = TILE_COLORS[index % TILE_COLORS.length];
   return (
     <motion.div
-      className="bg-white rounded-lg px-3 py-2"
+      className="rounded-lg px-3 py-2 border border-[#0A0A0A]/10"
       animate={{ scale: [1, 1.04, 1] }}
       transition={{
         duration: 0.45,
@@ -72,15 +75,51 @@ function StatTile({
       }}
     >
       <div className="flex items-center gap-1 mb-0.5">
-        <Icon size={size === "sm" ? 8 : 9} strokeWidth={2} className="text-[#C9A84C] flex-shrink-0" />
+        <Icon size={size === "sm" ? 8 : 9} strokeWidth={2} style={{ color }} className="flex-shrink-0" />
         <span className={`font-semibold text-[#0A0A0A]/40 uppercase tracking-[0.08em] ${size === "sm" ? "text-[8px]" : "text-[9px]"}`}>
           {label}
         </span>
       </div>
-      <p className={`font-black text-[#0A0A0A] leading-none ${size === "sm" ? "text-[15px]" : "text-lg"}`}>
+      <p className={`font-black leading-none ${size === "sm" ? "text-[15px]" : "text-lg"}`} style={{ color }}>
         {value}
       </p>
     </motion.div>
+  );
+}
+
+// ─── Animated gradient progress bar ──────────────────────────────────────────
+
+function ProgressBar({ pct, delay = 0.4, height = "h-2" }: { pct: number; delay?: number; height?: string }) {
+  return (
+    <div className={`${height} bg-[#0A0A0A]/8 rounded-full overflow-hidden`}>
+      <motion.div
+        className="h-full rounded-full relative overflow-hidden"
+        style={{
+          background: "linear-gradient(90deg, #155E3E 0%, #1F8A57 45%, #C9A84C 100%)",
+        }}
+        initial={{ width: 0 }}
+        animate={{ width: `${pct}%` }}
+        transition={{ duration: 1.4, ease: [0.25, 0.1, 0.25, 1], delay }}
+      >
+        {/* Shimmer sweep — starts after bar finishes animating */}
+        <motion.div
+          className="absolute inset-y-0"
+          style={{
+            width: "45%",
+            background:
+              "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.45) 50%, transparent 100%)",
+          }}
+          animate={{ left: ["-45%", "145%"] }}
+          transition={{
+            duration: 1.4,
+            ease: "easeInOut",
+            repeat: Infinity,
+            repeatDelay: 3,
+            delay: delay + 1.6,
+          }}
+        />
+      </motion.div>
+    </div>
   );
 }
 
@@ -118,20 +157,13 @@ function CompactCampaignBar({
         {/* Progress info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-black text-[#0A0A0A] text-sm whitespace-nowrap">{fmt(raised)}</span>
+            <span className="font-black text-[#155E3E] text-sm whitespace-nowrap">{fmt(raised)}</span>
             <span className="text-[#0A0A0A]/40 text-[11px] whitespace-nowrap hidden sm:inline">
               of {fmt(CAMPAIGN_GOAL)} · {donations} donations
             </span>
             <span className="text-[#C9A84C] text-[10px] font-bold whitespace-nowrap">{pct.toFixed(0)}%</span>
           </div>
-          <div className="h-1 bg-[#0A0A0A]/10 rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-[#0A0A0A] rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${pct}%` }}
-              transition={{ duration: 1.1, ease: "easeOut", delay: 0.3 }}
-            />
-          </div>
+          <ProgressBar pct={pct} delay={0.3} height="h-1.5" />
         </div>
         {/* CTA */}
         <a
@@ -189,12 +221,12 @@ function MediumCampaignSection({
         </div>
         <div className="bg-[#F5F3EE] rounded-lg px-3 py-2.5">
           <div className="flex items-baseline gap-2 mb-1.5">
-            <span className="font-black text-[#0A0A0A] text-xl leading-none">{fmt(raised)}</span>
+            <span className="font-black text-[#155E3E] text-xl leading-none">{fmt(raised)}</span>
             <span className="text-[#0A0A0A]/45 text-[11px] font-medium">of {fmt(CAMPAIGN_GOAL)}</span>
             <span className="text-[#C9A84C] text-[10px] font-bold ml-auto">{pct}%</span>
           </div>
-          <div className="h-1 bg-[#0A0A0A]/10 rounded-full overflow-hidden mb-2">
-            <motion.div className="h-full bg-[#0A0A0A] rounded-full" initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }} />
+          <div className="mb-2">
+            <ProgressBar pct={Number(pct)} delay={0.4} height="h-1.5" />
           </div>
           <div className="grid grid-cols-3 gap-1.5">
             <StatTile icon={Heart} label="Donations" value={donations} index={0} size="sm" />
@@ -227,12 +259,12 @@ function MediumCampaignSection({
           </motion.div>
           <motion.div className="bg-[#F5F3EE] rounded-xl px-4 py-3" initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.55, ease: "easeOut", delay: 0.12 }}>
             <div className="flex items-baseline gap-2 mb-1.5">
-              <span className="font-black text-[#0A0A0A]" style={{ fontSize: "clamp(18px, 2vw, 24px)", letterSpacing: "-0.02em" }}>{fmt(raised)}</span>
+              <span className="font-black text-[#155E3E]" style={{ fontSize: "clamp(18px, 2vw, 24px)", letterSpacing: "-0.02em" }}>{fmt(raised)}</span>
               <span className="text-[#0A0A0A]/40 text-[11px]">raised of <span className="text-[#0A0A0A]/60 font-semibold">{fmt(CAMPAIGN_GOAL)}</span></span>
               <span className="text-[#C9A84C] text-[10px] font-bold ml-auto">{pct}%</span>
             </div>
-            <div className="h-1 bg-[#0A0A0A]/10 rounded-full mb-2.5 overflow-hidden">
-              <motion.div className="h-full bg-[#0A0A0A] rounded-full" initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 1.3, ease: "easeOut", delay: 0.4 }} />
+            <div className="mb-2.5">
+              <ProgressBar pct={Number(pct)} delay={0.4} height="h-1.5" />
             </div>
             <div className="grid grid-cols-3 gap-2">
               <StatTile icon={Heart} label="Donations" value={donations} index={0} size="sm" />
@@ -251,17 +283,30 @@ function MediumCampaignSection({
 
 export default function IslamicReliefCampaignSection() {
   const [navHeight, setNavHeight] = useState(0);
-  const { raised, donations, donationsLastHour } = useCampaignStats();
-  const [displayMode, setDisplayMode] = useState<"default" | "compact" | "medium">("default");
+  const [displayMode, setDisplayMode] = useState<"default" | "compact" | "medium" | null>(null);
+  const [raised, setRaised] = useState(0);
+  const [donations, setDonations] = useState(0);
+  const [donationsLastHour, setDonationsLastHour] = useState(0);
 
+  // Single fetch for both display mode and stats — prevents flash of default/hardcoded values
   useEffect(() => {
-    fetch("/api/settings")
-      .then((r) => r.json())
-      .then((data: Record<string, string>) => {
-        if (data.campaignDisplayMode === "compact") setDisplayMode("compact");
-        else if (data.campaignDisplayMode === "medium") setDisplayMode("medium");
-      })
-      .catch(() => {});
+    function loadSettings() {
+      fetch("/api/settings")
+        .then((r) => r.json())
+        .then((data: Record<string, string>) => {
+          const mode =
+            data.campaignDisplayMode === "compact" ? "compact" :
+            data.campaignDisplayMode === "medium"  ? "medium"  : "default";
+          setDisplayMode(mode);
+          setRaised(data.campaign_raised ? Number(data.campaign_raised) : 0);
+          setDonations(data.campaign_donations ? Number(data.campaign_donations) : 0);
+          setDonationsLastHour(data.campaign_donations_last_hour ? Number(data.campaign_donations_last_hour) : 0);
+        })
+        .catch(() => { setDisplayMode("default"); });
+    }
+    loadSettings();
+    const id = setInterval(loadSettings, 60_000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -274,17 +319,55 @@ export default function IslamicReliefCampaignSection() {
     return () => ro.disconnect();
   }, []);
 
+  // Loading: show compact-shaped skeleton to reserve space and avoid layout pop
+  if (displayMode === null) {
+    return (
+      <div className="bg-white" style={{ paddingTop: navHeight || 0 }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center gap-4 h-[42px]">
+            {/* IRC logo */}
+            <div className="h-6 w-[88px] flex-shrink-0 rounded bg-[#0A0A0A]/6 animate-pulse" />
+            {/* Badge */}
+            <div className="h-4 w-14 flex-shrink-0 rounded bg-[#C9A84C]/20 animate-pulse" />
+            {/* Progress area */}
+            <div className="flex-1 space-y-2">
+              <div className="flex items-center gap-2">
+                <div className="h-3 w-20 rounded bg-[#0A0A0A]/8 animate-pulse" />
+                <div className="h-2.5 w-28 rounded bg-[#0A0A0A]/5 animate-pulse hidden sm:block" />
+              </div>
+              <div className="h-1 w-full rounded-full bg-[#0A0A0A]/6 animate-pulse" />
+            </div>
+            {/* CTA */}
+            <div className="h-7 w-20 flex-shrink-0 rounded-full bg-[#0A0A0A]/8 animate-pulse" />
+          </div>
+        </div>
+        <div className="h-px bg-gradient-to-r from-transparent via-[#0A0A0A]/8 to-transparent" />
+      </div>
+    );
+  }
+
   if (displayMode === "compact") {
-    return <CompactCampaignBar navHeight={navHeight} raised={raised} donations={donations} />;
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
+        <CompactCampaignBar navHeight={navHeight} raised={raised} donations={donations} />
+      </motion.div>
+    );
   }
   if (displayMode === "medium") {
-    return <MediumCampaignSection navHeight={navHeight} raised={raised} donations={donations} donationsLastHour={donationsLastHour} />;
+    return (
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
+        <MediumCampaignSection navHeight={navHeight} raised={raised} donations={donations} donationsLastHour={donationsLastHour} />
+      </motion.div>
+    );
   }
 
   const pct = ((raised / CAMPAIGN_GOAL) * 100).toFixed(1);
 
   return (
-    <section
+    <motion.section
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       className="bg-white relative overflow-hidden"
       style={{ paddingTop: navHeight || 0 }}
     >
@@ -345,20 +428,15 @@ export default function IslamicReliefCampaignSection() {
 
           {/* Raised amount — prominent */}
           <div className="mb-1.5">
-            <span className="font-black text-[#0A0A0A] text-2xl leading-none">{fmt(raised)}</span>
+            <span className="font-black text-[#155E3E] text-2xl leading-none">{fmt(raised)}</span>
             <span className="text-[#0A0A0A]/45 text-[11px] font-medium ml-1.5">
               raised of <span className="text-[#0A0A0A]/65 font-semibold">{fmt(CAMPAIGN_GOAL)}</span>
             </span>
           </div>
 
           {/* Progress bar */}
-          <div className="h-1 bg-[#0A0A0A]/10 rounded-full overflow-hidden mb-2.5">
-            <motion.div
-              className="h-full bg-[#0A0A0A] rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${pct}%` }}
-              transition={{ duration: 1.2, ease: "easeOut", delay: 0.4 }}
-            />
+          <div className="mb-2.5">
+            <ProgressBar pct={Number(pct)} delay={0.4} height="h-2" />
           </div>
 
           {/* Stat tiles */}
@@ -442,7 +520,7 @@ export default function IslamicReliefCampaignSection() {
 
               <div className="mb-1.5">
                 <span
-                  className="font-black text-[#0A0A0A]"
+                  className="font-black text-[#155E3E]"
                   style={{ fontSize: "clamp(20px, 2.4vw, 28px)", letterSpacing: "-0.02em" }}
                 >
                   {fmt(raised)}
@@ -453,13 +531,8 @@ export default function IslamicReliefCampaignSection() {
                 </span>
               </div>
 
-              <div className="h-1 bg-[#0A0A0A]/10 rounded-full mb-2.5 overflow-hidden">
-                <motion.div
-                  className="h-full bg-[#0A0A0A] rounded-full"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${pct}%` }}
-                  transition={{ duration: 1.4, ease: "easeOut", delay: 0.5 }}
-                />
+              <div className="mb-2.5">
+                <ProgressBar pct={Number(pct)} delay={0.5} height="h-2" />
               </div>
 
               <div className="grid grid-cols-3 gap-2">
@@ -489,6 +562,6 @@ export default function IslamicReliefCampaignSection() {
       </div>
 
       <div className="h-px bg-gradient-to-r from-transparent via-[#0A0A0A]/8 to-transparent" />
-    </section>
+    </motion.section>
   );
 }

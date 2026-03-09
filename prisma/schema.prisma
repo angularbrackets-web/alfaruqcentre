@@ -84,6 +84,20 @@ model Volunteer {
   @@map("volunteers")
 }
 
+model VideoPost {
+  id           String   @id
+  title        String
+  description  String?
+  facebookUrl  String
+  isFeatured   Boolean  @default(false)
+  displayOrder Int      @default(0)
+  status       Status   @default(ACTIVE)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("video_posts")
+}
+
 enum Status {
   ACTIVE
   INACTIVE

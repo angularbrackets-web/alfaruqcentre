@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { FC, useState } from "react";
+import { useHeaderHeight } from "../hooks/useHeaderHeight";
 
 const weekendSchoolUrl = "/AlFaruqWeekendSchool.mp4";
 
@@ -64,6 +65,7 @@ const faqs = [
 ];
 
 const WeekendSchool: FC = () => {
+  const headerHeight = useHeaderHeight();
   const [open, setOpen] = useState<Record<string, boolean>>({
     arabic: true,
     quran: false,
@@ -76,7 +78,7 @@ const WeekendSchool: FC = () => {
   return (
     <div className="min-h-screen">
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="pt-[260px] sm:pt-[220px] lg:pt-[160px] pb-20 bg-[#0A0A0A] text-white">
+      <section className="pb-20 bg-[#0A0A0A] text-white" style={{ paddingTop: headerHeight || 160 }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>

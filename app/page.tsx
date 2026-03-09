@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import IslamicReliefCampaignSection from "./home-v3/IslamicReliefCampaignSection";
-import FundraiserBanner from "./home-v3/FundraiserBanner";
+import TopFundraisingSection from "./home-v3/TopFundraisingSection";
 import MobileStickyBar from "./home-v2/MobileStickyBar";
 import HeroV3 from "./home-v3/HeroV3";
 import MissionQuoteBlock from "./home-v3/MissionQuoteBlock";
@@ -12,6 +12,7 @@ import SchoolFeatureSection from "./home-v3/SchoolFeatureSection";
 import DonationCTAV3 from "./home-v3/DonationCTAV3";
 import ProgramsCarousel from "./home-v3/ProgramsCarousel";
 import EventsCarousel from "./home-v3/EventsCarousel";
+import VideosSection from "./home-v3/VideosSection";
 
 interface PrayerTime {
   azzan: string;
@@ -65,8 +66,8 @@ function getNextPrayerInfo(
 }
 
 export default function Home() {
-  const [bannerDismissed, setBannerDismissed] = useState(false);
   const [prayerTimes, setPrayerTimes] = useState<DayPrayerTimes | null>(null);
+  const [tomorrowPrayerTimes, setTomorrowPrayerTimes] = useState<DayPrayerTimes | null>(null);
   const [nextPrayer, setNextPrayer] = useState<{ name: string; time: string; minutesUntil: number }>(
     { name: "Loading", time: "", minutesUntil: 0 }
   );
@@ -86,6 +87,15 @@ export default function Home() {
           setPrayerTimes(today);
           setNextPrayer(getNextPrayerInfo(today));
         }
+        const tomorrowDate = new Date(now);
+        tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+        const tomorrow = data.find(
+          (t) =>
+            t.date === String(tomorrowDate.getDate()) &&
+            t.month === String(tomorrowDate.getMonth() + 1) &&
+            t.year === String(tomorrowDate.getFullYear())
+        );
+        if (tomorrow) setTomorrowPrayerTimes(tomorrow);
       })
       .catch(() => {});
   }, []);
@@ -104,11 +114,7 @@ export default function Home() {
       ─────────────────────────────────────────────────────────────────────── */}
       <IslamicReliefCampaignSection />
 
-      {/* ── FUNDRAISER BANNER (temporary) ──────────────────────────────────────
-          When the fundraiser ends: remove <FundraiserBanner />.
-          Update assets in FundraiserBanner.tsx CONFIG block before reusing.
-      ─────────────────────────────────────────────────────────────────────── */}
-      <FundraiserBanner dismissed={bannerDismissed} onDismiss={() => setBannerDismissed(true)} />
+      <TopFundraisingSection />
 
       <HeroV3
         nextPrayerName={nextPrayer.name}
@@ -118,9 +124,10 @@ export default function Home() {
 
       <ProgramsCarousel />
       <EventsCarousel />
+      <VideosSection />
       <MissionQuoteBlock />
       <GetConnectedSection />
-      <PrayerTimesV3 prayerTimes={prayerTimes} />
+      <PrayerTimesV3 prayerTimes={prayerTimes} tomorrowPrayerTimes={tomorrowPrayerTimes} />
       <SchoolFeatureSection />
       <DonationCTAV3 />
 

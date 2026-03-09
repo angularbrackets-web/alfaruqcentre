@@ -1,9 +1,21 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link2, TrendingUp, Clock, QrCode, ExternalLink, BookOpen, Plus, Trash2, Eye, LayoutList } from 'lucide-react';
+import { Link2, TrendingUp, Clock, QrCode, ExternalLink, BookOpen, Plus, Trash2, Eye, LayoutList, Play, ArrowUp, ArrowDown } from 'lucide-react';
 
-// ── Types ──────────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
+
+interface FeaturedVideo {
+  id: string;
+  src: string;
+  heading?: string;
+  subheading?: string;
+  description?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+// ── Donation quote type (kept local) ─────────────────────────────────────────
 
 interface DonationQuote {
   type: 'quran' | 'hadith';
@@ -772,6 +784,362 @@ function DonationQuotesSection() {
   );
 }
 
+// ─── Donation Section Manager (mode toggle + video list) ─────────────────────
+
+const INPUT_CLS =
+  'block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
+
+function FeaturedVideoItem({
+  video,
+  index,
+  total,
+  onChange,
+  onRemove,
+  onMoveUp,
+  onMoveDown,
+}: {
+  video: FeaturedVideo;
+  index: number;
+  total: number;
+  onChange: (field: keyof FeaturedVideo, value: string) => void;
+  onRemove: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+}) {
+  return (
+    <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          Video {index + 1}
+        </span>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={onMoveUp}
+            disabled={index === 0}
+            aria-label="Move up"
+            className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-25 transition-colors"
+          >
+            <ArrowUp className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onMoveDown}
+            disabled={index === total - 1}
+            aria-label="Move down"
+            className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-25 transition-colors"
+          >
+            <ArrowDown className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            aria-label="Remove video"
+            className="p-1 text-red-400 hover:text-red-600 transition-colors"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Video file path */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Video File Path <span className="text-red-400">*</span>
+        </label>
+        <input
+          type="text"
+          value={video.src}
+          onChange={(e) => onChange('src', e.target.value)}
+          required
+          placeholder="/videos/fundraiser.mp4"
+          className={INPUT_CLS}
+        />
+        <p className="text-xs text-gray-400 mt-1">
+          Place video files in{' '}
+          <code className="bg-gray-100 px-1 rounded">/public/videos/</code>
+          {' '}and reference as{' '}
+          <code className="bg-gray-100 px-1 rounded">/videos/filename.mp4</code>
+        </p>
+      </div>
+
+      {/* Heading + Subheading */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Heading <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={video.heading ?? ''}
+            onChange={(e) => onChange('heading', e.target.value)}
+            placeholder="Support Our Masjid"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Subheading <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={video.subheading ?? ''}
+            onChange={(e) => onChange('subheading', e.target.value)}
+            placeholder="Ramadan 2026 Campaign"
+            className={INPUT_CLS}
+          />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Description <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <textarea
+          value={video.description ?? ''}
+          onChange={(e) => onChange('description', e.target.value)}
+          rows={2}
+          placeholder="Your donation helps sustain Al-Faruq Islamic Centre…"
+          className={INPUT_CLS}
+        />
+      </div>
+
+      {/* CTA */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            CTA Button Text <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={video.ctaText ?? ''}
+            onChange={(e) => onChange('ctaText', e.target.value)}
+            placeholder="Donate Now"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            CTA URL <span className="text-gray-400 font-normal">(optional — uses site donate URL if blank)</span>
+          </label>
+          <input
+            type="url"
+            value={video.ctaUrl ?? ''}
+            onChange={(e) => onChange('ctaUrl', e.target.value)}
+            placeholder="https://…"
+            className={INPUT_CLS}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DonationSectionManagerSection() {
+  const [mode, setMode] = useState<'fundraising' | 'videos'>('fundraising');
+  const [videos, setVideos] = useState<FeaturedVideo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [modeSaving, setModeSaving] = useState(false);
+  const [videosSaving, setVideosSaving] = useState(false);
+  const [videosMessage, setVideosMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.donationSectionMode === 'videos') setMode('videos');
+        if (data.featuredVideos) {
+          try {
+            const parsed = JSON.parse(data.featuredVideos);
+            if (Array.isArray(parsed)) setVideos(parsed);
+          } catch {
+            // ignore
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleModeChange(value: 'fundraising' | 'videos') {
+    setMode(value);
+    setModeSaving(true);
+    try {
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'donationSectionMode', value }),
+      });
+    } finally {
+      setModeSaving(false);
+    }
+  }
+
+  async function handleSaveVideos(e: React.FormEvent) {
+    e.preventDefault();
+    setVideosSaving(true);
+    setVideosMessage(null);
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'featuredVideos', value: JSON.stringify(videos) }),
+      });
+      setVideosMessage(
+        res.ok
+          ? { type: 'success', text: 'Videos saved. Changes are live on the site.' }
+          : { type: 'error', text: 'Failed to save. Please try again.' }
+      );
+    } catch {
+      setVideosMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setVideosSaving(false);
+    }
+  }
+
+  function addVideo() {
+    setVideos((prev) => [
+      ...prev,
+      { id: Date.now().toString(), src: '', heading: '', subheading: '', description: '', ctaText: 'Donate Now', ctaUrl: '' },
+    ]);
+  }
+
+  function updateVideo(index: number, field: keyof FeaturedVideo, value: string) {
+    setVideos((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)));
+  }
+
+  function removeVideo(index: number) {
+    setVideos((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function moveVideo(index: number, direction: 'up' | 'down') {
+    const next = [...videos];
+    const swap = direction === 'up' ? index - 1 : index + 1;
+    [next[index], next[swap]] = [next[swap], next[index]];
+    setVideos(next);
+  }
+
+  return (
+    <div className="bg-white shadow rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-1 flex items-center gap-2">
+          <Play className="h-5 w-5 text-gray-400" />
+          Fundraising Section
+        </h3>
+        <p className="text-sm text-gray-500 mb-6">
+          Choose between showing the fundraising content (rotating quotes + donate button) or a
+          featured video showcase that loops through uploaded videos.
+        </p>
+
+        {loading ? (
+          <div className="space-y-3">
+            <div className="h-10 bg-gray-100 rounded animate-pulse w-64" />
+          </div>
+        ) : (
+          <>
+            {/* Mode toggle */}
+            <p className="text-xs text-blue-500 font-medium mb-3">Saves automatically when you select an option.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mb-8">
+              {(
+                [
+                  {
+                    value: 'fundraising' as const,
+                    label: 'Fundraising Content',
+                    desc: 'Rotating Quran & Hadith quotes with a Donate Now button.',
+                  },
+                  {
+                    value: 'videos' as const,
+                    label: 'Featured Videos',
+                    desc: 'Loop through a curated list of self-hosted videos with optional text and CTA per video.',
+                  },
+                ]
+              ).map(({ value, label, desc }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => handleModeChange(value)}
+                  disabled={modeSaving}
+                  className={`text-left p-4 rounded-lg border-2 transition-colors duration-150 ${
+                    mode === value
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                >
+                  <p className="text-sm font-semibold text-gray-900 mb-0.5">{label}</p>
+                  <p className="text-xs text-gray-500 leading-snug">{desc}</p>
+                </button>
+              ))}
+            </div>
+
+            {/* Video list — visible only in videos mode */}
+            {mode === 'videos' && (
+              <form onSubmit={handleSaveVideos} className="space-y-4 border-t border-gray-100 pt-6">
+                <p className="text-sm font-medium text-gray-700">
+                  Featured Videos
+                  <span className="text-gray-400 font-normal ml-2 text-xs">
+                    — videos play one by one and loop. Place files in{' '}
+                    <code className="bg-gray-100 px-1 rounded">/public/videos/</code>
+                  </span>
+                </p>
+
+                {videos.length === 0 && (
+                  <p className="text-sm text-gray-400 italic">No videos added yet.</p>
+                )}
+
+                <div className="space-y-4">
+                  {videos.map((video, index) => (
+                    <FeaturedVideoItem
+                      key={video.id}
+                      video={video}
+                      index={index}
+                      total={videos.length}
+                      onChange={(field, value) => updateVideo(index, field, value)}
+                      onRemove={() => removeVideo(index)}
+                      onMoveUp={() => moveVideo(index, 'up')}
+                      onMoveDown={() => moveVideo(index, 'down')}
+                    />
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={addVideo}
+                  className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add Video
+                </button>
+
+                {videosMessage && (
+                  <p
+                    className={`text-sm ${
+                      videosMessage.type === 'success' ? 'text-green-600' : 'text-red-600'
+                    }`}
+                  >
+                    {videosMessage.text}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={videosSaving}
+                  className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm
+                    text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
+                    focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                    disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {videosSaving ? 'Saving…' : 'Save Videos'}
+                </button>
+              </form>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── QR Card ──────────────────────────────────────────────────────────────────
 
 function QRCardSection() {
@@ -853,6 +1221,7 @@ export default function AdminSettings() {
       <div className="space-y-6">
         <NextPrayerBarSection />
         <CampaignDisplaySection />
+        <DonationSectionManagerSection />
         <JummahTimesSection />
         <DonateUrlSection />
         <DonationQuotesSection />
