@@ -9,8 +9,24 @@ interface FeaturedVideo {
   id: string;
   src: string;
   heading?: string;
+  animateHeading?: boolean;
   subheading?: string;
+  tagline?: string;
   description?: string;
+  venue?: string;
+  ctaText?: string;
+  ctaUrl?: string;
+}
+
+interface FeaturedImage {
+  id: string;
+  src: string;
+  heading?: string;
+  animateHeading?: boolean;
+  subheading?: string;
+  tagline?: string;
+  description?: string;
+  venue?: string;
   ctaText?: string;
   ctaUrl?: string;
 }
@@ -93,6 +109,127 @@ function NextPrayerBarSection() {
                   <span className="text-sm text-gray-700">{label}</span>
                 </label>
               ))}
+            </div>
+            {message && (
+              <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
+                {message.text}
+              </p>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Fundraising Section Visibility ───────────────────────────────────────────
+
+function FundraisingSectionVisibilitySection() {
+  const [show, setShow] = useState(true);
+  const [animationStyle, setAnimationStyle] = useState<'none' | 'particles' | 'fireworks'>('none');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/settings')
+      .then((r) => r.json())
+      .then((data: Record<string, string>) => {
+        if (data.showFundraisingSection === 'false') setShow(false);
+        if (data.fundraisingAnimationStyle) {
+          setAnimationStyle(data.fundraisingAnimationStyle as 'none' | 'particles' | 'fireworks');
+        } else if (data.showFundraisingAnimation === 'true') {
+          // Fallback map for legacy key before it was swapped
+          setAnimationStyle('particles');
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, []);
+
+  async function handleSave(value: string | boolean, key: 'showFundraisingSection' | 'fundraisingAnimationStyle') {
+    setSaving(true);
+    setMessage(null);
+    if (key === 'showFundraisingSection') setShow(value as boolean);
+    if (key === 'fundraisingAnimationStyle') setAnimationStyle(value as 'none' | 'particles' | 'fireworks');
+    
+    try {
+      const res = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, value: String(value) }),
+      });
+      setMessage(res.ok
+        ? { type: 'success', text: 'Saved. Changes are live on the site.' }
+        : { type: 'error', text: 'Failed to save. Please try again.' }
+      );
+    } catch {
+      setMessage({ type: 'error', text: 'Network error. Please try again.' });
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div className="bg-white shadow rounded-lg">
+      <div className="px-4 py-5 sm:p-6">
+        <h3 className="text-lg leading-6 font-medium text-gray-900 mb-1 flex items-center gap-2">
+          <Eye className="h-5 w-5 text-gray-400" />
+          Fundraising Section Visibility
+        </h3>
+        <p className="text-sm text-gray-500 mb-1">
+          Show or hide the entire Fundraising Section (including banners and featured videos) on the home page. Use this to easily toggle the section on or off based on your current fundraising needs.
+        </p>
+        <p className="text-xs text-blue-500 font-medium mb-6">Saves automatically when you select an option.</p>
+
+        {loading ? (
+          <div className="h-10 bg-gray-100 rounded animate-pulse w-48" />
+        ) : (
+          <div className="space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Visibility Toggle */}
+              <div>
+                <p className="text-sm font-medium text-gray-900 mb-2">Display Section</p>
+                <div className="flex gap-6">
+                  {[{ label: 'Show', value: true }, { label: 'Hide', value: false }].map(({ label, value }) => (
+                    <label key={label} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="showFundraisingSection"
+                        checked={show === value}
+                        onChange={() => handleSave(value, 'showFundraisingSection')}
+                        disabled={saving}
+                        className="text-blue-600"
+                      />
+                      <span className="text-sm text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              {/* Animation Toggle */}
+              <div>
+                <p className="text-sm font-medium text-gray-900 mb-2">Background Celebration Animation</p>
+                <div className="flex flex-col gap-3">
+                  {[
+                    { label: 'None', value: 'none' },
+                    { label: 'Particles & Orbs', value: 'particles' },
+                    { label: 'Fireworks', value: 'fireworks' }
+                  ].map(({ label, value }) => (
+                    <label key={label} className="flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="fundraisingAnimationStyle"
+                        checked={animationStyle === value}
+                        onChange={() => handleSave(value, 'fundraisingAnimationStyle')}
+                        disabled={saving}
+                        className="text-blue-600"
+                      />
+                      <span className="text-sm text-gray-700">{label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
             {message && (
               <p className={`text-sm ${message.type === 'success' ? 'text-green-600' : 'text-red-600'}`}>
@@ -801,7 +938,7 @@ function FeaturedVideoItem({
   video: FeaturedVideo;
   index: number;
   total: number;
-  onChange: (field: keyof FeaturedVideo, value: string) => void;
+  onChange: (field: keyof FeaturedVideo, value: string | boolean) => void;
   onRemove: () => void;
   onMoveUp: () => void;
   onMoveDown: () => void;
@@ -866,26 +1003,45 @@ function FeaturedVideoItem({
       {/* Heading + Subheading */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-gray-600 mb-1">
-            Heading <span className="text-gray-400 font-normal">(optional)</span>
+          <label className="flex items-center gap-2 text-xs font-medium text-gray-600 mb-1 cursor-pointer">
+            <span className="flex-1">Heading <span className="text-gray-400 font-normal">(optional)</span></span>
+            <input
+              type="checkbox"
+              checked={video.animateHeading ?? false}
+              onChange={(e) => onChange('animateHeading', e.target.checked)}
+              className="text-blue-600 rounded cursor-pointer"
+            />
+            <span className="font-normal text-gray-500">Animate colors</span>
           </label>
-          <input
-            type="text"
+          <textarea
             value={video.heading ?? ''}
             onChange={(e) => onChange('heading', e.target.value)}
+            rows={2}
             placeholder="Support Our Masjid"
             className={INPUT_CLS}
           />
         </div>
         <div>
           <label className="block text-xs font-medium text-gray-600 mb-1">
-            Subheading <span className="text-gray-400 font-normal">(optional)</span>
+            Eyebrow (Top Subheading) <span className="text-gray-400 font-normal">(optional)</span>
           </label>
-          <input
-            type="text"
+          <textarea
             value={video.subheading ?? ''}
             onChange={(e) => onChange('subheading', e.target.value)}
+            rows={2}
             placeholder="Ramadan 2026 Campaign"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Tagline (Below Heading) <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <textarea
+            value={video.tagline ?? ''}
+            onChange={(e) => onChange('tagline', e.target.value)}
+            rows={2}
+            placeholder="Join us in building a better future."
             className={INPUT_CLS}
           />
         </div>
@@ -901,6 +1057,20 @@ function FeaturedVideoItem({
           onChange={(e) => onChange('description', e.target.value)}
           rows={2}
           placeholder="Your donation helps sustain Al-Faruq Islamic Centre…"
+          className={INPUT_CLS}
+        />
+      </div>
+
+      {/* Venue */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Venue <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          value={video.venue ?? ''}
+          onChange={(e) => onChange('venue', e.target.value)}
+          placeholder="Al-Faruq Centre"
           className={INPUT_CLS}
         />
       </div>
@@ -936,23 +1106,217 @@ function FeaturedVideoItem({
   );
 }
 
+function FeaturedImageItem({
+  image,
+  index,
+  total,
+  onChange,
+  onRemove,
+  onMoveUp,
+  onMoveDown,
+}: {
+  image: FeaturedImage;
+  index: number;
+  total: number;
+  onChange: (field: keyof FeaturedImage, value: string | boolean) => void;
+  onRemove: () => void;
+  onMoveUp: () => void;
+  onMoveDown: () => void;
+}) {
+  return (
+    <div className="border border-gray-200 rounded-lg p-4 space-y-3">
+      <div className="flex items-center justify-between mb-1">
+        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+          Image {index + 1}
+        </span>
+        <div className="flex items-center gap-1">
+          <button
+            type="button"
+            onClick={onMoveUp}
+            disabled={index === 0}
+            aria-label="Move up"
+            className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-25 transition-colors"
+          >
+            <ArrowUp className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onMoveDown}
+            disabled={index === total - 1}
+            aria-label="Move down"
+            className="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-25 transition-colors"
+          >
+            <ArrowDown className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onRemove}
+            aria-label="Remove image"
+            className="p-1 text-red-400 hover:text-red-600 transition-colors"
+          >
+            <Trash2 className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Image file path */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Image File Path <span className="text-red-400">*</span>
+        </label>
+        <input
+          type="text"
+          value={image.src}
+          onChange={(e) => onChange('src', e.target.value)}
+          required
+          placeholder="/RamadanFundraiser2025.jpeg"
+          className={INPUT_CLS}
+        />
+        <p className="text-xs text-gray-400 mt-1">
+          Place image files in{' '}
+          <code className="bg-gray-100 px-1 rounded">/public/</code>
+          {' '}or{' '}
+          <code className="bg-gray-100 px-1 rounded">/public/images/</code>
+          {' '}and reference as{' '}
+          <code className="bg-gray-100 px-1 rounded">/filename.jpg</code>
+        </p>
+      </div>
+
+      {/* Heading + Subheading */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="flex items-center gap-2 text-xs font-medium text-gray-600 mb-1 cursor-pointer">
+            <span className="flex-1">Heading <span className="text-gray-400 font-normal">(optional)</span></span>
+            <input
+              type="checkbox"
+              checked={image.animateHeading ?? false}
+              onChange={(e) => onChange('animateHeading', e.target.checked)}
+              className="text-blue-600 rounded cursor-pointer"
+            />
+            <span className="font-normal text-gray-500">Animate colors</span>
+          </label>
+          <textarea
+            value={image.heading ?? ''}
+            onChange={(e) => onChange('heading', e.target.value)}
+            rows={2}
+            placeholder="Support Our Masjid"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Eyebrow (Top Subheading) <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <textarea
+            value={image.subheading ?? ''}
+            onChange={(e) => onChange('subheading', e.target.value)}
+            rows={2}
+            placeholder="Ramadan 2026 Campaign"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div className="sm:col-span-2">
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            Tagline (Below Heading) <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <textarea
+            value={image.tagline ?? ''}
+            onChange={(e) => onChange('tagline', e.target.value)}
+            rows={2}
+            placeholder="Join us in building a better future."
+            className={INPUT_CLS}
+          />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Description <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <textarea
+          value={image.description ?? ''}
+          onChange={(e) => onChange('description', e.target.value)}
+          rows={2}
+          placeholder="Your donation helps sustain Al-Faruq Islamic Centre…"
+          className={INPUT_CLS}
+        />
+      </div>
+
+      {/* Venue */}
+      <div>
+        <label className="block text-xs font-medium text-gray-600 mb-1">
+          Venue <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          value={image.venue ?? ''}
+          onChange={(e) => onChange('venue', e.target.value)}
+          placeholder="Al-Faruq Centre"
+          className={INPUT_CLS}
+        />
+      </div>
+
+      {/* CTA */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            CTA Button Text <span className="text-gray-400 font-normal">(optional)</span>
+          </label>
+          <input
+            type="text"
+            value={image.ctaText ?? ''}
+            onChange={(e) => onChange('ctaText', e.target.value)}
+            placeholder="Donate Now"
+            className={INPUT_CLS}
+          />
+        </div>
+        <div>
+          <label className="block text-xs font-medium text-gray-600 mb-1">
+            CTA URL <span className="text-gray-400 font-normal">(optional — uses site donate URL if blank)</span>
+          </label>
+          <input
+            type="url"
+            value={image.ctaUrl ?? ''}
+            onChange={(e) => onChange('ctaUrl', e.target.value)}
+            placeholder="https://…"
+            className={INPUT_CLS}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function DonationSectionManagerSection() {
-  const [mode, setMode] = useState<'fundraising' | 'videos'>('fundraising');
+  const [mode, setMode] = useState<'fundraising' | 'videos' | 'images'>('fundraising');
   const [videos, setVideos] = useState<FeaturedVideo[]>([]);
+  const [images, setImages] = useState<FeaturedImage[]>([]);
   const [loading, setLoading] = useState(true);
   const [modeSaving, setModeSaving] = useState(false);
-  const [videosSaving, setVideosSaving] = useState(false);
-  const [videosMessage, setVideosMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [mediaSaving, setMediaSaving] = useState(false);
+  const [mediaMessage, setMediaMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
     fetch('/api/settings')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.donationSectionMode === 'videos') setMode('videos');
+        if (data.donationSectionMode === 'images') setMode('images');
+        
         if (data.featuredVideos) {
           try {
             const parsed = JSON.parse(data.featuredVideos);
             if (Array.isArray(parsed)) setVideos(parsed);
+          } catch {
+            // ignore
+          }
+        }
+        
+        if (data.featuredImages) {
+          try {
+            const parsed = JSON.parse(data.featuredImages);
+            if (Array.isArray(parsed)) setImages(parsed);
           } catch {
             // ignore
           }
@@ -962,7 +1326,7 @@ function DonationSectionManagerSection() {
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleModeChange(value: 'fundraising' | 'videos') {
+  async function handleModeChange(value: 'fundraising' | 'videos' | 'images') {
     setMode(value);
     setModeSaving(true);
     try {
@@ -976,25 +1340,29 @@ function DonationSectionManagerSection() {
     }
   }
 
-  async function handleSaveVideos(e: React.FormEvent) {
+  async function handleSaveMedia(e: React.FormEvent) {
     e.preventDefault();
-    setVideosSaving(true);
-    setVideosMessage(null);
+    setMediaSaving(true);
+    setMediaMessage(null);
     try {
+      const isVideos = mode === 'videos';
       const res = await fetch('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key: 'featuredVideos', value: JSON.stringify(videos) }),
+        body: JSON.stringify({ 
+          key: isVideos ? 'featuredVideos' : 'featuredImages', 
+          value: JSON.stringify(isVideos ? videos : images) 
+        }),
       });
-      setVideosMessage(
+      setMediaMessage(
         res.ok
-          ? { type: 'success', text: 'Videos saved. Changes are live on the site.' }
+          ? { type: 'success', text: `${isVideos ? 'Videos' : 'Images'} saved. Changes are live on the site.` }
           : { type: 'error', text: 'Failed to save. Please try again.' }
       );
     } catch {
-      setVideosMessage({ type: 'error', text: 'Network error. Please try again.' });
+      setMediaMessage({ type: 'error', text: 'Network error. Please try again.' });
     } finally {
-      setVideosSaving(false);
+      setMediaSaving(false);
     }
   }
 
@@ -1005,7 +1373,7 @@ function DonationSectionManagerSection() {
     ]);
   }
 
-  function updateVideo(index: number, field: keyof FeaturedVideo, value: string) {
+  function updateVideo(index: number, field: keyof FeaturedVideo, value: string | boolean) {
     setVideos((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)));
   }
 
@@ -1018,6 +1386,28 @@ function DonationSectionManagerSection() {
     const swap = direction === 'up' ? index - 1 : index + 1;
     [next[index], next[swap]] = [next[swap], next[index]];
     setVideos(next);
+  }
+
+  function addImage() {
+    setImages((prev) => [
+      ...prev,
+      { id: Date.now().toString(), src: '', heading: '', subheading: '', description: '', ctaText: 'Donate Now', ctaUrl: '' },
+    ]);
+  }
+
+  function updateImage(index: number, field: keyof FeaturedImage, value: string | boolean) {
+    setImages((prev) => prev.map((v, i) => (i === index ? { ...v, [field]: value } : v)));
+  }
+
+  function removeImage(index: number) {
+    setImages((prev) => prev.filter((_, i) => i !== index));
+  }
+
+  function moveImage(index: number, direction: 'up' | 'down') {
+    const next = [...images];
+    const swap = direction === 'up' ? index - 1 : index + 1;
+    [next[index], next[swap]] = [next[swap], next[index]];
+    setImages(next);
   }
 
   return (
@@ -1040,7 +1430,7 @@ function DonationSectionManagerSection() {
           <>
             {/* Mode toggle */}
             <p className="text-xs text-blue-500 font-medium mb-3">Saves automatically when you select an option.</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mb-8">
               {(
                 [
                   {
@@ -1052,6 +1442,11 @@ function DonationSectionManagerSection() {
                     value: 'videos' as const,
                     label: 'Featured Videos',
                     desc: 'Loop through a curated list of self-hosted videos with optional text and CTA per video.',
+                  },
+                  {
+                    value: 'images' as const,
+                    label: 'Featured Images',
+                    desc: 'Loop through a curated list of images with optional text and CTA per image.',
                   },
                 ]
               ).map(({ value, label, desc }) => (
@@ -1072,23 +1467,23 @@ function DonationSectionManagerSection() {
               ))}
             </div>
 
-            {/* Video list — visible only in videos mode */}
-            {mode === 'videos' && (
-              <form onSubmit={handleSaveVideos} className="space-y-4 border-t border-gray-100 pt-6">
+            {/* Media list — visible only in videos or images mode */}
+            {(mode === 'videos' || mode === 'images') && (
+              <form onSubmit={handleSaveMedia} className="space-y-4 border-t border-gray-100 pt-6">
                 <p className="text-sm font-medium text-gray-700">
-                  Featured Videos
+                  {mode === 'videos' ? 'Featured Videos' : 'Featured Images'}
                   <span className="text-gray-400 font-normal ml-2 text-xs">
-                    — videos play one by one and loop. Place files in{' '}
-                    <code className="bg-gray-100 px-1 rounded">/public/videos/</code>
+                    — {mode === 'videos' ? 'videos' : 'images'} play one by one and loop. Place files in{' '}
+                    <code className="bg-gray-100 px-1 rounded">/public/{mode === 'videos' ? 'videos/' : ''}</code>
                   </span>
                 </p>
 
-                {videos.length === 0 && (
-                  <p className="text-sm text-gray-400 italic">No videos added yet.</p>
+                {(mode === 'videos' ? videos : images).length === 0 && (
+                  <p className="text-sm text-gray-400 italic">No {mode === 'videos' ? 'videos' : 'images'} added yet.</p>
                 )}
 
                 <div className="space-y-4">
-                  {videos.map((video, index) => (
+                  {mode === 'videos' && videos.map((video, index) => (
                     <FeaturedVideoItem
                       key={video.id}
                       video={video}
@@ -1100,36 +1495,48 @@ function DonationSectionManagerSection() {
                       onMoveDown={() => moveVideo(index, 'down')}
                     />
                   ))}
+                  {mode === 'images' && images.map((image, index) => (
+                    <FeaturedImageItem
+                      key={image.id}
+                      image={image}
+                      index={index}
+                      total={images.length}
+                      onChange={(field, value) => updateImage(index, field, value)}
+                      onRemove={() => removeImage(index)}
+                      onMoveUp={() => moveImage(index, 'up')}
+                      onMoveDown={() => moveImage(index, 'down')}
+                    />
+                  ))}
                 </div>
 
                 <button
                   type="button"
-                  onClick={addVideo}
+                  onClick={mode === 'videos' ? addVideo : addImage}
                   className="flex items-center gap-2 text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
                 >
                   <Plus className="h-4 w-4" />
-                  Add Video
+                  Add {mode === 'videos' ? 'Video' : 'Image'}
                 </button>
 
-                {videosMessage && (
+                {mediaMessage && (
                   <p
                     className={`text-sm ${
-                      videosMessage.type === 'success' ? 'text-green-600' : 'text-red-600'
+                      mediaMessage.type === 'success' ? 'text-green-600' : 'text-red-600'
                     }`}
                   >
-                    {videosMessage.text}
+                    {mediaMessage.text}
                   </p>
                 )}
 
                 <button
                   type="submit"
-                  disabled={videosSaving}
+                  disabled={mediaSaving}
                   className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm
                     text-sm font-medium text-white bg-blue-600 hover:bg-blue-700
                     focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
                     disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {videosSaving ? 'Saving…' : 'Save Videos'}
+                  {mediaSaving ? 'Saving…' : `Save ${mode === 'videos' ? 'Videos' : 'Images'}`}
                 </button>
               </form>
             )}
@@ -1220,6 +1627,7 @@ export default function AdminSettings() {
 
       <div className="space-y-6">
         <NextPrayerBarSection />
+        <FundraisingSectionVisibilitySection />
         <CampaignDisplaySection />
         <DonationSectionManagerSection />
         <JummahTimesSection />

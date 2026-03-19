@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Volume2, VolumeX, MapPin } from "lucide-react";
 import { useDonateUrl } from "@/app/hooks/useDonateUrl";
+import { CelebrationBackground } from "@/app/components/CelebrationBackground";
 
 // ─── CONFIG ─────────────────────────────────────────────────────────────────
 const CONFIG = {
@@ -91,10 +92,11 @@ function StackedCoinsMotif() {
 
 interface FundraiserBannerProps {
   dismissed: boolean;
+  animationStyle?: 'none' | 'particles' | 'fireworks';
   onDismiss: () => void;
 }
 
-export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBannerProps) {
+export default function FundraiserBanner({ dismissed, animationStyle, onDismiss }: FundraiserBannerProps) {
   const donateUrl = useDonateUrl();
   const [muted, setMuted] = useState(true);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -115,6 +117,9 @@ export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBan
           exit={{ opacity: 0, y: -12 }}
           transition={{ duration: 0.4, ease: "easeIn" }}
         >
+          {/* Background Effects */}
+          {animationStyle && animationStyle !== 'none' && <CelebrationBackground type={animationStyle} />}
+
           {/* SVG background decoration */}
           <div className="absolute left-0 top-0 w-[560px] h-[560px] pointer-events-none select-none -translate-x-1/4 -translate-y-1/4">
             <StackedCoinsMotif />
@@ -199,7 +204,7 @@ export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBan
                   transition={{ duration: 0.65, ease: "easeOut", delay: 0.1 }}
                 >
                   {/* Eyebrow */}
-                  <p className="text-white/30 text-[11px] font-medium uppercase tracking-[0.3em] mb-5">
+                  <p className="text-white text-[11px] font-medium uppercase tracking-[0.3em] mb-5">
                     {CONFIG.eyebrow}
                   </p>
 
@@ -265,14 +270,14 @@ export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBan
 
                   {/* Date, venue, speaker */}
                   <div className="flex flex-col gap-2.5 mb-5">
-                    <p className="text-white/50 text-[13px] uppercase tracking-[0.18em] font-medium">
+                    <p className="text-white text-[13px] uppercase tracking-[0.18em] font-medium">
                       {CONFIG.date}
                     </p>
-                    <p className="flex items-center gap-2 text-white/40 text-[13px] uppercase tracking-[0.15em] font-medium">
+                    <p className="flex items-center gap-2 text-white text-[13px] uppercase tracking-[0.15em] font-medium">
                       <MapPin size={12} strokeWidth={1.8} className="flex-shrink-0 text-[#C9A84C]/70" />
                       {CONFIG.venue}  ·  {CONFIG.address}
                     </p>
-                    <p className="text-white/35 text-[13px] uppercase tracking-[0.15em] font-medium pl-[20px]">
+                    <p className="text-white text-[13px] uppercase tracking-[0.15em] font-medium pl-[20px]">
                       {CONFIG.speaker}
                     </p>
                   </div>
@@ -281,7 +286,7 @@ export default function FundraiserBanner({ dismissed, onDismiss }: FundraiserBan
                   <div className="w-10 h-px bg-white/15 mb-6" />
 
                   {/* Description */}
-                  <p className="text-white/50 text-[15px] leading-relaxed max-w-md mb-8">
+                  <p className="text-white text-[15px] leading-relaxed max-w-md mb-8">
                     {CONFIG.description}
                   </p>
 
