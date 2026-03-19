@@ -7,6 +7,32 @@ import FundraiserBanner from "./FundraiserBanner";
 import { useDonateUrl } from "@/app/hooks/useDonateUrl";
 import { CelebrationBackground } from "@/app/components/CelebrationBackground";
 
+const noiseSvg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
+
+function GlowBorder({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="relative p-[3px] rounded-2xl overflow-hidden group h-full w-full">
+      {/* Rotating Background */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#818cf8,#34d399,#c084fc,#a78bfa,#818cf8)] opacity-100"
+      />
+      {/* Soft Glow Shadow */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#818cf8,#34d399,#c084fc,#a78bfa,#818cf8)] opacity-40 blur-3xl"
+      />
+      {/* Content Container */}
+      <div className="relative z-10 bg-black rounded-[13px] overflow-hidden h-full w-full">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+
 // ── Types ──────────────────────────────────────────────────────────────────────
 export interface FeaturedVideo {
   id: string;
@@ -107,7 +133,9 @@ function FeaturedVideoShowcase({ videos, animationStyle }: { videos: FeaturedVid
   if (!videos.length) return null;
 
   return (
-    <section className="relative bg-[#0A0A0A] overflow-hidden">
+    <section 
+      className="relative bg-[#0A0A0A] overflow-hidden"
+    >
       {/* Atmospheric blurred background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <AnimatePresence>
@@ -155,23 +183,34 @@ function FeaturedVideoShowcase({ videos, animationStyle }: { videos: FeaturedVid
 
               {active.heading && (
                 <motion.h2
-                  animate={active.animateHeading ? { 
-                    color: ["#4F46E5", "#10B981", "#9333EA", "#7C3AED", "#4F46E5"],
-                    textShadow: [
-                      "0 0 20px rgba(79, 70, 229, 0.4)",
-                      "0 0 20px rgba(16, 185, 129, 0.4)",
-                      "0 0 20px rgba(147, 51, 234, 0.4)",
-                      "0 0 20px rgba(124, 58, 237, 0.4)",
-                      "0 0 20px rgba(79, 70, 229, 0.4)"
-                    ]
-                  } : { color: "#ffffff", textShadow: "none" }}
-                  transition={active.animateHeading ? { 
-                    duration: 8, 
+                  animate={{ 
+                    backgroundPosition: ["0% center", "200% center"],
+                    textShadow: active.animateHeading ? [
+                      "0 0 20px rgba(129, 140, 248, 0.4)",
+                      "0 0 20px rgba(52, 211, 153, 0.4)",
+                      "0 0 20px rgba(192, 132, 252, 0.4)",
+                      "0 0 20px rgba(167, 139, 250, 0.4)",
+                      "0 0 20px rgba(129, 140, 248, 0.4)"
+                    ] : "none"
+                  }}
+                  transition={{ 
+                    duration: 10, 
                     repeat: Infinity, 
                     ease: "linear" 
-                  } : { duration: 0 }}
-                  className="text-white font-black leading-none mb-6 whitespace-pre-line"
-                  style={{ fontSize: "clamp(28px, 4vw, 64px)", letterSpacing: "-0.025em" }}
+                  }}
+                  className="font-black leading-none mb-6 whitespace-pre-line"
+                  style={{ 
+                    fontSize: "clamp(28px, 4vw, 64px)", 
+                    letterSpacing: "-0.025em",
+                    backgroundImage: active.animateHeading 
+                      ? "linear-gradient(to right, #818cf8, #34d399, #c084fc, #a78bfa, #818cf8)"
+                      : "linear-gradient(135deg, #fff 0%, #e5e5e5 25%, #fff 50%, #d1d1d1 75%, #fff 100%)",
+                    backgroundSize: "200% auto",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    maskImage: noiseSvg,
+                    WebkitMaskImage: noiseSvg,
+                  }}
                 >
                   {active.heading}
                 </motion.h2>
@@ -245,45 +284,44 @@ function FeaturedVideoShowcase({ videos, animationStyle }: { videos: FeaturedVid
             <AnimatePresence>
               <motion.div
                 key={`vid-${safeIndex}`}
-                className="absolute inset-0 rounded-2xl overflow-hidden ring-1 ring-white/10"
-                style={{
-                  boxShadow: "0 12px 80px rgba(0,0,0,0.85), 0 0 100px rgba(201,168,76,0.10)",
-                }}
+                className="absolute inset-0"
                 initial={{ opacity: 0, scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.10 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               >
-                <video
-                  src={active.src}
-                  autoPlay
-                  muted={muted}
-                  playsInline
-                  preload="auto"
-                  loop={videos.length <= 1}
-                  onEnded={handleEnded}
-                  onTimeUpdate={(e) => {
-                    const v = e.currentTarget;
-                    if (v.duration) setProgress(v.currentTime / v.duration);
-                  }}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+                <GlowBorder>
+                  <video
+                    src={active.src}
+                    autoPlay
+                    muted={muted}
+                    playsInline
+                    preload="auto"
+                    loop={videos.length <= 1}
+                    onEnded={handleEnded}
+                    onTimeUpdate={(e) => {
+                      const v = e.currentTarget;
+                      if (v.duration) setProgress(v.currentTime / v.duration);
+                    }}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
 
-                {/* Mute / unmute toggle */}
-                <button
-                  onClick={() => setMuted((m) => !m)}
-                  aria-label={muted ? "Unmute video" : "Mute video"}
-                  className="absolute bottom-4 right-4 z-10 flex items-center justify-center
-                    w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm
-                    text-white/70 hover:text-white hover:bg-black/70
-                    transition-colors duration-200"
-                >
-                  {muted
-                    ? <VolumeX size={15} strokeWidth={1.8} />
-                    : <Volume2 size={15} strokeWidth={1.8} />
-                  }
-                </button>
+                  {/* Mute / unmute toggle */}
+                  <button
+                    onClick={() => setMuted((m) => !m)}
+                    aria-label={muted ? "Unmute video" : "Mute video"}
+                    className="absolute bottom-4 right-4 z-10 flex items-center justify-center
+                      w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm
+                      text-white/70 hover:text-white hover:bg-black/70
+                      transition-colors duration-200"
+                  >
+                    {muted
+                      ? <VolumeX size={15} strokeWidth={1.8} />
+                      : <Volume2 size={15} strokeWidth={1.8} />
+                    }
+                  </button>
+                </GlowBorder>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -377,23 +415,34 @@ function FeaturedImageShowcase({ images, animationStyle }: { images: FeaturedIma
 
               {active.heading && (
                 <motion.h2
-                  animate={active.animateHeading ? { 
-                    color: ["#4F46E5", "#10B981", "#9333EA", "#7C3AED", "#4F46E5"],
-                    textShadow: [
-                      "0 0 20px rgba(79, 70, 229, 0.4)",
-                      "0 0 20px rgba(16, 185, 129, 0.4)",
-                      "0 0 20px rgba(147, 51, 234, 0.4)",
-                      "0 0 20px rgba(124, 58, 237, 0.4)",
-                      "0 0 20px rgba(79, 70, 229, 0.4)"
-                    ]
-                  } : { color: "#ffffff", textShadow: "none" }}
-                  transition={active.animateHeading ? { 
-                    duration: 8, 
+                  animate={{ 
+                    backgroundPosition: ["0% center", "200% center"],
+                    textShadow: active.animateHeading ? [
+                      "0 0 20px rgba(129, 140, 248, 0.4)",
+                      "0 0 20px rgba(52, 211, 153, 0.4)",
+                      "0 0 20px rgba(192, 132, 252, 0.4)",
+                      "0 0 20px rgba(167, 139, 250, 0.4)",
+                      "0 0 20px rgba(129, 140, 248, 0.4)"
+                    ] : "none"
+                  }}
+                  transition={{ 
+                    duration: 10, 
                     repeat: Infinity, 
                     ease: "linear" 
-                  } : { duration: 0 }}
-                  className="text-white font-black leading-none mb-6 whitespace-pre-line"
-                  style={{ fontSize: "clamp(28px, 4vw, 64px)", letterSpacing: "-0.025em" }}
+                  }}
+                  className="font-black leading-none mb-6 whitespace-pre-line"
+                  style={{ 
+                    fontSize: "clamp(28px, 4vw, 64px)", 
+                    letterSpacing: "-0.025em",
+                    backgroundImage: active.animateHeading 
+                      ? "linear-gradient(to right, #818cf8, #34d399, #c084fc, #a78bfa, #818cf8)"
+                      : "linear-gradient(135deg, #fff 0%, #e5e5e5 25%, #fff 50%, #d1d1d1 75%, #fff 100%)",
+                    backgroundSize: "200% auto",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                    maskImage: noiseSvg,
+                    WebkitMaskImage: noiseSvg,
+                  }}
                 >
                   {active.heading}
                 </motion.h2>
@@ -459,32 +508,27 @@ function FeaturedImageShowcase({ images, animationStyle }: { images: FeaturedIma
             </motion.div>
           </AnimatePresence>
 
-          {/* Right: image */}
           <div
             className="relative lg:order-last mx-auto w-full"
-            style={{ maxWidth: "320px", width: "100%", maxHeight: "600px" }}
+            style={{ maxWidth: "340px", width: "100%", aspectRatio: "1 / 1" }}
           >
             <AnimatePresence>
               <motion.div
                 key={`img-pic-${safeIndex}`}
-                className="relative rounded-2xl overflow-hidden ring-1 ring-white/10 flex items-center justify-center bg-black/40"
-                style={{
-                  boxShadow: "0 12px 80px rgba(0,0,0,0.85), 0 0 100px rgba(201,168,76,0.10)",
-                  aspectRatio: "auto",
-                  minHeight: "400px"
-                }}
+                className="absolute inset-0"
                 initial={{ opacity: 0, scale: 0.88 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.10 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
               >
-                <img
-                  src={active.src}
-                  alt={active.heading || "Featured image"}
-                  className="w-full h-full object-contain"
-                  style={{ maxHeight: "600px" }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+                <GlowBorder>
+                  <img
+                    src={active.src}
+                    alt={active.heading || "Featured image"}
+                    className="w-full h-full object-contain bg-black/40"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent pointer-events-none" />
+                </GlowBorder>
               </motion.div>
             </AnimatePresence>
           </div>
@@ -502,19 +546,23 @@ export default function TopFundraisingSection() {
 
   if (!showSection) return null;
 
-  if (mode === "videos" && videos.length > 0) {
-    return <FeaturedVideoShowcase videos={videos} animationStyle={animationStyle} />;
-  }
-  
-  if (mode === "images" && images.length > 0) {
-    return <FeaturedImageShowcase images={images} animationStyle={animationStyle} />;
+  if (mode === "videos") {
+    return <FeaturedVideoShowcase 
+      videos={videos} 
+      animationStyle={animationStyle} 
+    />;
   }
 
-  return (
-    <FundraiserBanner
-      dismissed={bannerDismissed}
-      animationStyle={animationStyle}
-      onDismiss={() => setBannerDismissed(true)}
-    />
-  );
+  if (mode === "images") {
+    return <FeaturedImageShowcase 
+      images={images} 
+      animationStyle={animationStyle} 
+    />;
+  }
+
+  return <FundraiserBanner 
+    dismissed={bannerDismissed}
+    onDismiss={() => setBannerDismissed(true)}
+    animationStyle={animationStyle} 
+  />;
 }

@@ -7,6 +7,32 @@ import { X, Volume2, VolumeX, MapPin } from "lucide-react";
 import { useDonateUrl } from "@/app/hooks/useDonateUrl";
 import { CelebrationBackground } from "@/app/components/CelebrationBackground";
 
+const noiseSvg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
+
+function GlowBorder({ children, rotateDuration = 6, borderRadius = "1rem" }: { children: React.ReactNode; rotateDuration?: number; borderRadius?: string }) {
+  return (
+    <div className="relative p-[3px] overflow-hidden group h-full w-full" style={{ borderRadius }}>
+      {/* Rotating Background */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: rotateDuration, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-[-150%] bg-[conic-gradient(from_0deg,#818cf8,#34d399,#c084fc,#a78bfa,#818cf8)] opacity-100"
+      />
+      {/* Soft Glow Shadow */}
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: rotateDuration, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-[-100%] bg-[conic-gradient(from_0deg,#818cf8,#34d399,#c084fc,#a78bfa,#818cf8)] opacity-40 blur-3xl"
+      />
+      {/* Content Container */}
+      <div className="relative z-10 bg-black overflow-hidden h-full w-full" style={{ borderRadius: `calc(${borderRadius} - 3px)` }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+
 // ─── CONFIG ─────────────────────────────────────────────────────────────────
 const CONFIG = {
   eyebrow:     "Ramadan Fundraising Event — Al Faruq Islamic School",
@@ -147,52 +173,53 @@ export default function FundraiserBanner({ dismissed, animationStyle, onDismiss 
                 >
                   {/* Poster — full portrait, slightly rotated, sits behind */}
                   <div
-                    className="relative flex-shrink-0 w-[240px] rounded-xl overflow-hidden -rotate-[12deg] z-0
-                      ring-1 ring-white/10 opacity-90"
+                    className="relative flex-shrink-0 w-[240px] -rotate-[12deg] z-0 opacity-90"
                     style={{ aspectRatio: "9/16" }}
                   >
-                    <Image
-                      src={CONFIG.posterSrc}
-                      alt="Fundraiser poster"
-                      fill
-                      className="object-cover"
-                      priority
-                    />
+                    <GlowBorder borderRadius="0.75rem" rotateDuration={8}>
+                      <Image
+                        src={CONFIG.posterSrc}
+                        alt="Fundraiser poster"
+                        fill
+                        className="object-contain bg-black/40"
+                        priority
+                      />
+                    </GlowBorder>
                   </div>
 
                   {/* Video — overlaps poster right edge, sits in front */}
                   <div
-                    className="relative flex-shrink-0 w-[260px] -ml-14 rounded-2xl overflow-hidden z-10
-                      bg-[#111] ring-1 ring-white/15
-                      shadow-[0_8px_48px_rgba(0,0,0,0.7),0_0_60px_rgba(201,168,76,0.12)]"
+                    className="relative flex-shrink-0 w-[260px] -ml-14 z-10 bg-[#111]"
                     style={{ aspectRatio: "9/16" }}
                   >
-                    <video
-                      ref={videoRef}
-                      src={CONFIG.videoSrc}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+                    <GlowBorder borderRadius="1rem" rotateDuration={12}>
+                      <video
+                        ref={videoRef}
+                        src={CONFIG.videoSrc}
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
 
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
 
-                    {/* Mute toggle */}
-                    <button
-                      onClick={toggleMute}
-                      aria-label={muted ? "Unmute video" : "Mute video"}
-                      className="absolute bottom-4 right-4 z-10 flex items-center justify-center
-                        w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm
-                        text-white/70 hover:text-white hover:bg-black/70
-                        transition-colors duration-200"
-                    >
-                      {muted
-                        ? <VolumeX size={15} strokeWidth={1.8} />
-                        : <Volume2 size={15} strokeWidth={1.8} />
-                      }
-                    </button>
+                      {/* Mute toggle */}
+                      <button
+                        onClick={toggleMute}
+                        aria-label={muted ? "Unmute video" : "Mute video"}
+                        className="absolute bottom-4 right-4 z-10 flex items-center justify-center
+                          w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm
+                          text-white/70 hover:text-white hover:bg-black/70
+                          transition-colors duration-200"
+                      >
+                        {muted
+                          ? <VolumeX size={15} strokeWidth={1.8} />
+                          : <Volume2 size={15} strokeWidth={1.8} />
+                        }
+                      </button>
+                    </GlowBorder>
                   </div>
                 </motion.div>
 
@@ -218,10 +245,21 @@ export default function FundraiserBanner({ dismissed, animationStyle, onDismiss 
                       <motion.span
                         className="block"
                         initial={{ y: "105%" }}
-                        animate={{ y: 0, color: ["#ffffff", "#F5E0A0", "#ffffff"] }}
+                        animate={{ 
+                          y: 0, 
+                          backgroundPosition: ["0% center", "200% center"]
+                        }}
                         transition={{
                           y:     { duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.3 },
-                          color: { duration: 0.9, ease: "easeInOut", delay: 3.5, repeat: Infinity, repeatDelay: 4.1 },
+                          backgroundPosition: { duration: 12, repeat: Infinity, ease: "linear" }
+                        }}
+                        style={{
+                          backgroundImage: "linear-gradient(to right, #818cf8, #34d399, #c084fc, #a78bfa, #818cf8)",
+                          backgroundSize: "200% auto",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          maskImage: noiseSvg,
+                          WebkitMaskImage: noiseSvg,
                         }}
                       >
                         {CONFIG.headlineTop}
@@ -233,10 +271,21 @@ export default function FundraiserBanner({ dismissed, animationStyle, onDismiss 
                       <motion.span
                         className="flex items-center gap-3 flex-wrap"
                         initial={{ y: "105%" }}
-                        animate={{ y: 0, color: ["#ffffff", "#F5E0A0", "#ffffff"] }}
+                        animate={{ 
+                          y: 0, 
+                          backgroundPosition: ["0% center", "200% center"]
+                        }}
                         transition={{
                           y:     { duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.48 },
-                          color: { duration: 0.9, ease: "easeInOut", delay: 3.7, repeat: Infinity, repeatDelay: 4.1 },
+                          backgroundPosition: { duration: 15, repeat: Infinity, ease: "linear" }
+                        }}
+                        style={{
+                          backgroundImage: "linear-gradient(to right, #818cf8, #34d399, #c084fc, #a78bfa, #818cf8)",
+                          backgroundSize: "200% auto",
+                          WebkitBackgroundClip: "text",
+                          WebkitTextFillColor: "transparent",
+                          maskImage: noiseSvg,
+                          WebkitMaskImage: noiseSvg,
                         }}
                       >
                         <span>{CONFIG.headlineBot}</span>

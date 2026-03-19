@@ -246,7 +246,7 @@ function FundraisingSectionVisibilitySection() {
 // ─── Campaign Display Mode ────────────────────────────────────────────────────
 
 function CampaignDisplaySection() {
-  const [mode, setMode] = useState<'default' | 'medium' | 'compact'>('default');
+  const [mode, setMode] = useState<'default' | 'medium' | 'compact' | 'hidden'>('default');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -257,12 +257,13 @@ function CampaignDisplaySection() {
       .then((data: Record<string, string>) => {
         if (data.campaignDisplayMode === 'compact') setMode('compact');
         else if (data.campaignDisplayMode === 'medium') setMode('medium');
+        else if (data.campaignDisplayMode === 'hidden') setMode('hidden');
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleSave(value: 'default' | 'medium' | 'compact') {
+  async function handleSave(value: 'default' | 'medium' | 'compact' | 'hidden') {
     setSaving(true);
     setMessage(null);
     setMode(value);
@@ -316,7 +317,12 @@ function CampaignDisplaySection() {
                   label: 'Compact',
                   desc: 'Single-row banner: raised amount, inline progress bar, and Donate button only.',
                 },
-              ] as const).map(({ value, label, desc }: { value: 'default' | 'medium' | 'compact'; label: string; desc: string }) => (
+                {
+                  value: 'hidden',
+                  label: 'Hidden',
+                  desc: 'Completely remove the Campaign Section from the home page. Ideal for off-season or downtime.',
+                },
+              ] as const).map(({ value, label, desc }: { value: 'default' | 'medium' | 'compact' | 'hidden'; label: string; desc: string }) => (
                 <button
                   key={value}
                   type="button"

@@ -1,8 +1,8 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useDonateUrl } from "../hooks/useDonateUrl";
 import { Heart, TrendingUp, Target } from "lucide-react";
 
 // ─── Static campaign config ───────────────────────────────────────────────────
@@ -126,19 +126,16 @@ function ProgressBar({ pct, delay = 0.4, height = "h-2" }: { pct: number; delay?
 // ─── Compact Campaign Bar ─────────────────────────────────────────────────────
 
 function CompactCampaignBar({
-  navHeight,
   raised,
   donations,
 }: {
-  navHeight: number;
   raised: number;
   donations: number;
 }) {
   const pct = Math.min((raised / CAMPAIGN_GOAL) * 100, 100);
   return (
     <section
-      className="bg-white border-b border-black/8 relative overflow-hidden"
-      style={{ paddingTop: navHeight || 0 }}
+      className="bg-white border-b border-[#0A0A0A]/5 relative z-40"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center gap-3 sm:gap-5">
         {/* IRC logo */}
@@ -184,12 +181,10 @@ function CompactCampaignBar({
 // ─── Medium Campaign Section ──────────────────────────────────────────────────
 
 function MediumCampaignSection({
-  navHeight,
   raised,
   donations,
   donationsLastHour,
 }: {
-  navHeight: number;
   raised: number;
   donations: number;
   donationsLastHour: number;
@@ -198,7 +193,6 @@ function MediumCampaignSection({
   return (
     <section
       className="bg-white relative overflow-hidden"
-      style={{ paddingTop: navHeight || 0 }}
     >
       {/* Mobile */}
       <motion.div
@@ -282,8 +276,7 @@ function MediumCampaignSection({
 // ─── Full Campaign Section ─────────────────────────────────────────────────────
 
 export default function IslamicReliefCampaignSection() {
-  const [navHeight, setNavHeight] = useState(0);
-  const [displayMode, setDisplayMode] = useState<"default" | "compact" | "medium" | null>(null);
+  const [displayMode, setDisplayMode] = useState<"default" | "compact" | "medium" | "hidden" | null>(null);
   const [raised, setRaised] = useState(0);
   const [donations, setDonations] = useState(0);
   const [donationsLastHour, setDonationsLastHour] = useState(0);
@@ -296,7 +289,8 @@ export default function IslamicReliefCampaignSection() {
         .then((data: Record<string, string>) => {
           const mode =
             data.campaignDisplayMode === "compact" ? "compact" :
-            data.campaignDisplayMode === "medium"  ? "medium"  : "default";
+            data.campaignDisplayMode === "medium"  ? "medium"  :
+            data.campaignDisplayMode === "hidden"  ? "hidden"  : "default";
           setDisplayMode(mode);
           setRaised(data.campaign_raised ? Number(data.campaign_raised) : 0);
           setDonations(data.campaign_donations ? Number(data.campaign_donations) : 0);
@@ -309,20 +303,12 @@ export default function IslamicReliefCampaignSection() {
     return () => clearInterval(id);
   }, []);
 
-  useEffect(() => {
-    const header = document.querySelector("header");
-    if (!header) return;
-    const update = () => setNavHeight(header.offsetHeight);
-    update();
-    const ro = new ResizeObserver(update);
-    ro.observe(header);
-    return () => ro.disconnect();
-  }, []);
+
 
   // Loading: show compact-shaped skeleton to reserve space and avoid layout pop
   if (displayMode === null) {
     return (
-      <div className="bg-white" style={{ paddingTop: navHeight || 0 }}>
+      <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center gap-4 h-[42px]">
             {/* IRC logo */}
@@ -346,17 +332,21 @@ export default function IslamicReliefCampaignSection() {
     );
   }
 
+  if (displayMode === "hidden") {
+    return null;
+  }
+
   if (displayMode === "compact") {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
-        <CompactCampaignBar navHeight={navHeight} raised={raised} donations={donations} />
+        <CompactCampaignBar raised={raised} donations={donations} />
       </motion.div>
     );
   }
   if (displayMode === "medium") {
     return (
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4, ease: "easeOut" }}>
-        <MediumCampaignSection navHeight={navHeight} raised={raised} donations={donations} donationsLastHour={donationsLastHour} />
+        <MediumCampaignSection raised={raised} donations={donations} donationsLastHour={donationsLastHour} />
       </motion.div>
     );
   }
@@ -369,7 +359,6 @@ export default function IslamicReliefCampaignSection() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="bg-white relative overflow-hidden"
-      style={{ paddingTop: navHeight || 0 }}
     >
       {/* Background geometry — desktop only */}
       <div className="hidden lg:block absolute right-0 top-0 w-[360px] h-[360px] pointer-events-none select-none translate-x-1/3 -translate-y-1/3">
