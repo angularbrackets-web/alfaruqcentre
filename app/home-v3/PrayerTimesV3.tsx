@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useJummahTimes } from "@/app/hooks/useJummahTimes";
@@ -87,35 +87,20 @@ function CrescentIllustration() {
   );
 }
 
-// ─── Iqamah display: inline today (struck) → tomorrow (gold) ──────────────────
+// ─── Iqamah: always today’s time; if tomorrow differs, show tomorrow below ─────
 
 function IqamahDisplay({
   todayIqamah,
   tomorrowIqamah,
   isActive,
-  colIndex,
 }: {
   todayIqamah: string;
   tomorrowIqamah?: string;
   isActive: boolean;
-  colIndex: number;
 }) {
-  const changed = !!tomorrowIqamah && tomorrowIqamah !== todayIqamah;
-  const [strikeDrawn, setStrikeDrawn] = useState(false);
-  const prevTomorrowRef = useRef<string | undefined>(undefined);
-
-  useEffect(() => {
-    const wasChanged = !!prevTomorrowRef.current && prevTomorrowRef.current !== todayIqamah;
-    prevTomorrowRef.current = tomorrowIqamah;
-    if (!changed) { setStrikeDrawn(false); return; }
-    if (wasChanged) return;
-    const t = setTimeout(() => setStrikeDrawn(true), 400 + colIndex * 160);
-    return () => clearTimeout(t);
-  }, [changed, colIndex, tomorrowIqamah, todayIqamah]);
-
-  // Slightly smaller when showing two values side-by-side
-  const normalSize: React.CSSProperties = { fontSize: "clamp(13px, 1.6vw, 22px)", letterSpacing: "-0.02em" };
-  const compactSize: React.CSSProperties = { fontSize: "clamp(10px, 1.05vw, 15px)", letterSpacing: "-0.01em" };
+  const tomorrowDiffers = !!tomorrowIqamah && tomorrowIqamah !== todayIqamah;
+  const iqamahSize: React.CSSProperties = { fontSize: "clamp(13px, 1.6vw, 22px)", letterSpacing: "-0.02em" };
+  const tomorrowSize: React.CSSProperties = { fontSize: "clamp(9px, 1vw, 13px)", letterSpacing: "-0.01em" };
 
   return (
     <div className="flex flex-col items-center gap-0.5">
@@ -123,48 +108,32 @@ function IqamahDisplay({
         Iqāmah
       </span>
 
-      {changed ? (
-        /* Inline: ~~today~~ → tomorrow — no extra height */
-        <div className="flex items-center justify-center gap-[3px] flex-wrap">
-          {/* Today — dimmed, strikethrough */}
-          <div className="relative inline-block leading-none" style={compactSize}>
-            <span className={`font-black ${isActive ? "text-white/25" : "text-white/20"}`}>
-              {todayIqamah}
-            </span>
-            <motion.span
-              className={`absolute inset-x-0 top-[50%] ${isActive ? "bg-white/25" : "bg-white/20"}`}
-              style={{ height: "1.5px", transformOrigin: "left" }}
-              initial={{ scaleX: 0 }}
-              animate={{ scaleX: strikeDrawn ? 1 : 0 }}
-              transition={{ duration: 0.38, ease: "easeOut" }}
-            />
-          </div>
-          {/* Arrow */}
-          <motion.span
-            className="text-white/20 select-none leading-none"
-            style={{ fontSize: "8px" }}
-            animate={{ opacity: strikeDrawn ? 1 : 0 }}
-            transition={{ duration: 0.15, delay: strikeDrawn ? 0.25 : 0 }}
+      <p
+        className={`font-black leading-none text-center ${isActive ? "text-white" : "text-white/60"}`}
+        style={iqamahSize}
+      >
+        {todayIqamah}
+      </p>
+
+      {tomorrowDiffers && (
+        <motion.div
+          className="flex flex-col items-center gap-0 max-w-[min(100%,7.5rem)] text-center leading-tight mt-0.5"
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
+          <span
+            className={`text-[6px] uppercase tracking-[0.18em] font-bold ${isActive ? "text-[#C9A84C]/80" : "text-[#C9A84C]/55"}`}
           >
-            →
-          </motion.span>
-          {/* Tomorrow — gold */}
-          <motion.span
-            className="font-black leading-none text-[#C9A84C]"
-            style={compactSize}
-            animate={{ opacity: strikeDrawn ? 1 : 0 }}
-            transition={{ duration: 0.25, delay: strikeDrawn ? 0.42 : 0 }}
+            Tomorrow
+          </span>
+          <span
+            className="font-bold text-[#C9A84C] leading-none"
+            style={tomorrowSize}
           >
             {tomorrowIqamah}
-          </motion.span>
-        </div>
-      ) : (
-        <p
-          className={`font-black leading-none text-center ${isActive ? "text-white" : "text-white/60"}`}
-          style={normalSize}
-        >
-          {todayIqamah}
-        </p>
+          </span>
+        </motion.div>
       )}
     </div>
   );
@@ -335,7 +304,6 @@ export default function PrayerTimesV3({ prayerTimes, tomorrowPrayerTimes }: Pray
                     todayIqamah={pt.iqamah}
                     tomorrowIqamah={tomorrowPt?.iqamah}
                     isActive={isActive}
-                    colIndex={index}
                   />
                 </div>
               );

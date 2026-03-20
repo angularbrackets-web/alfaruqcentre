@@ -848,10 +848,10 @@ export default function NavbarV3() {
           <CountdownBar
             nextName={nextPrayer.name}
             secsLeft={nextPrayer.secsLeft}
-            todayFajr={dailySlots.find((s) => s.name === "Fajr")?.adhan}
-            todayMaghrib={dailySlots.find((s) => s.name === "Maghrib")?.adhan}
-            tomorrowFajr={tomorrowSlots.find((s) => s.name === "Fajr")?.adhan}
-            tomorrowMaghrib={tomorrowSlots.find((s) => s.name === "Maghrib")?.adhan}
+            todayFajr={dailySlots.find((s) => s.name === "Fajr")?.iqamah ?? undefined}
+            todayMaghrib={dailySlots.find((s) => s.name === "Maghrib")?.iqamah ?? undefined}
+            tomorrowFajr={tomorrowSlots.find((s) => s.name === "Fajr")?.iqamah ?? undefined}
+            tomorrowMaghrib={tomorrowSlots.find((s) => s.name === "Maghrib")?.iqamah ?? undefined}
           />
         )}
 
