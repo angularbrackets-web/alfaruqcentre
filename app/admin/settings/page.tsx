@@ -49,7 +49,7 @@ function NextPrayerBarSection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.showNextPrayerBar === 'false') setShow(false);
@@ -132,7 +132,7 @@ function FundraisingSectionVisibilitySection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.showFundraisingSection === 'false') setShow(false);
@@ -252,7 +252,7 @@ function CampaignDisplaySection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.campaignDisplayMode === 'compact') setMode('compact');
@@ -360,7 +360,7 @@ function DonateUrlSection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data) => setDonateUrl(data.donateUrl || 'https://donorchoice.ca/dia'))
       .catch(() => setDonateUrl('https://donorchoice.ca/dia'))
@@ -452,7 +452,7 @@ function JummahTimesSection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         setJummah1(data.jummah1Time || '1:15 PM');
@@ -567,7 +567,7 @@ function CampaignStatsSection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         setRaised(data.campaign_raised             ?? '4154');
@@ -741,7 +741,7 @@ function DonationQuotesSection() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.donationQuotes) {
@@ -1304,7 +1304,7 @@ function DonationSectionManagerSection() {
   const [mediaMessage, setMediaMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   useEffect(() => {
-    fetch('/api/settings')
+    fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
         if (data.donationSectionMode === 'videos') setMode('videos');
