@@ -65,8 +65,16 @@ const CountdownTimer = () => {
       // Calculate tomorrow's Fajr iqamah time.
       const tomorrow = new Date(now);
       tomorrow.setDate(now.getDate() + 1);
-      const tomorrowNumber = tomorrow.getDate().toString();
-      const tomorrowData = prayerTimes.find(day => day.date === tomorrowNumber) || prayerTimes[0];
+      const tomorrowDay = tomorrow.getDate().toString();
+      const tomorrowMonth = (tomorrow.getMonth() + 1).toString().replace(/^0/, '');
+      const tomorrowYear = tomorrow.getFullYear().toString();
+      
+      const tomorrowData = prayerTimes.find(day => 
+        day.date === tomorrowDay && 
+        day.month === tomorrowMonth && 
+        day.year === tomorrowYear
+      ) || prayerTimes[0];
+      
       const fajrTimeTomorrow = parseTimeForDate(tomorrowData.fajr.iqamah, tomorrow);
       if (fajrTimeTomorrow) {
         return { prayerName: 'Fajr', time: fajrTimeTomorrow };

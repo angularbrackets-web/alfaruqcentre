@@ -23,6 +23,7 @@ interface DayPrayerTimes {
 
 interface MobileStickyBarProps {
   prayerTimes: DayPrayerTimes | null;
+  tomorrowPrayerTimes?: DayPrayerTimes | null;
 }
 
 function parseTimeToday(timeStr: string): Date {
@@ -44,7 +45,10 @@ interface NextPrayer {
   minutesUntil: number;
 }
 
-function getNextPrayer(prayers: DayPrayerTimes): NextPrayer | null {
+function getNextPrayer(
+  prayers: DayPrayerTimes,
+  tomorrow?: DayPrayerTimes | null
+): NextPrayer | null {
   const now = new Date();
   const prayerList = [
     { name: "Fajr", iqamah: prayers.fajr.iqamah, time: parseTimeToday(prayers.fajr.iqamah) },
@@ -59,10 +63,19 @@ function getNextPrayer(prayers: DayPrayerTimes): NextPrayer | null {
       return { name: p.name, iqamah: p.iqamah, minutesUntil: totalMinutes };
     }
   }
+
+  // If no more prayers today, show tomorrow's Fajr
+  if (tomorrow) {
+    const tomorrowFajr = parseTimeToday(tomorrow.fajr.iqamah);
+    tomorrowFajr.setDate(tomorrowFajr.getDate() + 1);
+    const totalMinutes = Math.floor((tomorrowFajr.getTime() - now.getTime()) / 60000);
+    return { name: "Fajr", iqamah: tomorrow.fajr.iqamah, minutesUntil: totalMinutes };
+  }
+
   return null;
 }
 
-export default function MobileStickyBar({ prayerTimes }: MobileStickyBarProps) {
+export default function MobileStickyBar({ prayerTimes, tomorrowPrayerTimes }: MobileStickyBarProps) {
   const [visible, setVisible] = useState(false);
   const [nextPrayer, setNextPrayer] = useState<NextPrayer | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -77,13 +90,13 @@ export default function MobileStickyBar({ prayerTimes }: MobileStickyBarProps) {
 
   useEffect(() => {
     if (!prayerTimes) return;
-    const update = () => setNextPrayer(getNextPrayer(prayerTimes));
+    const update = () => setNextPrayer(getNextPrayer(prayerTimes, tomorrowPrayerTimes));
     update();
     intervalRef.current = setInterval(update, 60_000);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [prayerTimes]);
+  }, [prayerTimes, tomorrowPrayerTimes]);
 
   if (!nextPrayer) return null;
 

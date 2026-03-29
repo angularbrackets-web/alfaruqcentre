@@ -4,6 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sun } from "lucide-react";
 import { prayerTimesData } from "../data/prayerTimes";
+import IqamahChanges from "./IqamahChanges";
 import { useJummahTimes } from "../hooks/useJummahTimes";
 import { useHeaderHeight } from "../hooks/useHeaderHeight";
 
@@ -77,12 +78,30 @@ function getCurrentIndex(p: DayPrayerTimes): number {
   return -1;
 }
 
-function getNextInfo(p: DayPrayerTimes): { name: string; time: string; secsLeft: number } {
+function getNextInfo(p: DayPrayerTimes, allData: DayPrayerTimes[]): { name: string; time: string; secsLeft: number } {
   const now = new Date();
   for (const { key, label } of PRAYERS) {
     const t = parseTime(p[key].iqamah);
     if (now < t) return { name: label, time: p[key].iqamah, secsLeft: Math.floor((t.getTime() - now.getTime()) / 1000) };
   }
+  
+  // If all prayers done for today, get tomorrow's Fajr
+  const tomorrow = new Date(now);
+  tomorrow.setDate(now.getDate() + 1);
+  const tomorrowDay = tomorrow.getDate().toString();
+  const tomorrowMonth = (tomorrow.getMonth() + 1).toString();
+  const tomorrowYear = tomorrow.getFullYear().toString();
+  
+  const tomorrowData = allData.find(d => d.date === tomorrowDay && d.month === tomorrowMonth && d.year === tomorrowYear);
+  if (tomorrowData) {
+    const t = parseTime(tomorrowData.fajr.iqamah);
+    // Note: parseTime currently returns a date for "today". We need to adjust it for tomorrow.
+    t.setDate(tomorrow.getDate());
+    t.setMonth(tomorrow.getMonth());
+    t.setFullYear(tomorrow.getFullYear());
+    return { name: "Fajr", time: tomorrowData.fajr.iqamah, secsLeft: Math.floor((t.getTime() - now.getTime()) / 1000) };
+  }
+  
   return { name: "Fajr", time: p.fajr.iqamah, secsLeft: 0 };
 }
 
@@ -107,12 +126,63 @@ function CrescentIllustration() {
   );
 }
 
+function IqamahDisplay({
+  todayIqamah,
+  tomorrowIqamah,
+  isActive,
+}: {
+  todayIqamah: string;
+  tomorrowIqamah?: string;
+  isActive: boolean;
+}) {
+  const tomorrowDiffers = !!tomorrowIqamah && tomorrowIqamah !== todayIqamah;
+  const iqamahSize: React.CSSProperties = { fontSize: "clamp(13px, 1.7vw, 22px)", letterSpacing: "-0.02em" };
+  const tomorrowSize: React.CSSProperties = { fontSize: "clamp(9px, 1vw, 13px)", letterSpacing: "-0.01em" };
+
+  return (
+    <div className="flex flex-col items-center gap-0.5">
+      <span className={`text-[8px] uppercase tracking-[0.2em] font-medium ${isActive ? "text-white/25" : "text-white/15"}`}>
+        Iqāmah
+      </span>
+
+      <p
+        className={`font-black leading-none text-center ${isActive ? "text-white" : "text-white/60"}`}
+        style={iqamahSize}
+      >
+        {todayIqamah}
+      </p>
+
+      {tomorrowDiffers && (
+        <motion.div
+          className="flex flex-col items-center gap-0 max-w-[min(100%,7.5rem)] text-center leading-tight mt-0.5"
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+        >
+          <span
+            className={`text-[6px] uppercase tracking-[0.18em] font-bold ${isActive ? "text-[#C9A84C]/80" : "text-[#C9A84C]/55"}`}
+          >
+            Tomorrow
+          </span>
+          <span
+            className="font-bold text-[#C9A84C] leading-none"
+            style={tomorrowSize}
+          >
+            {tomorrowIqamah}
+          </span>
+        </motion.div>
+      )}
+    </div>
+  );
+}
+
 // ── Main component ───────────────────────────────────────────────────────────
 
 export default function MonthlyPrayerTimes() {
   const jummahTimes = useJummahTimes();
   const headerHeight = useHeaderHeight();
   const [monthData, setMonthData]     = useState<DayPrayerTimes[]>([]);
+  const [fullData, setFullData]       = useState<DayPrayerTimes[]>(prayerTimesData);
   const [activeIndex, setActiveIndex] = useState(-1);
   const [next, setNext]               = useState<{ name: string; time: string; secsLeft: number }>({ name: "—", time: "", secsLeft: 0 });
   const [dateInfo, setDateInfo]       = useState<{ gregorian: string; hijri: string } | null>(null);
@@ -122,6 +192,21 @@ export default function MonthlyPrayerTimes() {
   const currentMonth  = (today.getMonth() + 1).toString();
   const currentYear   = today.getFullYear().toString();
   const fullMonthName = MONTH_NAMES[parseInt(currentMonth) - 1];
+
+  const tomorrowPT = useMemo(() => {
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowDay = tomorrow.getDate().toString();
+    const tomorrowMonth = (tomorrow.getMonth() + 1).toString();
+    const tomorrowYear = tomorrow.getFullYear().toString();
+
+    return fullData.find((d) =>
+      d.date === tomorrowDay &&
+      d.month === tomorrowMonth &&
+      d.year === tomorrowYear
+    );
+  }, [today, fullData]);
+
   const isFriday      = today.getDay() === 5;
   const showDST       = currentMonth === "3" && currentYear === "2026";
 
@@ -138,11 +223,13 @@ export default function MonthlyPrayerTimes() {
     fetch("/api/prayerTimes")
       .then((r) => r.json())
       .then((data: DayPrayerTimes[]) => {
+        setFullData(data);
         const filtered = data.filter((d) => d.month === currentMonth && d.year === currentYear);
         if (filtered.length > 0) { setMonthData(filtered); return; }
         setMonthData((prayerTimesData as DayPrayerTimes[]).filter((d) => d.month === currentMonth && d.year === currentYear));
       })
       .catch(() => {
+        setFullData(prayerTimesData as DayPrayerTimes[]);
         setMonthData((prayerTimesData as DayPrayerTimes[]).filter((d) => d.month === currentMonth && d.year === currentYear));
       });
   }, [currentMonth, currentYear]);
@@ -153,13 +240,13 @@ export default function MonthlyPrayerTimes() {
   useEffect(() => {
     if (!todayPT) return;
     setActiveIndex(getCurrentIndex(todayPT));
-    setNext(getNextInfo(todayPT));
+    setNext(getNextInfo(todayPT, fullData));
     const id = setInterval(() => {
       setActiveIndex(getCurrentIndex(todayPT));
-      setNext(getNextInfo(todayPT));
+      setNext(getNextInfo(todayPT, fullData));
     }, 1000);
     return () => clearInterval(id);
-  }, [todayPT]);
+  }, [todayPT, fullData]);
 
   const timeStr = useMemo(() => {
     const h = Math.floor(next.secsLeft / 3600);
@@ -213,6 +300,7 @@ export default function MonthlyPrayerTimes() {
                 <p className="text-[#C9A84C] text-sm font-medium">{dateInfo.hijri}</p>
               </div>
             )}
+
           </motion.div>
 
           {/* Friday notice */}
@@ -302,17 +390,11 @@ export default function MonthlyPrayerTimes() {
                         {pt.azzan}
                       </p>
                     </div>
-                    <div className="flex flex-col items-center gap-0.5">
-                      <span className={`text-[8px] uppercase tracking-[0.2em] font-medium ${isActive ? "text-white/25" : "text-white/15"}`}>
-                        Iqāmah
-                      </span>
-                      <p
-                        className={`font-black leading-none text-center ${isActive ? "text-white" : "text-white/60"}`}
-                        style={{ fontSize: "clamp(13px, 1.7vw, 22px)", letterSpacing: "-0.02em" }}
-                      >
-                        {pt.iqamah}
-                      </p>
-                    </div>
+                    <IqamahDisplay
+                      todayIqamah={pt.iqamah}
+                      tomorrowIqamah={tomorrowPT?.[key]?.iqamah}
+                      isActive={isActive}
+                    />
                   </div>
                 );
               })}

@@ -47,7 +47,8 @@ function parseTimeToday(timeStr: string): Date {
 }
 
 function getNextPrayerInfo(
-  prayers: DayPrayerTimes
+  prayers: DayPrayerTimes,
+  tomorrow?: DayPrayerTimes | null
 ): { name: string; time: string; minutesUntil: number } {
   const now = new Date();
   const prayerList = [
@@ -57,11 +58,25 @@ function getNextPrayerInfo(
     { name: "Maghrib", time: prayers.maghrib.iqamah, parsed: parseTimeToday(prayers.maghrib.iqamah) },
     { name: "Isha",    time: prayers.isha.iqamah,    parsed: parseTimeToday(prayers.isha.iqamah)    },
   ];
+
   for (const p of prayerList) {
     if (now < p.parsed) {
       return { name: p.name, time: p.time, minutesUntil: Math.floor((p.parsed.getTime() - now.getTime()) / 60000) };
     }
   }
+
+  // If no more prayers today, return tomorrow's Fajr
+  if (tomorrow) {
+    const tomorrowFajr = parseTimeToday(tomorrow.fajr.iqamah);
+    // Explicitly set to tomorrow's date
+    tomorrowFajr.setDate(tomorrowFajr.getDate() + 1);
+    return { 
+      name: "Fajr", 
+      time: tomorrow.fajr.iqamah, 
+      minutesUntil: Math.floor((tomorrowFajr.getTime() - now.getTime()) / 60000) 
+    };
+  }
+
   return { name: "Fajr", time: prayers.fajr.iqamah, minutesUntil: 0 };
 }
 
@@ -85,7 +100,16 @@ export default function Home() {
         );
         if (today) {
           setPrayerTimes(today);
-          setNextPrayer(getNextPrayerInfo(today));
+          // Get tomorrow's data if possible for initial call
+          const tomorrowDate = new Date(now);
+          tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+          const tomorrowData = data.find(
+            (t) =>
+              t.date === String(tomorrowDate.getDate()) &&
+              t.month === String(tomorrowDate.getMonth() + 1) &&
+              t.year === String(tomorrowDate.getFullYear())
+          );
+          setNextPrayer(getNextPrayerInfo(today, tomorrowData));
         }
         const tomorrowDate = new Date(now);
         tomorrowDate.setDate(tomorrowDate.getDate() + 1);
@@ -102,9 +126,9 @@ export default function Home() {
 
   useEffect(() => {
     if (!prayerTimes) return;
-    const interval = setInterval(() => setNextPrayer(getNextPrayerInfo(prayerTimes)), 60_000);
+    const interval = setInterval(() => setNextPrayer(getNextPrayerInfo(prayerTimes, tomorrowPrayerTimes)), 60_000);
     return () => clearInterval(interval);
-  }, [prayerTimes]);
+  }, [prayerTimes, tomorrowPrayerTimes]);
 
   return (
     <div className="min-h-screen bg-white">
@@ -131,7 +155,7 @@ export default function Home() {
       <SchoolFeatureSection />
       <DonationCTAV3 />
 
-      <MobileStickyBar prayerTimes={prayerTimes} />
+      <MobileStickyBar prayerTimes={prayerTimes} tomorrowPrayerTimes={tomorrowPrayerTimes} />
     </div>
   );
 }

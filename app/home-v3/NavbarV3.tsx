@@ -82,7 +82,7 @@ function parseTime(timeStr: string): Date {
   return d;
 }
 
-function computeNextPrayer(slots: PrayerSlot[]): { name: string; secsLeft: number } {
+function computeNextPrayer(slots: PrayerSlot[], tomorrowSlots: PrayerSlot[] = []): { name: string; secsLeft: number } {
   const MAIN = slots.filter(
     (pt) => pt.iqamah && pt.name !== "Sunrise" && !pt.name.startsWith("Jummah")
   );
@@ -94,6 +94,19 @@ function computeNextPrayer(slots: PrayerSlot[]): { name: string; secsLeft: numbe
       return { name: p.name, secsLeft: Math.floor((t.getTime() - now.getTime()) / 1000) };
     }
   }
+  
+  // If no upcoming prayer today, find tomorrow's Fajr
+  const tomorrowMAIN = tomorrowSlots.filter(
+    (pt) => pt.iqamah && pt.name === "Fajr"
+  );
+  
+  if (tomorrowMAIN.length > 0) {
+    const t = parseTime(tomorrowMAIN[0].iqamah!);
+    t.setDate(t.getDate() + 1); // Adjust parseTime to tomorrow
+    return { name: tomorrowMAIN[0].name, secsLeft: Math.floor((t.getTime() - now.getTime()) / 1000) };
+  }
+  
+  // Fallback to today's Fajr + 1 day (old logic)
   const fajrToday = parseTime(MAIN[0].iqamah!);
   const fajrTomorrow = new Date(fajrToday);
   fajrTomorrow.setDate(fajrTomorrow.getDate() + 1);
@@ -815,7 +828,7 @@ export default function NavbarV3() {
   useEffect(() => {
     if (prayerSlots.length === 0) return;
     const tick = () => {
-      setNextPrayer(computeNextPrayer(prayerSlots));
+      setNextPrayer(computeNextPrayer(prayerSlots, tomorrowSlots));
       // Recompute isAfterIshaToday in real time (useMemo alone won't re-run on time changes)
       const MAIN = dailySlots.filter((s) => s.iqamah && s.name !== "Sunrise");
       const now = new Date();
