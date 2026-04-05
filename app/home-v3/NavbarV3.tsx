@@ -230,23 +230,23 @@ const UtilityBar = memo(function UtilityBar({
                 return (
                   <div
                     key={pt.name}
-                    className={`px-3 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A] rounded-md py-0.5" : ""}`}
+                    className={`px-3 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A]/10 rounded-md py-0.5" : ""}`}
                   >
                     {isNext && (
                       <span className="absolute top-1 right-1 flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600" />
                       </span>
                     )}
-                    <p className="text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.15em] mb-0.5 whitespace-nowrap">
+                    <p className={`text-[9px] font-bold uppercase tracking-[0.15em] mb-0.5 whitespace-nowrap ${isNext ? "text-[#AC8F3D]" : "text-[#C9A84C]"}`}>
                       {pt.name}
                     </p>
-                    <p className={`text-[12px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-white/50" : "text-[#0A0A0A]/50"}`}>
+                    <p className={`text-[12px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-[#0A0A0A]/70" : "text-[#0A0A0A]/50"}`}>
                       {pt.adhan}
                     </p>
                     <AnimatedIqamah
                       current={pt.iqamah}
-                      className={`text-[12px] font-bold leading-tight whitespace-nowrap ${isNext ? "text-white" : "text-[#0A0A0A]"}`}
+                      className="text-[12px] font-bold leading-tight whitespace-nowrap text-[#0A0A0A]"
                     />
                   </div>
                 );
@@ -301,23 +301,23 @@ const UtilityBar = memo(function UtilityBar({
                 return (
                   <div
                     key={pt.name}
-                    className={`px-3.5 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A] rounded-md py-0.5" : ""}`}
+                    className={`px-3.5 first:pl-0 text-center relative ${isNext ? "bg-[#0A0A0A]/10 rounded-md py-0.5" : ""}`}
                   >
                     {isNext && (
                       <span className="absolute top-1.5 right-1.5 flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-600" />
                       </span>
                     )}
-                    <p className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] mb-1 whitespace-nowrap">
+                    <p className={`text-[11px] font-bold uppercase tracking-[0.15em] mb-1 whitespace-nowrap ${isNext ? "text-[#AC8F3D]" : "text-[#C9A84C]"}`}>
                       {pt.name}
                     </p>
-                    <p className={`text-[14px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-white/50" : "text-[#0A0A0A]/50"}`}>
+                    <p className={`text-[14px] font-normal leading-tight whitespace-nowrap ${isNext ? "text-[#0A0A0A]/70" : "text-[#0A0A0A]/50"}`}>
                       {pt.adhan}
                     </p>
                     <AnimatedIqamah
                       current={pt.iqamah}
-                      className={`text-[14px] font-bold leading-tight whitespace-nowrap ${isNext ? "text-white" : "text-[#0A0A0A]"}`}
+                      className="text-[14px] font-bold leading-tight whitespace-nowrap text-[#0A0A0A]"
                     />
                   </div>
                 );
@@ -543,17 +543,13 @@ function TomorrowChangeTicker({ changes }: { changes: ChangeItem[] }) {
 const CountdownBar = memo(function CountdownBar({
   nextName,
   secsLeft,
-  todayFajr,
-  todayMaghrib,
-  tomorrowFajr,
-  tomorrowMaghrib,
+  dailySlots,
+  tomorrowSlots,
 }: {
   nextName: string;
   secsLeft: number;
-  todayFajr?: string;
-  todayMaghrib?: string;
-  tomorrowFajr?: string;
-  tomorrowMaghrib?: string;
+  dailySlots: PrayerSlot[];
+  tomorrowSlots: PrayerSlot[];
 }) {
   const [dateInfo, setDateInfo] = useState<{ gregorian: string; hijri: string } | null>(null);
 
@@ -568,7 +564,17 @@ const CountdownBar = memo(function CountdownBar({
   // Always HH:MM:SS so digit positions stay stable as time changes
   const timeStr = `${String(hours).padStart(2, "0")}:${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
 
-  const hasTomorrow = !!(tomorrowFajr || tomorrowMaghrib);
+  const hasTomorrow = tomorrowSlots.length > 0;
+
+  const changes = useMemo(() => {
+    return [
+      { label: "Fajr", todayTime: dailySlots.find((s) => s.name === "Fajr")?.iqamah ?? "", tomorrowTime: tomorrowSlots.find((s) => s.name === "Fajr")?.iqamah ?? "" },
+      { label: "Dhuhr", todayTime: dailySlots.find((s) => s.name === "Dhuhr")?.iqamah ?? "", tomorrowTime: tomorrowSlots.find((s) => s.name === "Dhuhr")?.iqamah ?? "" },
+      { label: "Asr",   todayTime: dailySlots.find((s) => s.name === "Asr")?.iqamah ?? "",   tomorrowTime: tomorrowSlots.find((s) => s.name === "Asr")?.iqamah ?? "" },
+      { label: "Maghrib", todayTime: dailySlots.find((s) => s.name === "Maghrib")?.iqamah ?? "", tomorrowTime: tomorrowSlots.find((s) => s.name === "Maghrib")?.iqamah ?? "" },
+      { label: "Isha",  todayTime: dailySlots.find((s) => s.name === "Isha")?.iqamah ?? "",  tomorrowTime: tomorrowSlots.find((s) => s.name === "Isha")?.iqamah ?? "" },
+    ].filter((c) => c.todayTime && c.tomorrowTime);
+  }, [dailySlots, tomorrowSlots]);
 
   return (
     <div className="bg-white border-t border-b border-black/10 w-full">
@@ -627,12 +633,7 @@ const CountdownBar = memo(function CountdownBar({
           {/* Right — tomorrow changes ticker */}
           {hasTomorrow && (
             <div className="hidden md:block flex-shrink-0">
-              <TomorrowChangeTicker
-                changes={[
-                  { label: "Fajr",    todayTime: todayFajr    ?? "", tomorrowTime: tomorrowFajr    ?? "" },
-                  { label: "Maghrib", todayTime: todayMaghrib ?? "", tomorrowTime: tomorrowMaghrib ?? "" },
-                ].filter((c) => c.todayTime && c.tomorrowTime)}
-              />
+              <TomorrowChangeTicker changes={changes} />
             </div>
           )}
 
@@ -861,10 +862,8 @@ export default function NavbarV3() {
           <CountdownBar
             nextName={nextPrayer.name}
             secsLeft={nextPrayer.secsLeft}
-            todayFajr={dailySlots.find((s) => s.name === "Fajr")?.iqamah ?? undefined}
-            todayMaghrib={dailySlots.find((s) => s.name === "Maghrib")?.iqamah ?? undefined}
-            tomorrowFajr={tomorrowSlots.find((s) => s.name === "Fajr")?.iqamah ?? undefined}
-            tomorrowMaghrib={tomorrowSlots.find((s) => s.name === "Maghrib")?.iqamah ?? undefined}
+            dailySlots={dailySlots}
+            tomorrowSlots={tomorrowSlots}
           />
         )}
 
