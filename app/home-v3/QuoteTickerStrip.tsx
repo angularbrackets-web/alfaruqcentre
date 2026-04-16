@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+
 
 interface DonationQuote {
   type: "quran" | "hadith";
@@ -59,50 +59,58 @@ export default function QuoteTickerStrip() {
   const fontSize = getQuoteFontSize(current.translation);
 
   return (
-    /**
-     * layout="size" animates the height smoothly when a longer/shorter quote
-     * causes the container to expand or shrink — no jarring height jump.
-     */
-    <motion.div
-      layout="size"
-      className="hidden md:block bg-white overflow-hidden"
-      transition={{ duration: 0.32, ease: "easeInOut" }}
-    >
+    <div className="hidden md:block bg-white overflow-hidden border-b border-neutral-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-start gap-3 sm:gap-4 py-2.5 min-h-[44px]">
+          
+          {/* 
+            Grid container renders all quotes invisibly stacked.
+            This ensures the container height matches the tallest quote,
+            preventing layout jumps across the rest of the page entirely!
+          */}
+          <div className="flex-1 min-w-0 grid items-start">
+            {quotes.map((quote, i) => {
+              const isActive = i === index;
+              const fontSize = getQuoteFontSize(quote.translation);
 
-          {/* Label pill — top-aligned so it doesn't shift when text wraps */}
-          <span className="flex-shrink-0 text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.2em] whitespace-nowrap border border-[#C9A84C]/50 px-2 py-1 rounded-sm mt-0.5">
-            {current.type === "quran" ? "Quran" : "Hadith"}
-          </span>
-
-          {/* Rotating quote — full text, no truncation */}
-          <div className="flex-1 min-w-0">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={index}
-                className="flex items-baseline gap-2 sm:gap-3 flex-wrap"
-                initial={{ opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.38, ease: "easeOut" }}
-              >
-                <p
-                  className="text-[#1E5BB4] font-semibold leading-snug flex-1 min-w-0"
-                  style={{ fontSize }}
+              return (
+                <div
+                  key={i}
+                  className="col-start-1 row-start-1 flex items-start gap-3 sm:gap-4 transition-all duration-500 ease-out"
+                  style={{
+                    opacity: isActive ? 1 : 0,
+                    visibility: isActive ? "visible" : "hidden",
+                    transform: isActive ? "translateY(0)" : "translateY(6px)",
+                    pointerEvents: isActive ? "auto" : "none",
+                    zIndex: isActive ? 10 : 0,
+                  }}
+                  aria-hidden={!isActive}
                 >
-                  &ldquo;{current.translation}&rdquo;
-                </p>
-                <span className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0 self-end">
-                  {current.reference}
-                </span>
-              </motion.div>
-            </AnimatePresence>
+                  {/* Label pill — top-aligned so it doesn't shift when text wraps */}
+                  <span className="flex-shrink-0 text-[#C9A84C] text-[9px] font-bold uppercase tracking-[0.2em] whitespace-nowrap border border-[#C9A84C]/50 px-2 py-1 rounded-sm mt-0.5">
+                    {quote.type === "quran" ? "Quran" : "Hadith"}
+                  </span>
+
+                  {/* Rotating quote — full text, no truncation */}
+                  <div className="flex items-baseline gap-2 sm:gap-3 flex-wrap flex-1 min-w-0">
+                    <p
+                      className="text-[#1E5BB4] font-semibold leading-snug flex-1 min-w-0"
+                      style={{ fontSize }}
+                    >
+                      &ldquo;{quote.translation}&rdquo;
+                    </p>
+                    <span className="text-[#C9A84C] text-[11px] font-bold uppercase tracking-[0.15em] whitespace-nowrap flex-shrink-0 self-end">
+                      {quote.reference}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Dot indicators */}
           {quotes.length > 1 && (
-            <div className="flex items-center gap-1.5 flex-shrink-0 mt-1.5">
+            <div className="flex items-center gap-1.5 flex-shrink-0 mt-1.5 z-10">
               {quotes.map((_, i) => (
                 <button
                   key={i}
@@ -120,6 +128,6 @@ export default function QuoteTickerStrip() {
 
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
