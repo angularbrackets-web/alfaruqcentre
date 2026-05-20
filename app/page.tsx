@@ -13,6 +13,7 @@ import DonationCTAV3 from "./home-v3/DonationCTAV3";
 import ProgramsCarousel from "./home-v3/ProgramsCarousel";
 import EventsCarousel from "./home-v3/EventsCarousel";
 import VideosSection from "./home-v3/VideosSection";
+import WeeklyScheduleSection from "./home-v3/WeeklyScheduleSection";
 
 interface PrayerTime {
   azzan: string;
@@ -149,6 +150,7 @@ export default function Home() {
       <ProgramsCarousel />
       <EventsCarousel />
       <VideosSection />
+      <WeeklyScheduleSection />
       <MissionQuoteBlock />
       <GetConnectedSection />
       <PrayerTimesV3 prayerTimes={prayerTimes} tomorrowPrayerTimes={tomorrowPrayerTimes} />

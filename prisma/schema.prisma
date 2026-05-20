@@ -84,6 +84,22 @@ model Volunteer {
   @@map("volunteers")
 }
 
+model WeeklyClass {
+  id        String   @id
+  name      String
+  days      String[]
+  startTime String
+  endTime   String?
+  audience  String?
+  category  String
+  status    Status   @default(ACTIVE)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("weekly_classes")
+}
+
 model VideoPost {
   id           String   @id
   title        String

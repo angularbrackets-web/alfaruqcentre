@@ -18,7 +18,9 @@ import {
   Users,
   Settings,
   Play,
-  PlayCircle
+  PlayCircle,
+  Clock,
+  PlusCircle
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -30,6 +32,8 @@ const navigation = [
   { name: 'Add Program', href: '/admin/programs/add', icon: Plus },
   { name: 'Events', href: '/admin/events', icon: Calendar },
   { name: 'Add Event', href: '/admin/events/add', icon: CalendarPlus },
+  { name: 'Weekly Schedule', href: '/admin/weekly-schedule', icon: Clock },
+  { name: 'Add Class', href: '/admin/weekly-schedule/add', icon: PlusCircle },
   { name: 'Videos', href: '/admin/videos', icon: Play },
   { name: 'Add Video', href: '/admin/videos/add', icon: PlayCircle },
   { name: 'Volunteers', href: '/admin/volunteers', icon: Users },
