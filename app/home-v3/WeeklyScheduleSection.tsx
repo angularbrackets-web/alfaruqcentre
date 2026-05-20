@@ -47,10 +47,10 @@ function AudienceBadge({ label }: { label: string }) {
   const isSisters = label.toLowerCase() === "sisters";
   return (
     <span
-      className={`inline-block text-[9px] font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-sm leading-none flex-shrink-0 ${
+      className={`inline-block text-[10px] font-bold uppercase tracking-[0.1em] px-2 py-0.5 rounded-sm leading-none flex-shrink-0 ${
         isSisters
           ? "bg-[#C9A84C]/15 text-[#C9A84C]"
-          : "bg-[#0A0A0A]/6 text-[#0A0A0A]/35"
+          : "bg-[#0A0A0A]/6 text-[#0A0A0A]/40"
       }`}
     >
       {label}
@@ -58,7 +58,8 @@ function AudienceBadge({ label }: { label: string }) {
   );
 }
 
-function DayCard({
+/* ── Desktop card (7-column grid, all days including empty) ── */
+function DesktopDayCard({
   day,
   classes,
   isToday,
@@ -68,10 +69,9 @@ function DayCard({
   isToday: boolean;
 }) {
   const hasClasses = classes.length > 0;
-
   return (
     <div
-      className={`relative flex-shrink-0 flex flex-col w-[188px] md:w-auto snap-start rounded-xl border transition-all duration-200 ${
+      className={`relative flex flex-col rounded-xl border transition-all duration-200 ${
         isToday
           ? "border-[#C9A84C] shadow-[0_0_0_1px_#C9A84C]"
           : hasClasses
@@ -79,40 +79,28 @@ function DayCard({
           : "border-[#0A0A0A]/6"
       } ${hasClasses ? "bg-white" : "bg-[#0A0A0A]/[0.018]"}`}
     >
-      {isToday && (
-        <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#C9A84C] rounded-t-xl" />
-      )}
+      {isToday && <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#C9A84C] rounded-t-xl" />}
 
-      <div
-        className={`px-3 pt-3 pb-2 border-b ${
-          isToday ? "border-[#C9A84C]/20" : "border-[#0A0A0A]/6"
-        }`}
-      >
-        <div className="flex items-center justify-between gap-1.5">
-          <p
-            className={`text-[10px] font-bold uppercase tracking-[0.2em] leading-none ${
-              hasClasses ? "text-[#0A0A0A]" : "text-[#0A0A0A]/22"
-            }`}
-          >
+      <div className={`px-3 pt-3 pb-2 border-b ${isToday ? "border-[#C9A84C]/20" : "border-[#0A0A0A]/6"}`}>
+        <div className="flex items-center justify-between gap-1">
+          <p className={`text-[11px] font-bold uppercase tracking-[0.18em] leading-none ${hasClasses ? "text-[#0A0A0A]" : "text-[#0A0A0A]/22"}`}>
             {DAY_FULL_LABELS[day]}
           </p>
           {isToday && (
-            <span className="bg-[#0A0A0A] text-white text-[7.5px] font-bold uppercase tracking-[0.15em] px-1.5 py-0.5 rounded-sm leading-none">
+            <span className="bg-[#0A0A0A] text-white text-[8px] font-bold uppercase tracking-[0.12em] px-1.5 py-0.5 rounded-sm leading-none">
               Today
             </span>
           )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 p-3 flex-1 min-h-[100px]">
+      <div className="flex flex-col gap-3 p-3 flex-1 min-h-[90px]">
         {hasClasses ? (
           classes.map((cls) => (
             <div key={cls.id} className="flex flex-col gap-1">
-              <p className="text-[11px] font-bold text-[#0A0A0A] leading-tight">
-                {cls.name}
-              </p>
+              <p className="text-[13px] font-bold text-[#0A0A0A] leading-tight">{cls.name}</p>
               <div className="flex items-center gap-1.5 flex-wrap">
-                <p className="text-[10px] text-[#0A0A0A]/45 font-medium leading-none">
+                <p className="text-[11px] text-[#0A0A0A]/50 font-medium leading-none">
                   {cls.endTime ? `${cls.startTime} – ${cls.endTime}` : cls.startTime}
                 </p>
                 {cls.audience && <AudienceBadge label={cls.audience} />}
@@ -120,10 +108,56 @@ function DayCard({
             </div>
           ))
         ) : (
-          <span className="text-[#0A0A0A]/18 text-[13px] font-medium self-center my-auto">
-            —
+          <span className="text-[#0A0A0A]/18 text-sm font-medium self-center my-auto">—</span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── Mobile row (vertical stack, only days with classes) ── */
+function MobileDayRow({
+  day,
+  classes,
+  isToday,
+}: {
+  day: DayOfWeek;
+  classes: WeeklyClass[];
+  isToday: boolean;
+}) {
+  return (
+    <div
+      className={`relative rounded-xl border ${
+        isToday ? "border-[#C9A84C] shadow-[0_0_0_1px_#C9A84C]" : "border-[#0A0A0A]/10"
+      } bg-white overflow-hidden`}
+    >
+      {isToday && <div className="absolute top-0 left-0 right-0 h-[2px] bg-[#C9A84C]" />}
+
+      {/* Day header row */}
+      <div className={`flex items-center justify-between px-4 py-3 border-b ${isToday ? "border-[#C9A84C]/20" : "border-[#0A0A0A]/8"}`}>
+        <p className="text-sm font-bold uppercase tracking-[0.18em] text-[#0A0A0A]">
+          {DAY_FULL_LABELS[day]}
+        </p>
+        {isToday && (
+          <span className="bg-[#0A0A0A] text-white text-[9px] font-bold uppercase tracking-[0.12em] px-2 py-1 rounded-sm leading-none">
+            Today
           </span>
         )}
+      </div>
+
+      {/* Classes */}
+      <div className="divide-y divide-[#0A0A0A]/6">
+        {classes.map((cls) => (
+          <div key={cls.id} className="flex items-center justify-between px-4 py-3 gap-3">
+            <div className="flex flex-col gap-1 min-w-0">
+              <p className="text-[15px] font-bold text-[#0A0A0A] leading-snug">{cls.name}</p>
+              <p className="text-sm text-[#0A0A0A]/50 font-medium">
+                {cls.endTime ? `${cls.startTime} – ${cls.endTime}` : cls.startTime}
+              </p>
+            </div>
+            {cls.audience && <AudienceBadge label={cls.audience} />}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -194,16 +228,40 @@ export default function WeeklyScheduleSection() {
           </div>
         </motion.div>
 
+        {/* Mobile: vertical stack, only days with classes */}
         <motion.div
-          className="flex gap-3 md:grid md:grid-cols-7 md:gap-3 overflow-x-auto snap-x snap-mandatory hide-scrollbar -mx-4 px-4 sm:-mx-6 sm:px-6 md:mx-0 md:px-0"
+          className="md:hidden flex flex-col gap-3"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          {DAYS_ORDERED.filter((day) => classesByDay[day].length > 0).map((day, i) => {
+            const isToday = todayIndex === DAY_TO_JS_INDEX[day];
+            return (
+              <motion.div
+                key={day}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: i * 0.07 }}
+              >
+                <MobileDayRow day={day} classes={classesByDay[day]} isToday={isToday} />
+              </motion.div>
+            );
+          })}
+        </motion.div>
+
+        {/* Desktop: 7-column grid, all days */}
+        <motion.div
+          className="hidden md:grid md:grid-cols-7 md:gap-3"
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           {DAYS_ORDERED.map((day, i) => {
-            const jsDay = DAY_TO_JS_INDEX[day];
-            const isToday = todayIndex === jsDay;
+            const isToday = todayIndex === DAY_TO_JS_INDEX[day];
             return (
               <motion.div
                 key={day}
@@ -211,13 +269,8 @@ export default function WeeklyScheduleSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: 0.05 + i * 0.06 }}
-                className="md:contents"
               >
-                <DayCard
-                  day={day}
-                  classes={classesByDay[day]}
-                  isToday={isToday}
-                />
+                <DesktopDayCard day={day} classes={classesByDay[day]} isToday={isToday} />
               </motion.div>
             );
           })}
