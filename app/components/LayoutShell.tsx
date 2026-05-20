@@ -9,7 +9,7 @@ function NavbarSpacer() {
   return <div style={{ height: navHeight }} />;
 }
 
-const BARE_ROUTES = ["/qr-card", "/admin"];
+const BARE_ROUTES = ["/qr-card", "/admin", "/eid-salah-2026"];
 
 export default function LayoutShell({
   children,
