@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import IslamicReliefCampaignSection from "./home-v3/IslamicReliefCampaignSection";
 import TopFundraisingSection from "./home-v3/TopFundraisingSection";
 import MobileStickyBar from "./home-v2/MobileStickyBar";
+import TVAutoRefresh from "./components/TVAutoRefresh";
 import HeroV3 from "./home-v3/HeroV3";
 import MissionQuoteBlock from "./home-v3/MissionQuoteBlock";
 import GetConnectedSection from "./home-v3/GetConnectedSection";
@@ -133,6 +134,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-white">
+      <TVAutoRefresh />
+
       {/* ── IRC RAMADAN CAMPAIGN (temporary) ────────────────────────────────────
           When campaign ends: remove <IslamicReliefCampaignSection />.
           Update numbers in IslamicReliefCampaignSection.tsx → CAMPAIGN config.
