@@ -67,6 +67,7 @@ function useSectionSettings() {
   const [mode, setMode] = useState<"fundraising" | "videos" | "images">("fundraising");
   const [videos, setVideos] = useState<FeaturedVideo[]>([]);
   const [images, setImages] = useState<FeaturedImage[]>([]);
+  const [duoMode, setDuoMode] = useState(false);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -80,7 +81,7 @@ function useSectionSettings() {
         }
         if (data.donationSectionMode === "videos") setMode("videos");
         if (data.donationSectionMode === "images") setMode("images");
-        
+
         if (data.featuredVideos) {
           try {
             const parsed = JSON.parse(data.featuredVideos);
@@ -98,11 +99,13 @@ function useSectionSettings() {
             // ignore malformed JSON
           }
         }
+
+        if (data.featuredImageDuoMode === "true") setDuoMode(true);
       })
       .catch(() => {});
   }, []);
 
-  return { showSection, animationStyle, mode, videos, images };
+  return { showSection, animationStyle, mode, videos, images, duoMode };
 }
 
 // ── Featured video showcase ────────────────────────────────────────────────────
@@ -332,8 +335,98 @@ function FeaturedVideoShowcase({ videos, animationStyle }: { videos: FeaturedVid
   );
 }
 
+// ── Duo panel layout (exactly 2 images, side-by-side) ─────────────────────────
+function DuoPanelLayout({ images }: { images: FeaturedImage[] }) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const donateUrl = useDonateUrl();
+
+  return (
+    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:h-[650px]">
+      {images.map((img, i) => {
+        const hasContent = !!(img.venue || img.heading || img.tagline || img.subheading || img.description || img.ctaText);
+        const isDimmed = hoveredIndex !== null && hoveredIndex !== i;
+
+        return (
+          <div
+            key={i}
+            className="relative flex-1 overflow-hidden rounded-[16px] md:rounded-[24px] ring-1 ring-white/10 shadow-2xl min-h-[380px] md:min-h-0"
+            style={{ transition: 'opacity 400ms ease', opacity: isDimmed ? 0.85 : 1 }}
+            onMouseEnter={() => setHoveredIndex(i)}
+            onMouseLeave={() => setHoveredIndex(null)}
+          >
+            {/* Blurred background fill */}
+            <img
+              src={img.src}
+              className="absolute inset-0 w-full h-full object-cover blur-[25px] scale-125 pointer-events-none opacity-40"
+              alt=""
+            />
+
+            {/* Foreground image — scales slightly on hover */}
+            <img
+              src={img.src}
+              alt={img.heading || "Featured Campaign"}
+              className="absolute inset-0 z-10 w-full h-full object-contain pointer-events-none"
+              style={{
+                transition: 'transform 400ms ease',
+                transform: hoveredIndex === i ? 'scale(1.02)' : 'scale(1)',
+              }}
+            />
+
+            {/* Gradient for text legibility */}
+            {hasContent && (
+              <div className="absolute z-20 inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent pointer-events-none" />
+            )}
+
+            {/* Content overlay — always visible */}
+            {hasContent && (
+              <div className="absolute z-30 inset-x-0 bottom-0 p-3 sm:p-4 md:p-6 flex flex-col justify-end pointer-events-none">
+                <div className="max-w-xl bg-[#0A0A0A]/70 backdrop-blur-xl p-4 sm:p-5 md:p-7 rounded-[14px] md:rounded-[20px] border border-white/10 shadow-2xl pointer-events-auto">
+                  {img.venue && (
+                    <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 text-white text-[9px] md:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 md:mb-4 w-fit">
+                      <MapPin size={10} className="md:w-3 md:h-3" strokeWidth={2.5} />
+                      {img.venue}
+                    </div>
+                  )}
+                  {img.heading && (
+                    <h2 className="text-lg sm:text-xl md:text-3xl font-black text-white leading-tight mb-1.5 md:mb-2 uppercase truncate md:whitespace-normal">
+                      {img.heading}
+                    </h2>
+                  )}
+                  {(img.subheading || img.tagline) && (
+                    <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium max-w-lg mb-2 md:mb-3 line-clamp-1 md:line-clamp-2">
+                      {img.tagline || img.subheading}
+                    </p>
+                  )}
+                  {img.description && (
+                    <p className="hidden md:block text-white/60 text-xs md:text-sm max-w-lg mb-5 line-clamp-2 md:line-clamp-3 leading-relaxed">
+                      {img.description}
+                    </p>
+                  )}
+                  {img.ctaText && (
+                    <a
+                      href={img.ctaUrl || donateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center w-fit gap-1.5 md:gap-2 bg-[#C9A84C] text-[#0A0A0A] font-extrabold
+                        text-[9px] md:text-[11px] uppercase tracking-[0.15em] px-4 md:px-6 py-2 md:py-3 rounded-full
+                        hover:bg-[#D4B55E] transition-colors duration-200 mt-1 md:mt-0"
+                    >
+                      {img.ctaText}
+                      <span className="text-xs md:text-sm leading-none">→</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 // ── Featured image showcase ────────────────────────────────────────────────────
-function FeaturedImageShowcase({ images, animationStyle }: { images: FeaturedImage[]; animationStyle: 'none' | 'particles' | 'fireworks' }) {
+function FeaturedImageShowcase({ images, animationStyle, duoMode }: { images: FeaturedImage[]; animationStyle: 'none' | 'particles' | 'fireworks'; duoMode: boolean }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const donateUrl = useDonateUrl();
@@ -350,6 +443,30 @@ function FeaturedImageShowcase({ images, animationStyle }: { images: FeaturedIma
   }, [images.length, isHovered]);
 
   if (!images.length) return null;
+
+  if (duoMode && images.length === 2) {
+    return (
+      <section className="relative bg-[#0A0A0A] overflow-hidden py-12 md:py-20">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <img
+            src={images[0].src}
+            className="absolute inset-0 w-full h-full object-cover scale-125"
+            style={{ filter: "blur(80px)", opacity: 0.18 }}
+            alt=""
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0A0A0A]/92 via-[#0A0A0A]/85 to-[#0A0A0A]/95" />
+        </div>
+        {animationStyle !== 'none' && <CelebrationBackground type={animationStyle} />}
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-white text-3xl md:text-5xl font-black mb-3">Featured Campaigns</h2>
+            <p className="text-[#C9A84C] text-xs md:text-sm font-black uppercase tracking-[0.2em]">Explore our upcoming initiatives and events</p>
+          </div>
+          <DuoPanelLayout images={images} />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="relative bg-[#0A0A0A] overflow-hidden py-12 md:py-20">
@@ -525,7 +642,7 @@ function FeaturedImageShowcase({ images, animationStyle }: { images: FeaturedIma
 
 // ── Main export ────────────────────────────────────────────────────────────────
 export default function TopFundraisingSection() {
-  const { showSection, animationStyle, mode, videos, images } = useSectionSettings();
+  const { showSection, animationStyle, mode, videos, images, duoMode } = useSectionSettings();
   const [bannerDismissed, setBannerDismissed] = useState(false);
 
   if (!showSection) return null;
@@ -538,9 +655,10 @@ export default function TopFundraisingSection() {
   }
 
   if (mode === "images") {
-    return <FeaturedImageShowcase 
-      images={images} 
-      animationStyle={animationStyle} 
+    return <FeaturedImageShowcase
+      images={images}
+      animationStyle={animationStyle}
+      duoMode={duoMode}
     />;
   }
 

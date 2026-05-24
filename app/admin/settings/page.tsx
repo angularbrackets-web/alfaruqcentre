@@ -1302,6 +1302,8 @@ function DonationSectionManagerSection() {
   const [modeSaving, setModeSaving] = useState(false);
   const [mediaSaving, setMediaSaving] = useState(false);
   const [mediaMessage, setMediaMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [duoMode, setDuoMode] = useState(false);
+  const [duoModeSaving, setDuoModeSaving] = useState(false);
 
   useEffect(() => {
     fetch('/api/settings?fresh=1')
@@ -1327,10 +1329,26 @@ function DonationSectionManagerSection() {
             // ignore
           }
         }
+
+        if (data.featuredImageDuoMode === 'true') setDuoMode(true);
       })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
+
+  async function handleDuoModeToggle(value: boolean) {
+    setDuoMode(value);
+    setDuoModeSaving(true);
+    try {
+      await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key: 'featuredImageDuoMode', value: value ? 'true' : 'false' }),
+      });
+    } finally {
+      setDuoModeSaving(false);
+    }
+  }
 
   async function handleModeChange(value: 'fundraising' | 'videos' | 'images') {
     setMode(value);
@@ -1523,6 +1541,32 @@ function DonationSectionManagerSection() {
                   <Plus className="h-4 w-4" />
                   Add {mode === 'videos' ? 'Video' : 'Image'}
                 </button>
+
+                {mode === 'images' && (
+                  <div className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">Duo layout (2 images only)</p>
+                        <p className="text-xs text-gray-500 mt-0.5 leading-snug max-w-xs">
+                          Shows both images side-by-side at equal width simultaneously.
+                          Has no effect with 1 or 3+ images.
+                        </p>
+                      </div>
+                      <label className="flex items-center gap-2 cursor-pointer flex-shrink-0 mt-0.5">
+                        <input
+                          type="checkbox"
+                          checked={duoMode}
+                          onChange={(e) => handleDuoModeToggle(e.target.checked)}
+                          disabled={duoModeSaving}
+                          className="text-blue-600 rounded cursor-pointer"
+                        />
+                        <span className="text-sm text-gray-700 select-none">
+                          {duoModeSaving ? 'Saving…' : duoMode ? 'On' : 'Off'}
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                )}
 
                 {mediaMessage && (
                   <p
