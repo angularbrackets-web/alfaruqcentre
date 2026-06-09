@@ -341,7 +341,7 @@ function DuoPanelLayout({ images }: { images: FeaturedImage[] }) {
   const donateUrl = useDonateUrl();
 
   return (
-    <div className="flex flex-col md:flex-row gap-2 md:gap-4 md:h-[650px]">
+    <div className="flex flex-col md:flex-row gap-4 md:h-[700px]">
       {images.map((img, i) => {
         const hasContent = !!(img.venue || img.heading || img.tagline || img.subheading || img.description || img.ctaText);
         const isDimmed = hoveredIndex !== null && hoveredIndex !== i;
@@ -349,56 +349,53 @@ function DuoPanelLayout({ images }: { images: FeaturedImage[] }) {
         return (
           <div
             key={i}
-            className="relative flex-1 overflow-hidden rounded-[16px] md:rounded-[24px] ring-1 ring-white/10 shadow-2xl min-h-[380px] md:min-h-0"
+            className="flex-1 overflow-hidden rounded-[16px] md:rounded-[24px] ring-1 ring-white/10 shadow-2xl flex flex-col bg-[#0A0A0A]"
             style={{ transition: 'opacity 400ms ease', opacity: isDimmed ? 0.85 : 1 }}
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
-            {/* Blurred background fill */}
-            <img
-              src={img.src}
-              className="absolute inset-0 w-full h-full object-cover blur-[25px] scale-125 pointer-events-none opacity-40"
-              alt=""
-            />
+            {/* Image area — fills available space above content */}
+            <div className="relative w-full aspect-[3/4] md:aspect-auto md:flex-1 md:min-h-0 overflow-hidden">
+              {/* Blurred background fill */}
+              <img
+                src={img.src}
+                className="absolute inset-0 w-full h-full object-cover blur-[25px] scale-125 pointer-events-none opacity-40"
+                alt=""
+              />
+              {/* Foreground image — full poster, no cropping */}
+              <img
+                src={img.src}
+                alt={img.heading || "Featured Campaign"}
+                className="absolute inset-0 z-10 w-full h-full object-contain pointer-events-none"
+                style={{
+                  transition: 'transform 400ms ease',
+                  transform: hoveredIndex === i ? 'scale(1.02)' : 'scale(1)',
+                }}
+              />
+            </div>
 
-            {/* Foreground image — scales slightly on hover */}
-            <img
-              src={img.src}
-              alt={img.heading || "Featured Campaign"}
-              className="absolute inset-0 z-10 w-full h-full object-contain pointer-events-none"
-              style={{
-                transition: 'transform 400ms ease',
-                transform: hoveredIndex === i ? 'scale(1.02)' : 'scale(1)',
-              }}
-            />
-
-            {/* Gradient for text legibility */}
+            {/* Content below image — no overlap */}
             {hasContent && (
-              <div className="absolute z-20 inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent pointer-events-none" />
-            )}
-
-            {/* Content overlay — always visible */}
-            {hasContent && (
-              <div className="absolute z-30 inset-x-0 bottom-0 p-3 sm:p-4 md:p-6 flex flex-col justify-end pointer-events-none">
-                <div className="max-w-xl bg-[#0A0A0A]/70 backdrop-blur-xl p-4 sm:p-5 md:p-7 rounded-[14px] md:rounded-[20px] border border-white/10 shadow-2xl pointer-events-auto">
+              <div className="p-3 sm:p-4 md:p-5">
+                <div className="bg-[#111]/90 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-[14px] md:rounded-[18px] border border-white/10 shadow-2xl">
                   {img.venue && (
-                    <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 text-white text-[9px] md:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 md:mb-4 w-fit">
+                    <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 text-white text-[9px] md:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 w-fit">
                       <MapPin size={10} className="md:w-3 md:h-3" strokeWidth={2.5} />
                       {img.venue}
                     </div>
                   )}
                   {img.heading && (
-                    <h2 className="text-lg sm:text-xl md:text-3xl font-black text-white leading-tight mb-1.5 md:mb-2 uppercase truncate md:whitespace-normal">
+                    <h2 className="text-base sm:text-lg md:text-2xl font-black text-white leading-tight mb-1 md:mb-2 uppercase">
                       {img.heading}
                     </h2>
                   )}
                   {(img.subheading || img.tagline) && (
-                    <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium max-w-lg mb-2 md:mb-3 line-clamp-1 md:line-clamp-2">
+                    <p className="text-white/80 text-xs sm:text-sm font-medium max-w-lg mb-2 line-clamp-2">
                       {img.tagline || img.subheading}
                     </p>
                   )}
                   {img.description && (
-                    <p className="hidden md:block text-white/60 text-xs md:text-sm max-w-lg mb-5 line-clamp-2 md:line-clamp-3 leading-relaxed">
+                    <p className="text-white/60 text-xs md:text-sm max-w-lg mb-4 line-clamp-3 leading-relaxed">
                       {img.description}
                     </p>
                   )}
@@ -409,7 +406,7 @@ function DuoPanelLayout({ images }: { images: FeaturedImage[] }) {
                       rel="noopener noreferrer"
                       className="inline-flex items-center w-fit gap-1.5 md:gap-2 bg-[#C9A84C] text-[#0A0A0A] font-extrabold
                         text-[9px] md:text-[11px] uppercase tracking-[0.15em] px-4 md:px-6 py-2 md:py-3 rounded-full
-                        hover:bg-[#D4B55E] transition-colors duration-200 mt-1 md:mt-0"
+                        hover:bg-[#D4B55E] transition-colors duration-200"
                     >
                       {img.ctaText}
                       <span className="text-xs md:text-sm leading-none">→</span>
@@ -515,72 +512,78 @@ function FeaturedImageShowcase({ images, animationStyle, duoMode }: { images: Fe
                 onMouseEnter={() => {
                   if(typeof window !== "undefined" && window.innerWidth >= 1024) setActiveIndex(i);
                 }}
-                className={`relative overflow-hidden rounded-[16px] md:rounded-[24px] cursor-pointer group transition-all duration-[750ms] ease-[cubic-bezier(0.25,1,0.3,1)] ${
-                  isActive 
-                    ? 'flex-[3.5] lg:flex-[3] ring-1 ring-white/10 shadow-2xl shadow-[#C9A84C]/5' 
+                className={`relative overflow-hidden rounded-[16px] md:rounded-[24px] cursor-pointer group transition-all duration-[750ms] ease-[cubic-bezier(0.25,1,0.3,1)] flex flex-col ${
+                  isActive
+                    ? 'flex-[3.5] lg:flex-[3] ring-1 ring-white/10 shadow-2xl shadow-[#C9A84C]/5'
                     : 'flex-[1] lg:flex-[1.2] ring-1 ring-white/5 opacity-70 hover:opacity-100'
                 }`}
               >
-                {/* Image filling the panel */}
-                <div className="absolute inset-0 w-full h-full bg-[#0A0A0A]">
-                  {/* Blurred background map for the expanded state */}
+                {/* Image area — fills space above content */}
+                <div className="relative flex-1 min-h-0 bg-[#0A0A0A] overflow-hidden">
+                  {/* Blurred background for expanded state */}
                   <img src={img.src} className={`absolute inset-0 w-full h-full object-cover blur-[25px] scale-125 pointer-events-none transition-opacity duration-[800ms] ${isActive ? 'opacity-40' : 'opacity-0'}`} alt="" />
-                  
-                  {/* Collapsed Image (covers the narrow slice) */}
-                  <img 
+
+                  {/* Collapsed image (narrow slice) */}
+                  <img
                     src={img.src}
                     alt=""
                     className={`absolute inset-0 w-full h-full object-cover transition-all duration-[750ms] ease-[cubic-bezier(0.25,1,0.3,1)] pointer-events-none ${isActive ? 'opacity-0 scale-[1.05]' : 'opacity-40 group-hover:opacity-75 scale-100'}`}
                   />
 
-                  {/* Expanded Image (shows full flyer without cropping) */}
-                  <img 
+                  {/* Expanded image — full poster, no cropping */}
+                  <img
                     src={img.src}
                     alt={img.heading || "Featured Event"}
                     className={`absolute inset-0 z-10 w-full h-full object-contain transition-all duration-[750ms] ease-[cubic-bezier(0.25,1,0.3,1)] ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.95]'}`}
                   />
-                  
-                  {/* Subtle gradient so overlaid text (if any) is readable */}
-                  {hasContent && (
-                    <div className={`absolute z-20 inset-0 transition-opacity duration-700 pointer-events-none ${isActive ? 'bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/20 to-transparent opacity-100' : 'bg-transparent opacity-0'}`} />
-                  )}
+
+                  {/* Collapsed State Title */}
+                  <div
+                    className={`absolute z-30 inset-0 py-6 px-1 md:p-5 flex flex-col justify-end lg:justify-center items-center pointer-events-none transition-all duration-500 ${isActive ? 'opacity-0 scale-95' : 'opacity-100 scale-100 delay-300'}`}
+                  >
+                    <span
+                      style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }}
+                      className="block text-white/50 group-hover:text-white/90 font-bold tracking-[0.2em] md:tracking-[0.25em] uppercase transition-colors text-[10px] md:text-[13px] whitespace-nowrap overflow-hidden text-ellipsis max-h-full"
+                    >
+                      {collapsedTitle}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Content Overlay */}
+                {/* Content below image — no overlap */}
                 {hasContent && (
                   <AnimatePresence>
                     {isActive && (
-                      <motion.div 
+                      <motion.div
                         key={`content-${i}`}
-                        initial={{ opacity: 0, y: 15 }}
+                        initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
-                        transition={{ duration: 0.4, delay: 0.3 }}
-                        className="absolute z-30 inset-x-0 bottom-0 p-3 sm:p-4 md:p-6 flex flex-col justify-end pointer-events-none"
+                        transition={{ duration: 0.4, delay: 0.25 }}
+                        className="relative z-30 p-3 sm:p-4 md:p-5 pointer-events-none bg-[#0A0A0A]"
                       >
-                        {/* Dark glassmorphic container to make sure poster text doesn't clash with overlaid text */}
-                        <div className="max-w-xl bg-[#0A0A0A]/70 backdrop-blur-xl p-4 sm:p-5 md:p-7 rounded-[14px] md:rounded-[20px] border border-white/10 shadow-2xl pointer-events-auto">
+                        <div className="bg-[#111]/90 backdrop-blur-xl p-4 sm:p-5 md:p-6 rounded-[14px] md:rounded-[18px] border border-white/10 shadow-2xl pointer-events-auto">
                           {img.venue && (
-                             <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 text-white text-[9px] md:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 md:mb-4 w-fit">
-                               <MapPin size={10} className="md:w-3 md:h-3" strokeWidth={2.5} />
-                               {img.venue}
-                             </div>
+                            <div className="inline-flex items-center gap-1.5 bg-white/10 border border-white/10 text-white text-[9px] md:text-[11px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full mb-3 w-fit">
+                              <MapPin size={10} className="md:w-3 md:h-3" strokeWidth={2.5} />
+                              {img.venue}
+                            </div>
                           )}
-                          
+
                           {img.heading && (
-                            <h2 className="text-lg sm:text-xl md:text-3xl font-black text-white leading-tight mb-1.5 md:mb-2 uppercase truncate md:whitespace-normal">
+                            <h2 className="text-base sm:text-lg md:text-2xl font-black text-white leading-tight mb-1 md:mb-2 uppercase">
                               {img.heading}
                             </h2>
                           )}
 
                           {(img.subheading || img.tagline) && (
-                            <p className="text-white/80 text-xs sm:text-sm md:text-base font-medium max-w-lg mb-2 md:mb-3 line-clamp-1 md:line-clamp-2">
+                            <p className="text-white/80 text-xs sm:text-sm font-medium max-w-lg mb-2 line-clamp-2">
                               {img.tagline || img.subheading}
                             </p>
                           )}
-                          
+
                           {img.description && (
-                            <p className="hidden md:block text-white/60 text-xs md:text-sm max-w-lg mb-5 line-clamp-2 md:line-clamp-3 leading-relaxed">
+                            <p className="hidden md:block text-white/60 text-xs md:text-sm max-w-lg mb-4 line-clamp-3 leading-relaxed">
                               {img.description}
                             </p>
                           )}
@@ -593,7 +596,7 @@ function FeaturedImageShowcase({ images, animationStyle, duoMode }: { images: Fe
                               onClick={(e) => e.stopPropagation()}
                               className="inline-flex items-center w-fit gap-1.5 md:gap-2 bg-[#C9A84C] text-[#0A0A0A] font-extrabold
                                 text-[9px] md:text-[11px] uppercase tracking-[0.15em] px-4 md:px-6 py-2 md:py-3 rounded-full
-                                hover:bg-[#D4B55E] transition-colors duration-200 mt-1 md:mt-0"
+                                hover:bg-[#D4B55E] transition-colors duration-200"
                             >
                               {img.ctaText}
                               <span className="text-xs md:text-sm leading-none">→</span>
@@ -604,19 +607,6 @@ function FeaturedImageShowcase({ images, animationStyle, duoMode }: { images: Fe
                     )}
                   </AnimatePresence>
                 )}
-
-                {/* Collapsed State Title */}
-                <div 
-                  className={`absolute z-30 inset-0 py-6 px-1 md:p-5 flex flex-col justify-end lg:justify-center items-center pointer-events-none transition-all duration-500 ${isActive ? 'opacity-0 scale-95' : 'opacity-100 scale-100 delay-300'}`}
-                >
-                  {/* Vertical text on everywhere */}
-                  <span 
-                    style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)' }} 
-                    className="block text-white/50 group-hover:text-white/90 font-bold tracking-[0.2em] md:tracking-[0.25em] uppercase transition-colors text-[10px] md:text-[13px] whitespace-nowrap overflow-hidden text-ellipsis max-h-full"
-                  >
-                     {collapsedTitle}
-                  </span>
-                </div>
               </div>
             )
           })}
