@@ -455,12 +455,12 @@ function JummahTimesSection() {
     fetch('/api/settings?fresh=1')
       .then((r) => r.json())
       .then((data: Record<string, string>) => {
-        setJummah1(data.jummah1Time || '1:15 PM');
-        setJummah2(data.jummah2Time || '2:15 PM');
+        setJummah1(data.jummah1Time || '2:00 PM');
+        setJummah2(data.jummah2Time || '3:15 PM');
       })
       .catch(() => {
-        setJummah1('1:15 PM');
-        setJummah2('2:15 PM');
+        setJummah1('2:00 PM');
+        setJummah2('3:15 PM');
       })
       .finally(() => setLoading(false));
   }, []);
@@ -490,7 +490,7 @@ function JummahTimesSection() {
           Jummah Prayer Times
         </h3>
         <p className="text-sm text-gray-500 mb-6">
-          Set the time for each Friday Jummah prayer. Use 12-hour format, e.g. <code className="bg-gray-100 px-1 rounded">1:15 PM</code>.
+          Set the time for each Friday Jummah prayer. Use 12-hour format, e.g. <code className="bg-gray-100 px-1 rounded">2:00 PM</code>.
           These times appear in the navbar, prayer times page, home page, and footer.
         </p>
 
@@ -511,7 +511,7 @@ function JummahTimesSection() {
                   value={jummah1}
                   onChange={(e) => setJummah1(e.target.value)}
                   required
-                  placeholder="1:15 PM"
+                  placeholder="2:00 PM"
                   className="block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm
                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
@@ -526,7 +526,7 @@ function JummahTimesSection() {
                   value={jummah2}
                   onChange={(e) => setJummah2(e.target.value)}
                   required
-                  placeholder="2:15 PM"
+                  placeholder="3:15 PM"
                   className="block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 text-sm
                     focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
